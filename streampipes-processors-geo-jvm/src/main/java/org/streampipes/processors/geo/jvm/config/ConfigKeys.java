@@ -24,4 +24,14 @@ public class ConfigKeys {
     final static String ICON_PORT = "SP_ICON_PORT";
     final static String SERVICE_NAME_KEY = "SP_SERVICE_NAME";
     final static String GOOGLE_API_KEY = "SP_GOOGLE_API_KEY";
+
+    final static String POSTGRES_HOST = "SP_POSTGRES_HOST";
+    final static String POSTGRES_PORT = "SP_POSTGRES_PORT";
+    final static String POSTGRES_DATABASE = "SP_POSTGRES_DATABASE";
+    final static String POSTGRES_USER = "SP_POSTGRES_USER";
+    final static String POSTGRES_PASSWORD = "SP_POSTGRES_PASSWORD";
+
+
+
+
 }
