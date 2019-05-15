@@ -34,6 +34,7 @@ public class RoutingSingleInputController extends StandaloneEventProcessingDecla
                 .create("org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.oneManual", EPA_NAME,
                         "Calculates a routing LineString from a point geometry and a manual input")
                 .category(DataProcessorType.GEO)
+                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .requiredStream(StreamRequirementsBuilder
                         .create()
                         .requiredPropertyWithUnaryMapping(EpRequirements.stringReq(),

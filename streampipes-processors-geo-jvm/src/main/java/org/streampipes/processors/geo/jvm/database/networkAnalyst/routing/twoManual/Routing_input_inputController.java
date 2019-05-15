@@ -35,6 +35,7 @@ public class Routing_input_inputController extends StandaloneEventProcessingDecl
                 .create("org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.twoManual", EPA_NAME,
                         "Calculates a routing LineString from two manual inputs")
                 .category(DataProcessorType.GEO)
+                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .requiredStream(StreamRequirementsBuilder
                         .create()
                         .requiredProperty(EpRequirements.anyProperty())

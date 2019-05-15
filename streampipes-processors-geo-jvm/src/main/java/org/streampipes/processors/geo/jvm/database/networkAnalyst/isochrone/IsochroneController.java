@@ -34,6 +34,7 @@ public class IsochroneController extends StandaloneEventProcessingDeclarer<Isoch
                         "calculates an isochrone from an internal routing database." +
                                 "Input geometry has to be a point")
                 .category(DataProcessorType.GEO)
+                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
                 .requiredStream(StreamRequirementsBuilder
                         .create()
                         .requiredPropertyWithUnaryMapping(EpRequirements.stringReq(),
