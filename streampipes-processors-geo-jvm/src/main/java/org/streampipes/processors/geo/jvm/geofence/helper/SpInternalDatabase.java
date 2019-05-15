@@ -4,7 +4,7 @@ package org.streampipes.processors.geo.jvm.geofence.helper;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
-import org.my.streampipes.helpers.AreaSpOperator;
+import org.streampipes.processors.geo.jvm.helpers.AreaSpOperator;
 import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;

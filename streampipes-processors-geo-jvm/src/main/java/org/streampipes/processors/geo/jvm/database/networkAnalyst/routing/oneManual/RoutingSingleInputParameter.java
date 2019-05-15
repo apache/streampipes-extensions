@@ -7,7 +7,6 @@ import org.streampipes.model.graph.DataProcessorInvocation;
 import org.streampipes.wrapper.params.binding.EventProcessorBindingParams;
 
 import static org.streampipes.processors.geo.jvm.helpers.GeometryCreation.*;
-import static org.my.streampipes.helpers.GeometryCreation.createSPGeom;
 
 
 public class RoutingSingleInputParameter extends EventProcessorBindingParams {

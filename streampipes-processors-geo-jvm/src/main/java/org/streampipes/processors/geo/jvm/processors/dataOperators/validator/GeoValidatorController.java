@@ -29,7 +29,7 @@ public class GeoValidatorController extends StandaloneEventProcessingDeclarer<Ge
     @Override
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder
-                .create("org.my.streampipes.geo.processor.dataOperators.geoValidator",
+                .create("org.streampipes.processors.geo.jvm.processors.dataOperators.validator",
                         EPA_NAME,
                         "Validate Geometry and checks for isSimple, isEmpty and isValid")
                 .category(DataProcessorType.GEO)

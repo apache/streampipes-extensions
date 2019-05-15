@@ -1,6 +1,8 @@
 package org.streampipes.processors.geo.jvm.processors.dataOperators.setEpsgCode;
 
-import org.my.streampipes.geo.processor.dataOperators.validator.GeoValidator;
+
+
+import org.streampipes.processors.geo.jvm.processors.dataOperators.validator.GeoValidator;
 import org.streampipes.model.DataProcessorType;
 import org.streampipes.model.graph.DataProcessorDescription;
 import org.streampipes.model.graph.DataProcessorInvocation;
@@ -56,6 +58,8 @@ public class SetEpsgController extends StandaloneEventProcessingDeclarer<SetEpsg
         SetEpsgParameter params = new SetEpsgParameter(graph, epsg_value);
 
         return new ConfiguredEventProcessor<>(params, SetEPSG::new);
+
+        //todo list verarbeiten
 
     }
 }
