@@ -83,6 +83,16 @@
             <artifactId>systems-common-java8</artifactId>
             <version>0.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.streampipes</groupId>
+            <artifactId>streampipes-wrapper-standalone</artifactId>
+            <version>0.61.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.streampipes</groupId>
+            <artifactId>streampipes-sdk</artifactId>
+            <version>0.61.0</version>
+        </dependency>
 
     </dependencies>
 
