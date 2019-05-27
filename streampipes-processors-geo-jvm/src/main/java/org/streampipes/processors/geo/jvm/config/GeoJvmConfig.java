@@ -47,11 +47,11 @@ public enum GeoJvmConfig implements PeConfig {
 
 
     // internal postgres
-    config.register(POSTGRES_HOST, "pgrouting", "host for postgres geofence database");
-    config.register(POSTGRES_PORT, 65432, "port for postgres geofence database");
-    config.register(POSTGRES_DATABASE, "streampipes", "databasename for postgres geofence database");
-    config.register(POSTGRES_USER, "streampipes", "username for postgres geofence database");
-    config.register(POSTGRES_PASSWORD, "streampipes", "password for postgres geofence database");
+    config.register(ConfigKeys.POSTGRES_HOST, "pgrouting", "host for postgres geofence database");
+    config.register(ConfigKeys.POSTGRES_PORT, 65432, "port for postgres geofence database");
+    config.register(ConfigKeys.POSTGRES_DATABASE, "streampipes", "databasename for postgres geofence database");
+    config.register(ConfigKeys.POSTGRES_USER, "streampipes", "username for postgres geofence database");
+    config.register(ConfigKeys.POSTGRES_PASSWORD, "streampipes", "password for postgres geofence database");
 
 
 
@@ -102,19 +102,19 @@ public enum GeoJvmConfig implements PeConfig {
 
   // ================= getter for internal docker pgrouting /postgis/postgresql
   public String getPostgresHost() {
-    return config.getString(POSTGRES_HOST);
+    return config.getString(ConfigKeys.POSTGRES_HOST);
   }
   public String getPostgresPort() {
-    return config.getString(POSTGRES_PORT);
+    return config.getString(ConfigKeys.POSTGRES_PORT);
   }
   public String getPostgresDatabase() {
-    return config.getString(POSTGRES_DATABASE);
+    return config.getString(ConfigKeys.POSTGRES_DATABASE);
   }
   public String getPostgresUser() {
-    return config.getString(POSTGRES_USER);
+    return config.getString(ConfigKeys.POSTGRES_USER);
   }
   public String getPostgresPassword() {
-    return config.getString(POSTGRES_PASSWORD);
+    return config.getString(ConfigKeys.POSTGRES_PASSWORD);
   }
 
 }

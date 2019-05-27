@@ -4,6 +4,7 @@ package org.streampipes.processors.geo.jvm.processors.derivedGeometry.bufferOper
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.streampipes.logging.api.Logger;
+import org.streampipes.processors.geo.jvm.processors.derivedGeometry.bufferOperator.bufferGeometry.BufferGeometryController;
 import org.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.streampipes.wrapper.routing.SpOutputCollector;
 import org.streampipes.wrapper.runtime.EventProcessor;

@@ -1,8 +1,6 @@
 package org.streampipes.processors.geo.jvm.processors.topologicalOperators.filter.typeFilter.equals;
 
 
-org.streampipes.processors.geo.jvm.helpers.topologyGroup
-
 
 import org.locationtech.jts.geom.Geometry;
 import org.streampipes.processors.geo.jvm.helpers.topologyGroup.EqualsTopology;

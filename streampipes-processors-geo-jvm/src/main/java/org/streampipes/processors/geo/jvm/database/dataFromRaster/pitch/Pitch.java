@@ -10,6 +10,8 @@ import org.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.streampipes.wrapper.routing.SpOutputCollector;
 import org.streampipes.wrapper.runtime.EventProcessor;
 
+import org.streampipes.processors.geo.jvm.config.*;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 
@@ -33,11 +35,11 @@ public class Pitch implements EventProcessor<PitchParameter> {
         this.type = params.getType();
 
 
-        String host = Config.INSTANCE.getPostgresHost();
-        Integer port = Integer.valueOf(Config.INSTANCE.getPostgresPort());
-        String dbName = Config.INSTANCE.getPostgresDatabase();
-        String user = Config.INSTANCE.getPostgresUser();
-        String password = Config.INSTANCE.getPostgresPassword();
+        String host = GeoJvmConfig.INSTANCE.getPostgresHost();
+        Integer port = Integer.valueOf(GeoJvmConfig.INSTANCE.getPostgresPort());
+        String dbName = GeoJvmConfig.INSTANCE.getPostgresDatabase();
+        String user = GeoJvmConfig.INSTANCE.getPostgresUser();
+        String password = GeoJvmConfig.INSTANCE.getPostgresPassword();
 
 
         this.db = new SpDatabase(host, port, dbName, user, password);

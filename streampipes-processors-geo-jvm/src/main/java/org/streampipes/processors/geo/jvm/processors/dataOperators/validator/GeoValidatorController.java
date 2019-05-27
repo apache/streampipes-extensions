@@ -11,8 +11,11 @@ import org.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
 import org.streampipes.sdk.helpers.*;
 import org.streampipes.wrapper.standalone.ConfiguredEventProcessor;
 import org.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDeclarer;
+import org.streampipes.sdk.utils.Assets;
 
 import java.util.List;
+
+
 
 public class GeoValidatorController extends StandaloneEventProcessingDeclarer<GeoValidatorParameter> {
 
@@ -21,8 +24,6 @@ public class GeoValidatorController extends StandaloneEventProcessingDeclarer<Ge
     public final static String EPSG_CODE = "epsg_code";
     public final static String OUTPUT_OPTION = "output_option";
     public final static String FILTER_OPTION = "filter_option";
-
-
     public  final static String EPA_NAME = "Geo Validator";
 
 

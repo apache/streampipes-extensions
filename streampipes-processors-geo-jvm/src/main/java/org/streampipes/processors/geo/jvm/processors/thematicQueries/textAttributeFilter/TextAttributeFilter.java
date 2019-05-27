@@ -5,7 +5,7 @@ import org.streampipes.model.runtime.Event;
 import org.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.streampipes.wrapper.routing.SpOutputCollector;
 import org.streampipes.wrapper.runtime.EventProcessor;
-
+import org.streampipes.sdk.utils.Assets;
 
 
 

@@ -11,6 +11,8 @@ import org.streampipes.sdk.helpers.*;
 import org.streampipes.vocabulary.SO;
 import org.streampipes.wrapper.standalone.ConfiguredEventProcessor;
 import org.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDeclarer;
+import org.streampipes.sdk.utils.Assets;
+
 
 public class CollectMultiLineStringController extends StandaloneEventProcessingDeclarer<CollectMultiLineStringParameters> {
 

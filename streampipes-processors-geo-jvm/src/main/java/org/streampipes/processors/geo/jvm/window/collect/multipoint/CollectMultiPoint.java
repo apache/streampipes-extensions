@@ -80,6 +80,7 @@ public class CollectMultiPoint implements EventProcessor<CollectMultiPointParame
           out.collect(in);
 
 
+
           //LOG.info(multipoint.toText());
       } else {
           LOG.warn("Point is required in " + CollectMultiPointController.EPA_NAME + " but input type is " + geometry.getGeometryType());

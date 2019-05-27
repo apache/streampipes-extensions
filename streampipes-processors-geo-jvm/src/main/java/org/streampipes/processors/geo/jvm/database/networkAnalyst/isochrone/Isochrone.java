@@ -4,6 +4,7 @@ package org.streampipes.processors.geo.jvm.database.networkAnalyst.isochrone;
 import org.locationtech.jts.geom.CoordinateList;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.streampipes.processors.geo.jvm.config.GeoJvmConfig;
 import org.streampipes.processors.geo.jvm.database.helper.SpDatabase;
 import org.streampipes.logging.api.Logger;
 import org.streampipes.model.runtime.Event;
@@ -29,8 +30,6 @@ public class Isochrone implements EventProcessor<IsochroneParameter> {
     private SpDatabase db;
 
 
-
-
     @Override
     public void onInvocation(IsochroneParameter params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
 
@@ -41,11 +40,11 @@ public class Isochrone implements EventProcessor<IsochroneParameter> {
         this.unitIsSecond = params.getUnit();
 
 
-        String host = Config.INSTANCE.getPostgresHost();
-        Integer port = Integer.valueOf(Config.INSTANCE.getPostgresPort());
-        String dbName = Config.INSTANCE.getPostgresDatabase();
-        String user = Config.INSTANCE.getPostgresUser();
-        String password = Config.INSTANCE.getPostgresPassword();
+        String host = GeoJvmConfig.INSTANCE.getPostgresHost();
+        Integer port = Integer.valueOf(GeoJvmConfig.INSTANCE.getPostgresPort());
+        String dbName = GeoJvmConfig.INSTANCE.getPostgresDatabase();
+        String user = GeoJvmConfig.INSTANCE.getPostgresUser();
+        String password = GeoJvmConfig.INSTANCE.getPostgresPassword();
 
 
         this.db = new SpDatabase(host, port, dbName, user, password);

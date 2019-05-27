@@ -18,7 +18,7 @@ import org.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDecl
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import org.streampipes.sdk.utils.Assets;
 
 public class WithinTopoController extends StandaloneEventProcessingDeclarer<WithinTopoParameter> implements ResolvesContainerProvidedOptions {
 
