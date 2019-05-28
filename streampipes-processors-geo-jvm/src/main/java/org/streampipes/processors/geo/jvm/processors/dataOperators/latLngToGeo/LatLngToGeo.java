@@ -36,7 +36,7 @@ public class LatLngToGeo implements EventProcessor<LatLngToGeoParameter> {
         Double lat = in.getFieldBySelector(params.getLat()).getAsPrimitive().getAsDouble();
         Double lng = in.getFieldBySelector(params.getLng()).getAsPrimitive().getAsDouble();
         Integer epsgCode = in.getFieldBySelector(params.getEpsg_code()).getAsPrimitive().getAsInt();
-        Geometry geometry =  createSPGeom(lat, lng, epsgCode);
+        Geometry geometry =  createSPGeom(lng, lat, epsgCode);
 
         if (!geometry.isEmpty()){
             in.addField(LatLngToGeoController.WKT_TEXT, geometry.toString());
