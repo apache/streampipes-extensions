@@ -101,7 +101,6 @@ public class SpDatabase {
             source = (Point) transformSpGeom(source, 4326);
         }
 
-        //todo adjust name to new location --> ka.ways_vertices_pgr
         String query =
                 "SELECT dijkstra.*, ST_X(w.the_geom) as x, ST_Y(w.the_geom) as y "
                         +" FROM pgr_dijkstra( "
@@ -109,17 +108,17 @@ public class SpDatabase {
                         + "source, "
                         + "target, "
                         + "cost_s as cost "
-                        + "FROM ka.ways', "
+                        + "FROM routing.ways', "
                         + "(SELECT id "
-                        + "FROM ka.ways_vertices_pgr "
+                        + "FROM routing.ways_vertices_pgr "
                         + "Order BY the_geom <-> ST_SetSRID(ST_MakePoint(" + source.getX() + "," + source.getY() + "), 4326)"
                         + "LIMIT 1), "
                         + "(SELECT id "
-                        +"FROM ka.ways_vertices_pgr "
+                        +"FROM routing.ways_vertices_pgr "
                         +"Order BY the_geom <-> ST_SetSRID(ST_MakePoint(" + target.getX() + "," + target.getY() + "), 4326) "
                         +"LIMIT 1), "
                         +"directed := false) as dijkstra "
-                        +"LEFT JOIN ka.ways_vertices_pgr w "
+                        +"LEFT JOIN routing.ways_vertices_pgr w "
                         +"ON (dijkstra.node = w.id) ORDER BY seq; ";
 
         return query;
@@ -150,16 +149,16 @@ public class SpDatabase {
                 + "FROM pgr_alphashape('SELECT id::int4, "
                 + " lat::float8 AS y, "
                 + "lon::float8 AS x "
-                + "FROM ka.ways_vertices_pgr w "
+                + "FROM routing.ways_vertices_pgr w "
                 + "JOIN (SELECT * FROM pgr_drivingdistance "
                 + "('' SELECT gid AS id, "
                 + "source::int8 AS source, "
                 + "target::int8  AS target, "
                 + cost_field + "::float8 AS cost, "
                 + "reverse_cost_s::float8 as reverse_cost "
-                + "FROM ka.ways'', "
+                + "FROM routing.ways'', "
                 + "(SELECT id "
-                + "FROM ka.ways_vertices_pgr "
+                + "FROM routing.ways_vertices_pgr "
                 + "Order BY the_geom <-> ST_SetSRID(ST_MakePoint(" + point.getY() + "," + point.getX() + "), 4326) "
                 + " LIMIT 1), "
                 + value + ","
@@ -592,6 +591,49 @@ public class SpDatabase {
 
         return result;
     }
+
+
+
+
+    // enricher
+
+    public List<String> geofenceReadOut(String query, Connection conn) {
+
+        List<String> geofence_list = new ArrayList<>();
+        String readout;
+
+
+        // try with resources (no finally block and double try catch necessary
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)){
+
+            //reads all names and put it into the arraylist
+            while (rs.next()) {
+                readout = rs.getString("name");
+
+                //and adding the coordinate to the List
+                geofence_list.add(readout);
+            }
+
+        } catch (SQLException e) {
+            //todo logger
+            e.printStackTrace();
+        }
+
+        return geofence_list;
+    }
+
+
+    public String prepareQueryGeofence(){
+
+        String query = "SELECT name from geofence.main";
+
+        return query;
+    }
+
+
+
+
 
 }
 
