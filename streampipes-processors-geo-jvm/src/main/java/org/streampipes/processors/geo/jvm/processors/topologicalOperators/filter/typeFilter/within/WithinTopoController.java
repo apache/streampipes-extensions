@@ -1,12 +1,10 @@
 package org.streampipes.processors.geo.jvm.processors.topologicalOperators.filter.typeFilter.within;
 
 
-import org.streampipes.container.api.ResolvesContainerProvidedOptions;
+
 import org.streampipes.model.DataProcessorType;
 import org.streampipes.model.graph.DataProcessorDescription;
 import org.streampipes.model.graph.DataProcessorInvocation;
-import org.streampipes.model.runtime.RuntimeOptions;
-import org.streampipes.model.schema.EventProperty;
 import org.streampipes.model.schema.PropertyScope;
 import org.streampipes.sdk.builder.ProcessingElementBuilder;
 import org.streampipes.sdk.builder.StreamRequirementsBuilder;
@@ -14,13 +12,9 @@ import org.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
 import org.streampipes.sdk.helpers.*;
 import org.streampipes.wrapper.standalone.ConfiguredEventProcessor;
 import org.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDeclarer;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.streampipes.sdk.utils.Assets;
 
-public class WithinTopoController extends StandaloneEventProcessingDeclarer<WithinTopoParameter> implements ResolvesContainerProvidedOptions {
+public class WithinTopoController extends StandaloneEventProcessingDeclarer<WithinTopoParameter>  {
 
 
     public final static String GEOMETRY_1 = "geometry1";
@@ -132,8 +126,6 @@ public class WithinTopoController extends StandaloneEventProcessingDeclarer<With
         String read_withinType = extractor.selectedSingleValue(TYPE, String.class);
 
 
-        String database = extractor.selectedSingleValue("id", String.class);
-
         int withinType = 1;
         if (read_withinType.equals(WithinTypes.withinComplete.name())){
             withinType = WithinTypes.withinComplete.getNumber();
@@ -143,19 +135,5 @@ public class WithinTopoController extends StandaloneEventProcessingDeclarer<With
         WithinTopoParameter params = new WithinTopoParameter(graph, geom1, epsg_geom1, geom2, epsg_geom2, withinType, vsChecker);
 
         return new ConfiguredEventProcessor<>(params, WithinTopo::new);
-    }
-
-    @Override
-    public List<RuntimeOptions> resolveOptions(String s, EventProperty eventProperty) {
-        List<RuntimeOptions> results = new ArrayList<>();
-
-        // TODO get names from db
-        List<String> geofenceNames = Arrays.asList("bundeslaender", "strasse");
-
-        for (String name : geofenceNames) {
-            results.add(new RuntimeOptions(name, ""));
-        }
-
-        return results;
     }
 }

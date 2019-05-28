@@ -36,8 +36,6 @@ public class WithinTopo implements EventProcessor<WithinTopoParameter> {
         this.type = params.getType();
         this.checker = params.getVsChecker();
 
-        //database conenction to get wkt ...
-
     }
 
     @Override
