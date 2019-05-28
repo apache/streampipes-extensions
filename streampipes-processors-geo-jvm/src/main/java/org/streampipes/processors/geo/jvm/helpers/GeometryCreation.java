@@ -106,7 +106,7 @@ public class GeometryCreation {
      * @param epsgCode Defines the EPSG code
      * @return a point geometry in the main class geometry
      */
-    public static Geometry createSPGeom(Double lat, Double lng, Integer epsgCode) {
+    public static Geometry createSPGeom(Double lng, Double lat, Integer epsgCode) {
 
         Geometry point;
         PrecisionModel prec = getPrecisionModel(epsgCode);
