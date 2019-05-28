@@ -30,6 +30,7 @@ import org.streampipes.processors.geo.jvm.database.networkAnalyst.isochrone.Isoc
 import org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.oneManual.RoutingSingleInputController;
 import org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.twoManual.Routing_input_inputController;
 import org.streampipes.processors.geo.jvm.geofence.StoreGeofenceController;
+import org.streampipes.processors.geo.jvm.geofence.enricher.EnricherController;
 import org.streampipes.processors.geo.jvm.processors.changeGeometries.direction.DirectionController;
 import org.streampipes.processors.geo.jvm.processors.changeGeometries.refineLine.RefineLineController;
 import org.streampipes.processors.geo.jvm.processors.dataOperators.latLngToGeo.LatLngToGeoController;
@@ -42,7 +43,6 @@ import org.streampipes.processors.geo.jvm.processors.derivedGeometry.centroidPoi
 import org.streampipes.processors.geo.jvm.processors.derivedGeometry.convexHull.ConvexHullController;
 import org.streampipes.processors.geo.jvm.processors.derivedGeometry.envelope.EnvelopeController;
 import org.streampipes.processors.geo.jvm.processors.derivedGeometry.interiorPoint.InteriorPointController;
-import org.streampipes.processors.geo.jvm.processors.derivedGeometry.overlayOperator.enricher.OverlaySpEnricherController;
 import org.streampipes.processors.geo.jvm.processors.derivedGeometry.overlayOperator.filter.OverlaySpFilterController;
 import org.streampipes.processors.geo.jvm.processors.measureOperator.areaCalc.AreaCalcController;
 import org.streampipes.processors.geo.jvm.processors.measureOperator.distanceCalc.geodesic.DistanceGeodesicController;
@@ -94,7 +94,7 @@ public class GeoJvmInit extends StandaloneModelSubmitter {
             .add(new InteriorPointController())
             //==========overlay
             .add(new OverlaySpFilterController())
-            .add(new OverlaySpEnricherController())
+            .add(new EnricherController())
             //==========measurement
             .add(new AreaCalcController())
             .add(new DistanceGeodesicController())
