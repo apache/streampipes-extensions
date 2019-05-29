@@ -266,7 +266,7 @@ public class SpDatabase {
 
         String query =
                 "SELECT b.*, ST_Value(a.rast, b.geom) as pitch "
-                        + "FROM srtm.bw a, "
+                        + "FROM elevation.srtm90 a, "
                         +"( SELECT (dp).path[1] AS INDEX, (dp).geom AS geom FROM "
                         +"( SELECT st_dumppoints(geom) AS dp FROM "
                         +"(SELECT ST_GeomFromText('" + wkt + "', 4326) AS geom) AS foo ) "
@@ -474,7 +474,7 @@ public class SpDatabase {
                         "SELECT (st_intersection(prec.rast, 1, poly.geom)).*  " +
                         "FROM " +
                         "(select ST_GeomFromText('"+ wkt + "',4326) AS geom) poly " +
-                        " , niederschlag.\""+ year + "\" prec " +
+                        " , precipitation.\""+ year + "\" prec " +
                         "WHERE st_intersects(prec.rast, 1, poly.geom) " +
                         ") " +
                         "SELECT ("+  aggregationType +"(val)) AS result FROM sub;";
