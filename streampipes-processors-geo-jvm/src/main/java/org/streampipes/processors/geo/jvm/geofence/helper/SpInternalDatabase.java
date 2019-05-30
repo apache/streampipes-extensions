@@ -71,12 +71,11 @@ public class SpInternalDatabase {
             LocalDateTime settime = LocalDateTime.now();
 
 
-
-            String createMain = "INSERT INTO geofence.main (time, name)" +
+            String createMain = "INSERT INTO " + schemaName + ".main (time, name)" +
                     " VALUES ('" + settime  + "' , '" + geofenceName + "');";
             stmt.executeUpdate(createMain);
 
-            String createInfo = "INSERT INTO geofence.info (name)" +
+            String createInfo = "INSERT INTO " + schemaName + ".info (name)" +
                     " VALUES ('" + geofenceName + "')";
 
             stmt.executeUpdate(createInfo);
@@ -97,7 +96,7 @@ public class SpInternalDatabase {
     }
 
 
-    public boolean updateGeofenceTable(Connection conn, String geofenceName, Geometry geom, int unit ){
+    public boolean updateGeofenceTable(Connection conn, String geofenceName, Geometry geom, int unit, double m_value ){
 
         boolean result = false;
 
@@ -105,6 +104,7 @@ public class SpInternalDatabase {
         int decimalPosition = -1;
         AreaSpOperator area = new AreaSpOperator(decimalPosition);
         Double resultArea = null;
+        String unitAsString;
 
         if (geom instanceof Polygon){
             area.calcArea((Polygon) geom);
@@ -118,6 +118,8 @@ public class SpInternalDatabase {
         }
 
         resultArea = area.getAreaValue();
+        unitAsString = area.getAreaUnit();
+
 
 
         LocalDateTime settime = LocalDateTime.now();
@@ -126,18 +128,20 @@ public class SpInternalDatabase {
 
 
             // update time in main
-            String updateTime = "UPDATE geofence.main " +
+            String updateTime = "UPDATE " + schemaName + ".main " +
                     "SET time = '" + settime +"' WHERE name = '" + geofenceName + "';";
 
 
             stmt.executeUpdate(updateTime);
 
 
-            String updateGeofence = "UPDATE geofence.info "
+            String updateGeofence = "UPDATE " + schemaName + ".info "
                     + "SET geom = ST_GeomFromText('" + geom.toText() +"' ," +  epsg + "),"
                     +  " wkt = '" + geom.toText() + "',"
                     + "epsg = " + epsg + ","
-                    + " area = " + resultArea
+                    + " area = " + resultArea + ","
+                    +  "areaunit = " + unitAsString + ","
+                    + "m = " + m_value
                     + " WHERE name = '" + geofenceName + "';";
 
 
@@ -165,7 +169,7 @@ public class SpInternalDatabase {
 
 
 
-            String query = "DELETE FROM geofence.main WHERE name = '" +  geofenceName + "';";
+            String query = "DELETE FROM " + schemaName + ".main WHERE name = '" +  geofenceName + "';";
             stmt.executeUpdate(query);
 
             result = true;
@@ -178,6 +182,7 @@ public class SpInternalDatabase {
 
         return result;
     }
+
 
 
 }

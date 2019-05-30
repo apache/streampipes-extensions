@@ -296,7 +296,7 @@ public class JdbcGeofence {
             String createMain = "INSERT INTO geofence.main (time, name)" +
                     " VALUES ('" + settime  + "' , '" + geofenceName + "');";
             stmt.executeUpdate(createMain);
-            logger.info("geofence enztry into main table successful");
+            logger.info("geofence entry into main table successful");
 
         } catch (PSQLException e1){
             // Unique-Constraint validation try with recursive solution
