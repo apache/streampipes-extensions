@@ -52,6 +52,7 @@ import org.streampipes.processors.geo.jvm.processors.measureOperator.lineLengthC
 import org.streampipes.processors.geo.jvm.processors.measureOperator.polygonPerimeterCalc.PolygonPerimeterController;
 import org.streampipes.processors.geo.jvm.processors.thematicQueries.arithmeticOperators.NumAttributeCalcController;
 import org.streampipes.processors.geo.jvm.processors.thematicQueries.comparisonOperators.NumericalFilterController;
+import org.streampipes.processors.geo.jvm.processors.thematicQueries.multiTextAttributeFilter.MultiTextAttributeFilterController;
 import org.streampipes.processors.geo.jvm.processors.thematicQueries.textAttributeFilter.TextAttributeFilterController;
 import org.streampipes.processors.geo.jvm.processors.topologicalOperators.filter.TopoRelationController;
 import org.streampipes.processors.geo.jvm.processors.topologicalOperators.filter.typeFilter.equals.EqualsTopoController;
@@ -106,6 +107,7 @@ public class GeoJvmInit extends StandaloneModelSubmitter {
             .add(new NumAttributeCalcController())
             .add(new NumericalFilterController())
             .add(new TextAttributeFilterController())
+            .add(new MultiTextAttributeFilterController())
             //==========topology
             .add(new TopoRelationController())
             .add(new EqualsTopoController())
@@ -115,6 +117,7 @@ public class GeoJvmInit extends StandaloneModelSubmitter {
             .add(new WithinTopoController())
             //==========geofence
             .add(new StoreGeofenceController())
+            .add(new EnricherController())
             //==========Sink
             //.add(new PostgreSqlController())
             //==========Window
