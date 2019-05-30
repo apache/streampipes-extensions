@@ -1,12 +1,10 @@
 package org.streampipes.processors.geo.jvm.helpers.overlayGroup;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.streampipes.processors.geo.jvm.helpers.EnrichAndFilter;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
 
 import static org.streampipes.processors.geo.jvm.helpers.GeometryCreation.*;
 
@@ -137,7 +135,7 @@ public class OverlayOperator extends EnrichAndFilter {
             OverlayOperator b_vs_a = new OverlayOperator(getGeomB(), getGeomA());
             collection.add( b_vs_a.geomDifferenceSP());
 
-            MultiPolygon resultGeom = createSPMultiPolygon(collection, false);
+            returnGeom = createSPMultiPolygon(collection, false);
 
         } else {
             //todo logger
@@ -148,6 +146,9 @@ public class OverlayOperator extends EnrichAndFilter {
 
         return returnGeom;
     }
+
+
+
 
 
 
