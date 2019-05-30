@@ -78,10 +78,10 @@ public class TextAttributeFilterController extends StandaloneEventProcessingDecl
     String keyword = extractor.singleValueParameter(KEYWORD_ID, String.class);
     String operation = extractor.selectedSingleValue(OPERATION_ID, String.class);
     String filterProperty = extractor.mappingPropertyValue(ATTRIBUTE_COLUMN);
-    Boolean caseSensitiv = extractor.selectedSingleValue(CASE_SENSITIV, Boolean.class);
+    Boolean caseSensitive = extractor.selectedSingleValue(CASE_SENSITIV, Boolean.class);
 
 
-    TextAttributeFilterParameter params = new TextAttributeFilterParameter(graph, keyword, operation, filterProperty, caseSensitiv);
+    TextAttributeFilterParameter params = new TextAttributeFilterParameter(graph, keyword, operation, filterProperty, caseSensitive);
 
 
 
