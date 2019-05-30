@@ -4,6 +4,7 @@ package org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.twoMa
 import org.locationtech.jts.geom.CoordinateList;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
+import org.streampipes.processors.geo.jvm.config.GeoJvmConfig;
 import org.streampipes.processors.geo.jvm.database.helper.SpDatabase;
 import org.streampipes.logging.api.Logger;
 import org.streampipes.model.runtime.Event;
@@ -38,11 +39,11 @@ public class Routing_input_input implements EventProcessor<Routing_input_inputPa
 
 
 
-        String host = "localhost";
-        int port = 65432;
-        String dbName = "bw";
-        String user = "florian";
-        String password = "guge8adi";
+        String host = GeoJvmConfig.INSTANCE.getPostgresHost();
+        Integer port = Integer.valueOf(GeoJvmConfig.INSTANCE.getPostgresPort());
+        String dbName = GeoJvmConfig.INSTANCE.getPostgresDatabase();
+        String user = GeoJvmConfig.INSTANCE.getPostgresUser();
+        String password = GeoJvmConfig.INSTANCE.getPostgresPassword();
 
 
         this.db = new SpDatabase(host, port, dbName, user, password);
