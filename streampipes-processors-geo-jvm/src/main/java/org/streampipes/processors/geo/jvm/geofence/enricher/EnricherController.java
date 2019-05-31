@@ -30,11 +30,14 @@ import java.util.List;
 
 public class EnricherController extends
             StandaloneEventProcessingDeclarer<EnricherParameter> implements
-            ResolvesContainerProvidedOutputStrategy<DataProcessorInvocation, ProcessingElementParameterExtractor>, ResolvesContainerProvidedOptions {
+            //todo change back to custom
+            ResolvesContainerProvidedOutputStrategy<DataProcessorInvocation,ProcessingElementParameterExtractor>,
+            ResolvesContainerProvidedOptions {
 
 
     public final static String EPA_NAME = "Enricher from Geofence";
     public final static String GEOFENCE_NAME = "geofence_name";
+    public final static String DB_TABLE = "geofence_table";
 
 
     public final static String GEOFENCE_WKT = "geofence_wkt";
@@ -60,10 +63,28 @@ public class EnricherController extends
                             .requiredProperty(EpRequirements.anyProperty())
                             .build()
                     )
-                    .requiredSingleValueSelectionFromContainer(Labels.from("id", "Example Name", "Example " +
-                            "Description"))
+                    .requiredSingleValueSelectionFromContainer(
+                            Labels.from(
+                                    DB_TABLE,
+                                    "Table names from DB",
+                                    "Chose table name to enrich from"
+                            )
+                    )
 
+
+                    //todo change back to custom
                     .outputStrategy(OutputStrategies.customTransformation())
+
+//                    .outputStrategy(OutputStrategies.append(
+//                            EpProperties.stringEp(Labels.from(GEOFENCE_NAME, "geofence_name", "name of the geofence"), "geofence_name", SO.Text),
+//                            EpProperties.stringEp(Labels.from(GEOFENCE_WKT, "geofence_wkt", "WKT String of geofence"), "geofence_wkt", SO.Text),
+//                            EpProperties.integerEp(Labels.from(GEOFENCE_EPSG, "geofence_epsg", "EPSG Code of geofence"), "geofence_epsg", SO.Number),
+//                            EpProperties.doubleEp(Labels.from(GEOFENCE_AREA, "geofence_area", "area of geofence"), "geofence_area", SO.Number),
+//                            EpProperties.stringEp(Labels.from(GEOFENCE_AREA_UNIT, "geofence_areaUnit", "unit of geofence area"), "geofence_area_unit", SO.Text),
+//                            EpProperties.doubleEp(Labels.from(GEOFENCE_M_VALUE, "geofence_M_Value", "M value of geofence"), "geofence_M", SO.Number)
+//                            )
+//                    )
+
                     .supportedFormats(SupportedFormats.jsonFormat())
                     .supportedProtocols(SupportedProtocols.kafka())
                     .build();
@@ -73,19 +94,14 @@ public class EnricherController extends
         @Override
         public ConfiguredEventProcessor<EnricherParameter> onInvocation(DataProcessorInvocation graph, ProcessingElementParameterExtractor extractor) {
 
-            String geofence_name = extractor.selectedSingleValue(GEOFENCE_NAME, String.class);
-
-
+            String geofence_name = extractor.selectedSingleValueFromRemote(DB_TABLE, String.class);
             EnricherParameter params = new EnricherParameter(graph, geofence_name);
-
             return new ConfiguredEventProcessor<>(params, Enricher::new);
         }
-
 
         @Override
         public List<RuntimeOptions> resolveOptions(String s, EventProperty eventProperty) {
             List<RuntimeOptions> results = new ArrayList<>();
-
 
             List<String> geofence_names;
             Connection conn;
@@ -97,7 +113,6 @@ public class EnricherController extends
             String user = GeoJvmConfig.INSTANCE.getPostgresUser();
             String password = GeoJvmConfig.INSTANCE.getPostgresPassword();
 
-
             db = new SpDatabase(host, port, dbName, user, password);
             conn = db.connect();
             String query = db.prepareQueryGeofence();
@@ -107,15 +122,14 @@ public class EnricherController extends
             for (String name : geofence_names) {
                 results.add(new RuntimeOptions(name, ""));
             }
-
             return results;
         }
 
 
 
+        //todo change back to custom output strategie later on? instead of using append
         @Override
         public EventSchema resolveOutputStrategy(DataProcessorInvocation processingElement, ProcessingElementParameterExtractor parameterExtractor) throws SpRuntimeException {
-            //todo add all parameters from geofence
             return new EventSchema(Arrays.asList(
                     EpProperties.stringEp(Labels.from(GEOFENCE_NAME, "geofence_name", "name of the geofence"), "geofence_name", SO.Text),
                     EpProperties.stringEp(Labels.from(GEOFENCE_WKT, "geofence_wkt", "WKT String of geofence"), "geofence_wkt", SO.Text),

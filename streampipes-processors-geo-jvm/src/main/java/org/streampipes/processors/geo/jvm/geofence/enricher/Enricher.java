@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+
 public class Enricher implements EventProcessor<EnricherParameter> {
 
     private static Logger LOG;
@@ -52,7 +53,7 @@ public class Enricher implements EventProcessor<EnricherParameter> {
         Double geofence_M = null;
 
 
-        String query = "SELECT * FROM geofence.info WHERE name = " + geofence_name + ";";
+        String query = "SELECT * FROM geofence.info WHERE name = '" + geofence_name + "';";
 
         // try with resources (no finally block and double try catch necessary
         try (Statement stmt = conn.createStatement();
