@@ -3,10 +3,7 @@ package org.streampipes.processors.geo.jvm.processors.derivedGeometry.centroidPo
 
 
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.streampipes.logging.api.Logger;
 import org.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.streampipes.wrapper.routing.SpOutputCollector;
@@ -49,18 +46,22 @@ public class CentroidPoint implements EventProcessor<CentroidPointParameter> {
             centroidPoint = (Point) createSPGeom(geometry.getCentroid(), geometry.getSRID());
             in.addField(CentroidPointController.CENTROID_POINT, centroidPoint.toText());
             in.addField(CentroidPointController.EPSG_CODE_CENTROID, centroidPoint.getSRID());
-
-
             out.collect(in);
 
         } else if (geometry instanceof MultiPolygon){
             centroidPoint = (Point) createSPGeom(geometry.getCentroid(), geometry.getSRID());
             in.addField(CentroidPointController.CENTROID_POINT, centroidPoint.toText());
             in.addField(CentroidPointController.EPSG_CODE_CENTROID, centroidPoint.getSRID());
-
             out.collect(in);
+
+        }  else if (geometry instanceof MultiPoint){
+            centroidPoint = (Point) createSPGeom(geometry.getCentroid(), geometry.getSRID());
+            in.addField(CentroidPointController.CENTROID_POINT, centroidPoint.toText());
+            in.addField(CentroidPointController.EPSG_CODE_CENTROID, centroidPoint.getSRID());
+            out.collect(in);
+
         } else {
-            LOG.warn("Only Polygons and MultiPolygons are supported in the " + CentroidPointController.EPA_NAME + "but input type is " + geometry.getGeometryType());
+            LOG.warn("Only Polygons, MultiPoint and MultiPolygons are supported in the " + CentroidPointController.EPA_NAME + "but input type is " + geometry.getGeometryType());
 
         }
 
