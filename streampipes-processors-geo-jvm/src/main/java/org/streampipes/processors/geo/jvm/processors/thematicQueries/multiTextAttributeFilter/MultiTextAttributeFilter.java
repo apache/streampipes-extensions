@@ -32,12 +32,15 @@ public class MultiTextAttributeFilter implements EventProcessor<MultiTextAttribu
   }
 
   @Override
-  public void onEvent(Event event, SpOutputCollector out) {
+  public void onEvent(Event in, SpOutputCollector out) {
     Boolean satisfiesFirst = false;
     Boolean satisfiesSecond = false;
 
 
-    String filterAttribute = event.getFieldBySelector(params.getFilterAttribute()).getAsPrimitive().getAsString();
+    String filterAttribute = in.getFieldBySelector(params.getFilterAttribute()).getAsPrimitive().getAsString();
+
+
+
 
     if (!caseSensitiv && !(firstKeyword == null)) {
       filterAttribute = filterAttribute.toLowerCase();
@@ -46,34 +49,41 @@ public class MultiTextAttributeFilter implements EventProcessor<MultiTextAttribu
     }
 
 
+    //todo handle null string values
+    if (!(firstKeyword == null) && !(secondKeyword == null) ){
+      // checks for first Attribute
+      if (firstOption.equals(SearchOption.IS.name()) ) {
+        satisfiesFirst = (filterAttribute.equals(firstKeyword));
+      } else if (firstOption.equals(SearchOption.LIKE.name())) {
+        satisfiesFirst = (filterAttribute.contains(firstKeyword));
+      } else if (firstOption.equals(SearchOption.IS_NOT.name())) {
+        satisfiesFirst = (!filterAttribute.equals(firstKeyword));
+      }  else if (firstOption.equals(SearchOption.IS_NOT.name())){
+        satisfiesFirst = (!filterAttribute.contains(firstKeyword));
+      }
 
-    // checks for first Attribute
-    if (firstOption.equals(SearchOption.IS.name()) ) {
-      satisfiesFirst = (filterAttribute.equals(firstKeyword));
-    } else if (firstOption.equals(SearchOption.LIKE.name())) {
-      satisfiesFirst = (filterAttribute.contains(firstKeyword));
-    } else if (firstOption.equals(SearchOption.IS_NOT.name())) {
-      satisfiesFirst = (!filterAttribute.equals(firstKeyword));
-    }  else if (firstOption.equals(SearchOption.IS_NOT.name())){
-      satisfiesFirst = (!filterAttribute.contains(firstKeyword));
+
+      // checks for first Attribute
+      if (secondOption.equals(SearchOption.IS.name()) ) {
+        satisfiesSecond = (filterAttribute.equals(secondKeyword));
+      } else if (secondOption.equals(SearchOption.LIKE.name())) {
+        satisfiesSecond = (filterAttribute.contains(secondKeyword));
+      } else if (secondOption.equals(SearchOption.IS_NOT.name())) {
+        satisfiesSecond = (!filterAttribute.equals(secondKeyword));
+      }  else if (secondOption.equals(SearchOption.IS_NOT.name())){
+        satisfiesSecond = (!filterAttribute.contains(secondKeyword));
+      }
+    } else {
+      LOG.warn("During " + MultiTextAttributeFilterController.EPA_NAME + "has a null text filed and can't be processed");
+
     }
 
 
-    // checks for first Attribute
-    if (secondOption.equals(SearchOption.IS.name()) ) {
-      satisfiesSecond = (filterAttribute.equals(secondKeyword));
-    } else if (secondOption.equals(SearchOption.LIKE.name())) {
-      satisfiesSecond = (filterAttribute.contains(secondKeyword));
-    } else if (secondOption.equals(SearchOption.IS_NOT.name())) {
-      satisfiesSecond = (!filterAttribute.equals(secondKeyword));
-    }  else if (secondOption.equals(SearchOption.IS_NOT.name())){
-      satisfiesSecond = (!filterAttribute.contains(secondKeyword));
-    }
 
 
 
     if (satisfiesFirst && satisfiesSecond) {
-      out.collect(event);
+      out.collect(in);
     }
   }
 

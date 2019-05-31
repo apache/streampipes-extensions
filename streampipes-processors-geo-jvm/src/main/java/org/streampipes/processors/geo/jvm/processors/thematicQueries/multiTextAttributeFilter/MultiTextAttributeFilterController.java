@@ -86,6 +86,10 @@ public class MultiTextAttributeFilterController extends StandaloneEventProcessin
   public ConfiguredEventProcessor<MultiTextAttributeFilterParameter> onInvocation
           (DataProcessorInvocation graph, ProcessingElementParameterExtractor extractor) {
 
+
+    String filterProperty = extractor.mappingPropertyValue(ATTRIBUTE_COLUMN);
+
+
     String keyword_1 = extractor.singleValueParameter(KEYWORD_1, String.class);
     String operation_1 = extractor.selectedSingleValue(OPERATION_1, String.class);
 
@@ -93,7 +97,6 @@ public class MultiTextAttributeFilterController extends StandaloneEventProcessin
     String operation_2 = extractor.selectedSingleValue(OPERATION_2, String.class);
 
 
-    String filterProperty = extractor.mappingPropertyValue(ATTRIBUTE_COLUMN);
     Boolean caseSensitive = extractor.selectedSingleValue(CASE_SENSITIVE, Boolean.class);
 
 

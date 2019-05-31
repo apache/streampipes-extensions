@@ -39,15 +39,22 @@ public class TextAttributeFilter implements EventProcessor<TextAttributeFilterPa
       searchedKeyword = searchedKeyword.toLowerCase();
     }
 
-    if (option.equals(SearchOption.IS.name())) {
-      satisfiesFilter = (attributeValue.equals(searchedKeyword));
-    } else if (option.equals(SearchOption.LIKE.name())) {
-      satisfiesFilter = (attributeValue.contains(searchedKeyword));
-    } else if (option.equals(SearchOption.IS_NOT.name())) {
-      satisfiesFilter = (!attributeValue.equals(searchedKeyword));
-    }  else if (option.equals(SearchOption.IS_NOT.name())){
-      satisfiesFilter = (!attributeValue.contains(searchedKeyword));
+    //todo handle null string values in searchKey
+    if (!(searchedKeyword == null)){
+      if (option.equals(SearchOption.IS.name())) {
+        satisfiesFilter = (attributeValue.equals(searchedKeyword));
+      } else if (option.equals(SearchOption.LIKE.name())) {
+        satisfiesFilter = (attributeValue.contains(searchedKeyword));
+      } else if (option.equals(SearchOption.IS_NOT.name())) {
+        satisfiesFilter = (!attributeValue.equals(searchedKeyword));
+      }  else if (option.equals(SearchOption.IS_NOT.name())){
+        satisfiesFilter = (!attributeValue.contains(searchedKeyword));
+      }
+    } else {
+      LOG.warn("You are searching for a null text value in the  " + TextAttributeFilterController.EPA_NAME + ". This is not supported at the moment");
+
     }
+
 
 
     if (satisfiesFilter) {
