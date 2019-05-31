@@ -52,7 +52,6 @@ public class GeoValidator implements EventProcessor<GeoValidatorParameter> {
         }
 
 
-
         if (satisfiers){
             out.collect(in);
         }

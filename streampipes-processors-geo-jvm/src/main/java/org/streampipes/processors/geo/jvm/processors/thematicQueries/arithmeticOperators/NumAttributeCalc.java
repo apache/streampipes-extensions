@@ -63,7 +63,6 @@ public class NumAttributeCalc implements EventProcessor<NumAttributeCalcParamete
             }
         } else if (calc_operator.equals(ArithmeticOperator.MODULO.name())) {
             //if second value is greater than first value. modulo makes no sense and value is returned
-            //todo makes that sense?
             if (value2 > value1){
                 result = value1;
                 satisfier = true;

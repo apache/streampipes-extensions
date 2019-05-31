@@ -59,7 +59,5 @@ public class SetEpsgController extends StandaloneEventProcessingDeclarer<SetEpsg
 
         return new ConfiguredEventProcessor<>(params, SetEPSG::new);
 
-        //todo list verarbeiten
-
     }
 }
