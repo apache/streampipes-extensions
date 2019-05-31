@@ -99,6 +99,8 @@ public class RoutingSingleInput implements EventProcessor<RoutingSingleInputPara
             }
 
             in.addField(RoutingSingleInputController.ROUTING_TEXT, routingGeom.toString());
+            in.addField(RoutingSingleInputController.EPSG_CODE_ROUTING, routingGeom.getSRID());
+
             out.collect(in);
 
         } else {

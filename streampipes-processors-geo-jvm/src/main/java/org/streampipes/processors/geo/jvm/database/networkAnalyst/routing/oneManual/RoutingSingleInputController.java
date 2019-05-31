@@ -26,6 +26,7 @@ public class RoutingSingleInputController extends StandaloneEventProcessingDecla
 
 
     public final static String ROUTING_TEXT = "routing_text";
+    public final static String EPSG_CODE_ROUTING = "epsg_code_routing";
     public final static String EPA_NAME = "Routing with Single Input";
 
 
@@ -86,7 +87,13 @@ public class RoutingSingleInputController extends StandaloneEventProcessingDecla
                                                 "routing_wkt",
                                                 "wkt string from routing geometry result"),
                                         ROUTING_TEXT,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code from routing_wkt",
+                                                "EPSG Code from routing_wkt",
+                                                "EPSG Code for SRID from routing_wkt"),
+                                        EPSG_CODE_ROUTING, SO.Number)
                         )
                 )
                 .supportedFormats(SupportedFormats.jsonFormat())
