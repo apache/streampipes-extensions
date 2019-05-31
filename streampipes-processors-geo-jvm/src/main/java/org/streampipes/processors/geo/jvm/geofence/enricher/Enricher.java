@@ -44,8 +44,6 @@ public class Enricher implements EventProcessor<EnricherParameter> {
 
     @Override
     public void onEvent(Event in, SpOutputCollector out) {
-        //todo add parameters
-
 
         String geofence_wkt = null;
         Integer geofence_epsg = null;
