@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence;
+package org.streampipes.processors.geo.jvm.geofence.storing;
 
 import org.streampipes.model.graph.DataSinkInvocation;
 import org.streampipes.wrapper.params.binding.EventSinkBindingParams;

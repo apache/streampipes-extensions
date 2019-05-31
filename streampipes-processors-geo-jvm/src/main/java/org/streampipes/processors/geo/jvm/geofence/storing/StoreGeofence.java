@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence;
+package org.streampipes.processors.geo.jvm.geofence.storing;
 
 
 import org.locationtech.jts.geom.Geometry;

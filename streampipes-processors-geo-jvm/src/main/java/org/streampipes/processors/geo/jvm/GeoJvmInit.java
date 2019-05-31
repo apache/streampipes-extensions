@@ -29,7 +29,7 @@ import org.streampipes.processors.geo.jvm.database.dataFromRaster.precipitation.
 import org.streampipes.processors.geo.jvm.database.networkAnalyst.isochrone.IsochroneController;
 import org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.oneManual.RoutingSingleInputController;
 import org.streampipes.processors.geo.jvm.database.networkAnalyst.routing.twoManual.Routing_input_inputController;
-import org.streampipes.processors.geo.jvm.geofence.StoreGeofenceController;
+import org.streampipes.processors.geo.jvm.geofence.storing.StoreGeofenceController;
 import org.streampipes.processors.geo.jvm.geofence.enricher.EnricherController;
 import org.streampipes.processors.geo.jvm.processors.changeGeometries.direction.DirectionController;
 import org.streampipes.processors.geo.jvm.processors.changeGeometries.refineLine.RefineLineController;
