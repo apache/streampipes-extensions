@@ -19,6 +19,8 @@ public class CollectMultiPolygonController extends StandaloneEventProcessingDecl
 	protected final static String EPSG_CODE = "epsg_code";
 	protected final static String UID = "uid";
 	protected final static String COLLECT = "collect_multipolygon_wkt";
+	public final static String EPSG_CODE_COLLECTED_MULTIPOLYGON = "epsg_code_collected_multiline";
+
 	protected final static String DISSOLVE = "dissolve";
 
 	protected final static String EPA_NAME = "Collect as MultiPolygon";
@@ -74,7 +76,13 @@ public class CollectMultiPolygonController extends StandaloneEventProcessingDecl
 								Labels.from(COLLECT,
 										"multipolygon_wkt",
 										"multipolygon"),
-								COLLECT, SO.Text)
+								COLLECT, SO.Text),
+						EpProperties.numberEp(
+								Labels.from(
+										"EPSG Code Collected MultiPolygon",
+										"EPSG Code from Collected MultiPolygon",
+										"EPSG Code for SRID from MultiPolygon MultiLine"),
+								EPSG_CODE_COLLECTED_MULTIPOLYGON, SO.Number)
 						)
 				)
 				.build();

@@ -85,6 +85,8 @@ public class VoronoiOperator implements EventProcessor<VoronoiOperatorParameters
               if (!(voronoiPoly.isEmpty())) {
 
                   in.addField(VoronoiOperatorController.VORONOI, voronoiPoly.toText());
+                  in.addField(VoronoiOperatorController.EPSG_CODE_VORONOI, voronoiPoly.getSRID());
+
                   out.collect(in);
               }
 

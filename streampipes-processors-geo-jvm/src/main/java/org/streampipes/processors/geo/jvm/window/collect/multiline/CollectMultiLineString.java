@@ -75,6 +75,8 @@ public class CollectMultiLineString implements EventProcessor<CollectMultiLineSt
 
 
           in.addField(CollectMultiLineStringController.COLLECT, multiline.toText());
+          in.addField(CollectMultiLineStringController.EPSG_CODE_COLLECTED_MULTILINE, multiline.getSRID());
+
           out.collect(in);
 
 

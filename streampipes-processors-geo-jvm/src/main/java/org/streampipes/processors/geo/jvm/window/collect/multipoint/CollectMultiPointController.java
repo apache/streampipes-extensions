@@ -19,6 +19,8 @@ public class CollectMultiPointController extends StandaloneEventProcessingDeclar
 	protected final static String EPSG_CODE = "epsg_code";
 	protected final static String UID = "uid";
 	protected final static String COLLECT = "collect_multipoint_wkt";
+	public final static String EPSG_CODE_COLLECTED_MULTIPOINT = "epsg_code_collected_multipoint";
+
 
 	protected final static String EPA_NAME = "Collect as MultiPoint";
 
@@ -63,7 +65,13 @@ public class CollectMultiPointController extends StandaloneEventProcessingDeclar
 								Labels.from(COLLECT,
 										"mutlipoint_wkt",
 										"multipoint"),
-								COLLECT, SO.Text)
+								COLLECT, SO.Text),
+						EpProperties.numberEp(
+								Labels.from(
+										"EPSG Code Collected MultiPoint",
+										"EPSG Code from Collected MultiPoint",
+										"EPSG Code for SRID from Collected MultiPoint"),
+								EPSG_CODE_COLLECTED_MULTIPOINT, SO.Number)
 						)
 				)
 				.build();

@@ -20,6 +20,7 @@ public class VoronoiOperatorController extends StandaloneEventProcessingDeclarer
 	protected final static String EPSG_CODE = "epsg_code";
 	protected final static String UID = "uid";
 	protected final static String VORONOI = "voronoi_wkt";
+	public final static String EPSG_CODE_VORONOI = "epsg_code_voronoi";
 
 	protected final static String EPA_NAME = "Voronoi Operator";
 
@@ -64,7 +65,14 @@ public class VoronoiOperatorController extends StandaloneEventProcessingDeclarer
 								Labels.from(VORONOI,
 										"sizeGeometries",
 										"Size of Geometry stream"),
-								VORONOI, SO.Text)
+								VORONOI, SO.Text),
+						EpProperties.numberEp(
+								Labels.from(
+										"EPSG Code Voronoi",
+										"EPSG Code from Voronoi",
+										"EPSG Code for SRID from Voronoi"),
+								EPSG_CODE_VORONOI, SO.Number)
+
 						)
 				)
 				.build();

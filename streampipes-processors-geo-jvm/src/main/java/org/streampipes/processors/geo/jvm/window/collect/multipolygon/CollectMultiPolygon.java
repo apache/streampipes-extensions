@@ -77,6 +77,8 @@ public class CollectMultiPolygon implements EventProcessor<CollectMultiPolygonPa
 
 
           in.addField(CollectMultiPolygonController.COLLECT, multipolygon.toText());
+          in.addField(CollectMultiPolygonController.EPSG_CODE_COLLECTED_MULTIPOLYGON, multipolygon.getSRID());
+
           out.collect(in);
 
 

@@ -77,6 +77,8 @@ public class CollectMultiPoint implements EventProcessor<CollectMultiPointParame
 
 
           in.addField(CollectMultiPointController.COLLECT, multipoint.toText());
+          in.addField(CollectMultiPointController.EPSG_CODE_COLLECTED_MULTIPOINT, multipoint.getSRID());
+
           out.collect(in);
 
 

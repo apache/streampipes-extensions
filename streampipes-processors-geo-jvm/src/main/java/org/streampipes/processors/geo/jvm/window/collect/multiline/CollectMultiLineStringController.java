@@ -19,7 +19,9 @@ public class CollectMultiLineStringController extends StandaloneEventProcessingD
 	protected final static String WKT_TEXT = "wkt_text";
 	protected final static String EPSG_CODE = "epsg_code";
 	protected final static String UID = "uid";
-	protected final static String COLLECT = "collect_multiline_wkt";
+	protected final static String COLLECT = "collected_multiline_wkt";
+	public final static String EPSG_CODE_COLLECTED_MULTILINE = "epsg_code_collected_multiline";
+
 
 	protected final static String EPA_NAME = "Collect as MultiLineString";
 
@@ -64,7 +66,13 @@ public class CollectMultiLineStringController extends StandaloneEventProcessingD
 								Labels.from(COLLECT,
 										"mutlilinestring_wkt",
 										"multilinestring"),
-								COLLECT, SO.Text)
+								COLLECT, SO.Text),
+						EpProperties.numberEp(
+								Labels.from(
+										"EPSG Code Collected MultiLine",
+										"EPSG Code from Collected MultiLine",
+										"EPSG Code for SRID from Collected MultiLine"),
+								EPSG_CODE_COLLECTED_MULTILINE, SO.Number)
 						)
 				)
 				.build();
