@@ -23,7 +23,7 @@ public class PrecipitationController extends StandaloneEventProcessingDeclarer<P
     public final static String YEAR_START = "year_start";
     public final static String YEAR_END = "year_end";
     public final static String TYPE = "type";
-    public final static String PREC_result = "result";
+    public final static String PREC_result = "precipitation_result";
 
 
     public final static String EPA_Name = "Precipitation from Raster";

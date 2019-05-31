@@ -57,8 +57,6 @@ public class Precipitation implements EventProcessor<PrecipitationParameter> {
 
         double result = db.getTotalResult(year_start, year_end, conn, geometry, type);
 
-        //todo check what kind of value occurs, if region is outside of germany. if it in null
-
         in.addField(PrecipitationController.PREC_result, result);
         out.collect(in);
 
