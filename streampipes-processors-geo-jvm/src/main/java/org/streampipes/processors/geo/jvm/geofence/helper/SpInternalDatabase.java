@@ -140,7 +140,7 @@ public class SpInternalDatabase {
                     +  " wkt = '" + geom.toText() + "',"
                     + "epsg = " + epsg + ","
                     + " area = " + resultArea + ","
-                    +  "areaunit = " + unitAsString + ","
+                    +  "areaunit = '" + unitAsString + "',"
                     + "m = " + m_value
                     + " WHERE name = '" + geofenceName + "';";
 
