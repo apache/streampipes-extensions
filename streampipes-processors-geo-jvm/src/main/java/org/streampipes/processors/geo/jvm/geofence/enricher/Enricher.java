@@ -74,6 +74,7 @@ public class Enricher implements EventProcessor<EnricherParameter> {
         }
 
 
+        //todo merge with other stream
         in.addField(EnricherController.GEOFENCE_NAME, geofence_name);
         in.addField(EnricherController.GEOFENCE_WKT, geofence_wkt);
         in.addField(EnricherController.GEOFENCE_EPSG, geofence_epsg);
