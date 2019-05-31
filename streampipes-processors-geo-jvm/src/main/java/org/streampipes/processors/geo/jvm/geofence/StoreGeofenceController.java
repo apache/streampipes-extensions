@@ -28,7 +28,7 @@ public class StoreGeofenceController extends StandaloneEventSinkDeclarer<StoreGe
 
   @Override
   public DataSinkDescription declareModel() {
-    return DataSinkBuilder.create("org/streampipes/processors/geo/jvm/geofence", EPA_NAME,
+    return DataSinkBuilder.create("org.streampipes.processors.geo.jvm.geofence", EPA_NAME,
         "Stores Polygons or MultiPolygons as geofence together with calculated area in a database.")
             .category(DataSinkType.STORAGE)
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
