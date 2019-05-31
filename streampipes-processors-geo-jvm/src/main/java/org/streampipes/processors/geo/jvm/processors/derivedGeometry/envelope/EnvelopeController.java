@@ -19,6 +19,8 @@ public class EnvelopeController extends StandaloneEventProcessingDeclarer<Envelo
     public final static String WKT_TEXT = "wkt_text";
     public final static String EPSG_CODE = "epsg_code";
     public final static String ENVELOPE = "envelope_text";
+    public final static String EPSG_CODE_ENVELOPE = "epsg_code_envelope";
+
     public final static String EPA_NAME = "Envelope";
 
 
@@ -47,7 +49,13 @@ public class EnvelopeController extends StandaloneEventProcessingDeclarer<Envelo
                                                 "envelope_wkt",
                                                 "envelope wkt"),
                                         ENVELOPE,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code Envelope",
+                                                "EPSG Code from Envelope",
+                                                "EPSG Code for SRID from Envelope"),
+                                        EPSG_CODE_ENVELOPE, SO.Number)
                         )
                 )
 

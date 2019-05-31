@@ -47,7 +47,7 @@ public class OverlaySpFilter implements EventProcessor<OverlaySpFilterParameter>
         Integer epsgCode_geom2 = in.getFieldBySelector(params.getEpsg_geom_2()).getAsPrimitive().getAsInt();
 
 
-        Geometry result = null;
+        Geometry overlayResult = null;
 
         if (checker){
             first_geom = createSPGeom(geom1_wkt, epsgCode_geom1);
@@ -62,26 +62,27 @@ public class OverlaySpFilter implements EventProcessor<OverlaySpFilterParameter>
         boolean satisfier = false;
 
         if (type==1){
-            result = overlay.geomIntersectionSP();
+            overlayResult = overlay.geomIntersectionSP();
             satisfier = true;
         } else if (type ==2){
-            result = overlay.geomUnionSP();
+            overlayResult = overlay.geomUnionSP();
             satisfier = true;
 
         } else if (type ==3){
-            result = overlay.geomUnionLevel();
+            overlayResult = overlay.geomUnionLevel();
             satisfier = true;
         } else if (type == 4){
-            result = overlay.geomDifferenceSP();
+            overlayResult = overlay.geomDifferenceSP();
             satisfier = true;
         } else if (type == 5){
-            result = overlay.geomSymDifferenceSP();
+            overlayResult = overlay.geomSymDifferenceSP();
             satisfier = true;
         }
 
 
         if (satisfier){
-            in.addField(OverlaySpFilterController.OVERLAY, result.toText());
+            in.addField(OverlaySpFilterController.OVERLAY, overlayResult.toText());
+            in.addField(OverlaySpFilterController.EPSG_CODE_OVERLAY, overlayResult.getSRID());
             out.collect(in);
         }
 

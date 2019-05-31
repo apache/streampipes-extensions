@@ -31,6 +31,8 @@ public class OverlaySpFilterController extends StandaloneEventProcessingDeclarer
 
 
     public final static String OVERLAY = "overlay_wkt";
+    public final static String EPSG_CODE_OVERLAY = "epsg_code_overlay";
+
 
     public final static String EPA_NAME = "Overlay Operator";
 
@@ -105,7 +107,13 @@ public class OverlaySpFilterController extends StandaloneEventProcessingDeclarer
                                                 "overlay_wkt",
                                                 "overlay wkt"),
                                         OVERLAY,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code Overlay",
+                                                "EPSG Code from Overlay",
+                                                "EPSG Code for SRID from Overlay"),
+                                        EPSG_CODE_OVERLAY, SO.Number)
                         )
                 )
                 .supportedFormats(SupportedFormats.jsonFormat())

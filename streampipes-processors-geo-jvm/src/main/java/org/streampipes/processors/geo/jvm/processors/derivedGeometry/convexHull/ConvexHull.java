@@ -32,9 +32,11 @@ public class ConvexHull implements EventProcessor<ConvexHullParameter> {
         Geometry geometry = createSPGeom(wkt, epsgCode);
 
 
-        Geometry envelope = createSPGeom(geometry.convexHull(), epsgCode);
+        Geometry convexHull = createSPGeom(geometry.convexHull(), epsgCode);
 
-        in.addField(ConvexHullController.CONVEX_HULL_WKT, envelope.toText());
+        in.addField(ConvexHullController.CONVEX_HULL_WKT, convexHull.toText());
+        in.addField(ConvexHullController.EPSG_CODE_CONVEXHULL, convexHull.getSRID());
+
 
         out.collect(in);
 

@@ -19,6 +19,8 @@ public class InteriorPointController extends StandaloneEventProcessingDeclarer<I
     public final static String WKT_TEXT = "wkt_text";
     public final static String EPSG_CODE = "epsg_code";
     public final static String INTERIOR_POINT = "interior_wkt";
+    public final static String EPSG_CODE_INTERIOR = "epsg_code_interior";
+
     public final static String EPA_NAME = "Interior Point";
 
 
@@ -47,7 +49,13 @@ public class InteriorPointController extends StandaloneEventProcessingDeclarer<I
                                                 "interior_wkt",
                                                 "interior_wkt"),
                                         INTERIOR_POINT,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code Interior",
+                                                "EPSG Code from Interior",
+                                                "EPSG Code for SRID from Interior"),
+                                        EPSG_CODE_INTERIOR, SO.Number)
                         )
                 )
 

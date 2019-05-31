@@ -20,6 +20,7 @@ public class CentroidPointController extends StandaloneEventProcessingDeclarer<C
     public final static String EPSG_CODE = "epsg_code";
 
     public final static String CENTROID_POINT = "centroid_wkt";
+    public final static String EPSG_CODE_CENTROID = "epsg_code_centroid";
 
 
     public final static String EPA_NAME = "Centroid Point";
@@ -51,8 +52,15 @@ public class CentroidPointController extends StandaloneEventProcessingDeclarer<C
                                                 "centroid_wkt",
                                                 "centroid WKT"),
                                         CENTROID_POINT,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code Centroid",
+                                                "EPSG Code from Centroid",
+                                                "EPSG Code for SRID from Centroid"),
+                                        EPSG_CODE_CENTROID, SO.Number)
                         )
+
                 )
 
 

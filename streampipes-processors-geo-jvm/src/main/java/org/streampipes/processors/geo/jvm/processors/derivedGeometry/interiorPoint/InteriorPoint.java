@@ -38,6 +38,8 @@ public class InteriorPoint implements EventProcessor<InteriorPointParameter> {
         if (geometry instanceof LineString){
             Point interior = getInteriorSp((LineString) geometry);
             in.addField(InteriorPointController.INTERIOR_POINT, interior.toText());
+            in.addField(InteriorPointController.EPSG_CODE_INTERIOR, interior.getSRID());
+
             out.collect(in);
         } else {
             LOG.warn("Only LinesStrings are supported in the " + InteriorPointController.EPA_NAME + "but input type is " + geometry.getGeometryType());

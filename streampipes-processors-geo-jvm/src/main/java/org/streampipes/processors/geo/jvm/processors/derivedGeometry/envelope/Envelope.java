@@ -41,6 +41,8 @@ public class Envelope implements EventProcessor<EnvelopeParameter> {
 
 
         in.addField(EnvelopeController.ENVELOPE, envelope.toText());
+        in.addField(EnvelopeController.EPSG_CODE_ENVELOPE, envelope.getSRID());
+
 
         out.collect(in);
 

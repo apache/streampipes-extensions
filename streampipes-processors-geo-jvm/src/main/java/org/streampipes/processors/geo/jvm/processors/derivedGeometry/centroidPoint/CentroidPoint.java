@@ -48,12 +48,15 @@ public class CentroidPoint implements EventProcessor<CentroidPointParameter> {
         if (geometry instanceof Polygon){
             centroidPoint = (Point) createSPGeom(geometry.getCentroid(), geometry.getSRID());
             in.addField(CentroidPointController.CENTROID_POINT, centroidPoint.toText());
+            in.addField(CentroidPointController.EPSG_CODE_CENTROID, centroidPoint.getSRID());
+
 
             out.collect(in);
 
         } else if (geometry instanceof MultiPolygon){
             centroidPoint = (Point) createSPGeom(geometry.getCentroid(), geometry.getSRID());
             in.addField(CentroidPointController.CENTROID_POINT, centroidPoint.toText());
+            in.addField(CentroidPointController.EPSG_CODE_CENTROID, centroidPoint.getSRID());
 
             out.collect(in);
         } else {

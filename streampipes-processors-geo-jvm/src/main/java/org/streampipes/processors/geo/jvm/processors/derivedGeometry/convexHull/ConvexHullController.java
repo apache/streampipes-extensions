@@ -21,6 +21,7 @@ public class ConvexHullController extends StandaloneEventProcessingDeclarer<Conv
     public final static String WKT_TEXT = "wkt_text";
     public final static String EPSG_CODE = "epsg_code";
     public final static String CONVEX_HULL_WKT = "convex-hull_wkt";
+    public final static String EPSG_CODE_CONVEXHULL = "epsg_code_convex_hull";
 
     public final static String EPA_NAME = "Convex Hull";
 
@@ -50,7 +51,13 @@ public class ConvexHullController extends StandaloneEventProcessingDeclarer<Conv
                                                 "convex-hull_wkt",
                                                 "convex hull wkt"),
                                         CONVEX_HULL_WKT,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code ConvexHull",
+                                                "EPSG Code from ConvexHull",
+                                                "EPSG Code for SRID from ConvexHull"),
+                                        EPSG_CODE_CONVEXHULL, SO.Number)
                         )
                 )
                 .supportedFormats(SupportedFormats.jsonFormat())
