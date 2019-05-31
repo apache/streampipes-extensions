@@ -54,6 +54,7 @@ public class BufferGeometry implements EventProcessor<BufferGeometryParameter> {
 
         if (!bufferGeom.isEmpty()){
             in.addField(BufferGeometryController.OUTPUT_WKT, bufferGeom.toText());
+            in.addField(BufferGeometryController.EPSG_CODE_Buffer, bufferGeom.getSRID());
             out.collect(in);
         } else {
             LOG.warn("An empty polygon geometry is created in " + BufferGeometryController.EPA_NAME + " and is not parsed into the stream");

@@ -23,6 +23,8 @@ public class BufferPointController extends StandaloneEventProcessingDeclarer<Buf
     public final static String WKT_TEXT = "wkt_text";
     public final static String EPSG_CODE = "epsg_code";
     public final static String OUTPUT_WKT = "buffer_wkt";
+    public final static String EPSG_CODE_Buffer = "epsg_code_buffer";
+
 
 
     public final static String CAP= "cap_style";
@@ -105,7 +107,13 @@ public class BufferPointController extends StandaloneEventProcessingDeclarer<Buf
                                                 "buffer_wkt",
                                                 "buffer_wkt"),
                                         OUTPUT_WKT,
-                                        SO.Text)
+                                        SO.Text),
+                                EpProperties.numberEp(
+                                        Labels.from(
+                                                "EPSG Code Buffer",
+                                                "EPSG Code from Buffer Polygon",
+                                                "EPSG Code for SRID from Buffer"),
+                                        EPSG_CODE_Buffer, SO.Number)
                         )
                 )
 
