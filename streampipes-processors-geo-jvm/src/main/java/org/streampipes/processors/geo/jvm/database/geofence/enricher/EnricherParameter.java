@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence.enricher;
+package org.streampipes.processors.geo.jvm.database.geofence.enricher;
 
 
 

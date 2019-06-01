@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence.helper;
+package org.streampipes.processors.geo.jvm.database.geofence.helper;
 
 
 import org.postgresql.util.PSQLException;

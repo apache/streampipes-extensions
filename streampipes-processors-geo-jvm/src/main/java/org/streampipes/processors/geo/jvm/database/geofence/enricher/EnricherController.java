@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence.enricher;
+package org.streampipes.processors.geo.jvm.database.geofence.enricher;
 
 
 import org.streampipes.commons.exceptions.SpRuntimeException;
@@ -52,7 +52,7 @@ public class EnricherController extends
     @Override
         public DataProcessorDescription declareModel() {
             return ProcessingElementBuilder
-                    .create("org.streampipes.processors.geo.jvm.geofence.enricher",
+                    .create("org.streampipes.processors.geo.jvm.database.geofence.enricher",
                             EPA_NAME,
                             "Enrich stream with properties from geofence")
                     .category(DataProcessorType.GEO)

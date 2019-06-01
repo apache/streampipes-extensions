@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence.helper;
+package org.streampipes.processors.geo.jvm.database.geofence.helper;
 
 
 import org.locationtech.jts.geom.Geometry;
@@ -25,7 +25,7 @@ public class SpInternalDatabase {
     private String login;
 
 
-    private String schemaName = "geofence";
+    private final String schemaName = "geofence";
 
 
     public SpInternalDatabase(String host, Integer port, String dbName, String user, String password) {

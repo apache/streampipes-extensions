@@ -1,4 +1,4 @@
-package org.streampipes.processors.geo.jvm.geofence.storing;
+package org.streampipes.processors.geo.jvm.database.geofence.storing;
 
 
 import org.locationtech.jts.geom.Geometry;
@@ -6,7 +6,7 @@ import org.streampipes.commons.exceptions.SpRuntimeException;
 import org.streampipes.logging.api.Logger;
 import org.streampipes.model.runtime.Event;
 import org.streampipes.processors.geo.jvm.config.GeoJvmConfig;
-import org.streampipes.processors.geo.jvm.geofence.helper.SpInternalDatabase;
+import org.streampipes.processors.geo.jvm.database.geofence.helper.SpInternalDatabase;
 import org.streampipes.wrapper.context.EventSinkRuntimeContext;
 import org.streampipes.wrapper.runtime.EventSink;
 

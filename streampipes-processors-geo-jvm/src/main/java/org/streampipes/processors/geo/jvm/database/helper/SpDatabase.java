@@ -484,7 +484,7 @@ public class SpDatabase {
 
 
     /**
-     * returns a single value of raster or.org.streampipes.processors.geo.jvm.geofence.storing function
+     * returns a single value of raster or.org.streampipes.processors.geo.jvm.database.geofence.storing function
      * @param query
      * @param conn
      * @return

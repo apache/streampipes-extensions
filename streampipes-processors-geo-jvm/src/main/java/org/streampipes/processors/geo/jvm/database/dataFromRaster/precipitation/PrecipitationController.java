@@ -64,8 +64,8 @@ public class PrecipitationController extends StandaloneEventProcessingDeclarer<P
                 .requiredSingleValueSelection(
                         Labels.from(
                                 TYPE,
-                                "or.org.streampipes.processors.geo.jvm.geofence.storing type",
-                                "choose type of or.org.streampipes.processors.geo.jvm.geofence.storing" ),
+                                "aggregation type",
+                                "choose type of aggregation" ),
                         Options.from(
                                 SpDatabase.AggregationType.avg.name(),
                                 SpDatabase.AggregationType.sum.name(),

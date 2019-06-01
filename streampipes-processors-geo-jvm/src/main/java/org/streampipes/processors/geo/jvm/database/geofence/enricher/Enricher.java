@@ -1,10 +1,10 @@
-package org.streampipes.processors.geo.jvm.geofence.enricher;
+package org.streampipes.processors.geo.jvm.database.geofence.enricher;
 
 
 import org.streampipes.processors.geo.jvm.config.GeoJvmConfig;
 import org.streampipes.logging.api.Logger;
 import org.streampipes.model.runtime.Event;
-import org.streampipes.processors.geo.jvm.geofence.helper.SpInternalDatabase;
+import org.streampipes.processors.geo.jvm.database.geofence.helper.SpInternalDatabase;
 import org.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.streampipes.wrapper.routing.SpOutputCollector;
 import org.streampipes.wrapper.runtime.EventProcessor;
