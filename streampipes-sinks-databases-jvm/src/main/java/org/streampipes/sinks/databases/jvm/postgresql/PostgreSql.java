@@ -39,17 +39,18 @@ public class PostgreSql implements EventSink<PostgreSqlParameters> {
     // See (https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS)
     // for allowed postgres identifiers (for the regex)
     this.jdbcClient = new JdbcClient(
-        parameters.getGraph().getInputStreams().get(0).getEventSchema().getEventProperties(),
-        parameters.getPostgreSqlHost(),
-        parameters.getPostgreSqlPort(),
-        parameters.getDatabaseName(),
-        parameters.getTableName(),
-        parameters.getUsername(),
-        parameters.getPassword(),
-        "^[a-zA-Z_][a-zA-Z0-9_]*$",
-        "org.postgresql.Driver",
-        "postgresql",
-        LOG
+            parameters.getGraph().getInputStreams().get(0).getEventSchema().getEventProperties(),
+            parameters.getPostgreSqlHost(),
+            parameters.getPostgreSqlPort(),
+            parameters.getDatabaseName(),
+            parameters.getTableName(),
+            parameters.getUsername(),
+            parameters.getPassword(),
+            "^[a-zA-Z_][a-zA-Z0-9_]*$",
+            "org.postgresql.Driver",
+            "postgresql",
+            parameters.getSchemaName(),
+            LOG
     );
   }
 

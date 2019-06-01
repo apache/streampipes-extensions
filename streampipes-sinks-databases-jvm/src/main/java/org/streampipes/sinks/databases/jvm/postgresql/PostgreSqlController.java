@@ -22,16 +22,12 @@ import org.streampipes.model.graph.DataSinkInvocation;
 import org.streampipes.sdk.builder.DataSinkBuilder;
 import org.streampipes.sdk.builder.StreamRequirementsBuilder;
 import org.streampipes.sdk.extractor.DataSinkParameterExtractor;
-import org.streampipes.sdk.helpers.EpRequirements;
-import org.streampipes.sdk.helpers.Labels;
-import org.streampipes.sdk.helpers.Locales;
-import org.streampipes.sdk.helpers.SupportedFormats;
-import org.streampipes.sdk.helpers.SupportedProtocols;
+import org.streampipes.sdk.helpers.*;
 import org.streampipes.sdk.utils.Assets;
 import org.streampipes.wrapper.standalone.ConfiguredEventSink;
 import org.streampipes.wrapper.standalone.declarer.StandaloneEventSinkDeclarer;
 
-public class PostgreSqlController extends StandaloneEventSinkDeclarer<PostgreSqlParameters> {
+public class PostgreSqlController  extends StandaloneEventSinkDeclarer<PostgreSqlParameters> {
 
   private static final String DATABASE_HOST_KEY = "db_host";
   private static final String DATABASE_PORT_KEY = "db_port";
@@ -39,10 +35,11 @@ public class PostgreSqlController extends StandaloneEventSinkDeclarer<PostgreSql
   private static final String DATABASE_TABLE_KEY = "db_table";
   private static final String DATABASE_USER_KEY = "db_user";
   private static final String DATABASE_PASSWORD_KEY = "db_password";
+  private static final String DROP_TABLE_IF_EXISTS = "dropTable";
+  private static final String DATABASE_SCHEMA_KEY = "db_schema";
 
   @Override
   public DataSinkDescription declareModel() {
-    //TODO: Replace Icon, insert defaults (for the port)
     return DataSinkBuilder.create("org.streampipes.sinks.databases.jvm.postgresql")
             .withLocales(Locales.EN)
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
@@ -52,18 +49,44 @@ public class PostgreSqlController extends StandaloneEventSinkDeclarer<PostgreSql
                     .build())
             .supportedFormats(SupportedFormats.jsonFormat())
             .supportedProtocols(SupportedProtocols.kafka(), SupportedProtocols.jms())
-            .requiredTextParameter(Labels.withId(DATABASE_HOST_KEY))
-            .requiredIntegerParameter(Labels.withId(DATABASE_PORT_KEY), 5432)
-            .requiredTextParameter(Labels.withId(DATABASE_NAME_KEY))
-            .requiredTextParameter(Labels.withId(DATABASE_TABLE_KEY))
-            .requiredTextParameter(Labels.withId(DATABASE_USER_KEY))
-            .requiredTextParameter(Labels.withId(DATABASE_PASSWORD_KEY))
+            .requiredTextParameter(Labels.from(
+                    DATABASE_HOST_KEY,
+                    "Hostname",
+                    "The hostname of the PostgreSQL instance"))
+            .requiredIntegerParameter(Labels.from(
+                    DATABASE_PORT_KEY,
+                    "Port",
+                    "The port of the PostgreSQL instance (default 5432)"),
+                    5432)
+            .requiredTextParameter(Labels.from(
+                    DATABASE_NAME_KEY,
+                    "Database Name",
+                    "The name of the database where events will be stored"))
+            .requiredTextParameter(Labels.from(
+                    DATABASE_TABLE_KEY ,
+                    "Table Name",
+                    "The name of the table where events will be stored "
+                            + "(will be created if it does not exist)"))
+            .requiredTextParameter(Labels.from(
+                    DATABASE_USER_KEY ,
+                    "Username",
+                    "The username for the PostgreSQL Server"))
+            .requiredTextParameter(Labels.from(
+                    DATABASE_PASSWORD_KEY ,
+                    "Password",
+                    "The password for the PostgreSQL Server"))
+            .requiredTextParameter(Labels.from(
+                    DATABASE_SCHEMA_KEY,
+                    "Schema Name",
+                    "The name of the Schema where table will be stored in. Use 'public' as standard "))
             .build();
   }
 
+
+
   @Override
   public ConfiguredEventSink<PostgreSqlParameters> onInvocation(DataSinkInvocation graph,
-                                                                DataSinkParameterExtractor extractor) {
+                                                             DataSinkParameterExtractor extractor) {
 
     String hostname = extractor.singleValueParameter(DATABASE_HOST_KEY, String.class);
     Integer port = extractor.singleValueParameter(DATABASE_PORT_KEY, Integer.class);
@@ -71,6 +94,10 @@ public class PostgreSqlController extends StandaloneEventSinkDeclarer<PostgreSql
     String tableName = extractor.singleValueParameter(DATABASE_TABLE_KEY, String.class);
     String user = extractor.singleValueParameter(DATABASE_USER_KEY, String.class);
     String password = extractor.singleValueParameter(DATABASE_PASSWORD_KEY, String.class);
+    String schema = extractor.singleValueParameter(DATABASE_SCHEMA_KEY, String.class);
+
+
+
 
     PostgreSqlParameters params = new PostgreSqlParameters(graph,
             hostname,
@@ -78,7 +105,8 @@ public class PostgreSqlController extends StandaloneEventSinkDeclarer<PostgreSql
             dbName,
             tableName,
             user,
-            password);
+            password,
+            schema);
 
     return new ConfiguredEventSink<>(params, PostgreSql::new);
   }

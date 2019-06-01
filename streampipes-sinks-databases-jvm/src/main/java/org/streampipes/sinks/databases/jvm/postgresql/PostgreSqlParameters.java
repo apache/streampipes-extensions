@@ -27,8 +27,10 @@ public class PostgreSqlParameters extends EventSinkBindingParams {
   private String tableName;
   private String user;
   private String password;
+  private String schemaName;
 
-  public PostgreSqlParameters(DataSinkInvocation graph, String PostgreSqlHost, Integer PostgreSqlPort, String databaseName, String tableName, String user, String password) {
+
+  public PostgreSqlParameters(DataSinkInvocation graph, String PostgreSqlHost, Integer PostgreSqlPort, String databaseName, String tableName, String user, String password, String schemaName) {
     super(graph);
     this.PostgreSqlHost = PostgreSqlHost;
     this.PostgreSqlPort = PostgreSqlPort;
@@ -36,6 +38,7 @@ public class PostgreSqlParameters extends EventSinkBindingParams {
     this.tableName = tableName;
     this.user = user;
     this.password = password;
+    this.schemaName = schemaName;
   }
 
   public String getPostgreSqlHost() {
@@ -60,5 +63,14 @@ public class PostgreSqlParameters extends EventSinkBindingParams {
 
   public String getPassword() {
     return password;
+  }
+
+  public String getUser() {
+    return user;
+  }
+
+
+  public String getSchemaName() {
+    return schemaName;
   }
 }
