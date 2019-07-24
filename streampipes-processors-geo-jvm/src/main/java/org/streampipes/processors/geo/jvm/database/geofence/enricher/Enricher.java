@@ -54,6 +54,12 @@ public class Enricher implements EventProcessor<EnricherParameter> {
 
 
         String query = "SELECT * FROM geofence.info WHERE name = '" + geofence_name + "';";
+        // anstatt suchen nach namen search for nearest polygon in main table
+
+
+
+
+
 
         // try with resources (no finally block and double try catch necessary
         try (Statement stmt = conn.createStatement();
@@ -82,6 +88,7 @@ public class Enricher implements EventProcessor<EnricherParameter> {
         in.addField(EnricherController.GEOFENCE_AREA_UNIT, geofence_areaUnit);
         in.addField(EnricherController.GEOFENCE_M_VALUE, geofence_M);
 
+        out.collect(in);
     }
 
     @Override

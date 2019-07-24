@@ -73,17 +73,17 @@ public class EnricherController extends
 
 
                     //todo change back to custom
-                    .outputStrategy(OutputStrategies.customTransformation())
+                    //.outputStrategy(OutputStrategies.customTransformation())
 
-//                    .outputStrategy(OutputStrategies.append(
-//                            EpProperties.stringEp(Labels.from(GEOFENCE_NAME, "geofence_name", "name of the geofence"), "geofence_name", SO.Text),
-//                            EpProperties.stringEp(Labels.from(GEOFENCE_WKT, "geofence_wkt", "WKT String of geofence"), "geofence_wkt", SO.Text),
-//                            EpProperties.integerEp(Labels.from(GEOFENCE_EPSG, "geofence_epsg", "EPSG Code of geofence"), "geofence_epsg", SO.Number),
-//                            EpProperties.doubleEp(Labels.from(GEOFENCE_AREA, "geofence_area", "area of geofence"), "geofence_area", SO.Number),
-//                            EpProperties.stringEp(Labels.from(GEOFENCE_AREA_UNIT, "geofence_areaUnit", "unit of geofence area"), "geofence_area_unit", SO.Text),
-//                            EpProperties.doubleEp(Labels.from(GEOFENCE_M_VALUE, "geofence_M_Value", "M value of geofence"), "geofence_M", SO.Number)
-//                            )
-//                    )
+                    .outputStrategy(OutputStrategies.append(
+                            EpProperties.stringEp(Labels.from(GEOFENCE_NAME, "geofence_name", "name of the geofence"), "geofence_name", SO.Text),
+                            EpProperties.stringEp(Labels.from(GEOFENCE_WKT, "geofence_wkt", "WKT String of geofence"), "geofence_wkt", SO.Text),
+                            EpProperties.integerEp(Labels.from(GEOFENCE_EPSG, "geofence_epsg", "EPSG Code of geofence"), "geofence_epsg", SO.Number),
+                            EpProperties.doubleEp(Labels.from(GEOFENCE_AREA, "geofence_area", "area of geofence"), "geofence_area", SO.Number),
+                            EpProperties.stringEp(Labels.from(GEOFENCE_AREA_UNIT, "geofence_areaUnit", "unit of geofence area"), "geofence_area_unit", SO.Text),
+                            EpProperties.doubleEp(Labels.from(GEOFENCE_M_VALUE, "geofence_M_Value", "M value of geofence"), "geofence_M", SO.Number)
+                            )
+                    )
 
                     .supportedFormats(SupportedFormats.jsonFormat())
                     .supportedProtocols(SupportedProtocols.kafka())
