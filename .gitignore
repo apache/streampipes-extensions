@@ -60,3 +60,15 @@ dist/
 npm-debug.log
 
 logs/
+
+
+##========= for dev_geo
+# ignore geo pe in dev
+streampipes-processors-geo-jvm/src/main/java/org/apache/streampipes/processors/geo/jvm/processor/
+# ignore dev environment
+streampipes-processors-geo-jvm/development/
+# ignore geo resources in dev
+streampipes-processors-geo-jvm/src/main/resources/org.apache.streampipes.processor.geo.jvm.geocoding/
+streampipes-processors-geo-jvm/src/main/resources/org.apache.streampipes.processor.geo.jvm.reversegeocoding/
+streampipes-processors-geo-jvm/src/main/resources/org.apache.streampipes.processor.geo.jvm.staticgeocoding/
+streampipes-processors-geo-jvm/src/main/resources/org.apache.streampipes.processors.geo.jvm.processor.distancecalculator/
