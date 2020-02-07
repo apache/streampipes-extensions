@@ -18,29 +18,25 @@
 
 package org.apache.streampipes.processors.geo.jvm;
 
-import org.apache.streampipes.container.init.DeclarersSingleton;
-import org.apache.streampipes.container.standalone.init.StandaloneModelSubmitter;
-import org.apache.streampipes.dataformat.cbor.CborDataFormatFactory;
-import org.apache.streampipes.dataformat.fst.FstDataFormatFactory;
-import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
-import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
-import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
-import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.processors.geo.jvm.config.GeoJvmConfig;
-import org.apache.streampipes.processors.geo.jvm.processor.distancecalculator.DistanceCalculatorController;
-import org.apache.streampipes.processors.geo.jvm.processor.geocoder.GoogleMapsGeocodingController;
-import org.apache.streampipes.processors.geo.jvm.processor.revgeocoder.ReverseGeocodingController;
-import org.apache.streampipes.processors.geo.jvm.processor.staticgeocoder.StaticGoogleMapsGeocodingController;
+import org.apache.streampipes.processors.geo.jvm.jts.processors.latLngToGeo.LatLngToGeoController;
+import org.apache.streampipes.processors.geo.jvm.jts.processors.setEPSG.SetEpsgController;
+import org.streampipes.container.init.DeclarersSingleton;
+import org.streampipes.container.standalone.init.StandaloneModelSubmitter;
+import org.streampipes.dataformat.cbor.CborDataFormatFactory;
+import org.streampipes.dataformat.fst.FstDataFormatFactory;
+import org.streampipes.dataformat.json.JsonDataFormatFactory;
+import org.streampipes.dataformat.smile.SmileDataFormatFactory;
+import org.streampipes.messaging.jms.SpJmsProtocolFactory;
+import org.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 
 public class GeoJvmInit extends StandaloneModelSubmitter {
 
   public static void main(String[] args) {
     DeclarersSingleton
-            .getInstance()
-            .add(new DistanceCalculatorController())
-            .add(new GoogleMapsGeocodingController())
-            .add(new StaticGoogleMapsGeocodingController())
-            .add(new ReverseGeocodingController());
+        .getInstance()
+        .add(new SetEpsgController())
+        .add(new LatLngToGeoController());
 
     DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),
             new CborDataFormatFactory(),

@@ -19,8 +19,8 @@
 package org.apache.streampipes.processors.geo.jvm.config;
 
 
-import org.apache.streampipes.config.SpConfig;
-import org.apache.streampipes.container.model.PeConfig;
+import org.streampipes.config.SpConfig;
+import org.streampipes.container.model.PeConfig;
 
 public enum GeoJvmConfig implements PeConfig {
   INSTANCE;
