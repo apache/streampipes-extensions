@@ -16,34 +16,52 @@
   ~
   -->
 
-## Static Google Maps Geocoding
+## Latitude Longitutde To JTS Point
 
-<p align="center"> 
+<p align="center">
+    <img src="icon.png" width="150px;" class="pe-image-documentation"/>
 </p>
 
 ***
 
 ## Description
 
-This processor computes the latitude and longitude values from a fixed location (a place name such as "Karlsruhe
-, Germany
-") and adds the result to the event.
+This processor creates a [JTS](https://github.com/locationtech/jts) Point geometry from  latitude and longitude value.
 
 ***
 
 ## Required input
 
+*  number value representing Latitude field
+*  number value representing Longitude field
+*  integer value representing EPSG field
 
 
 ***
 
 ## Configuration
 
-Describe the configuration parameters here
+Creates a JTS Geometry Point from Latitude (x) and Longitude (y) values in the representing coordinate reference system [(CRS)](https://en.wikipedia.org/wiki/Spatial_reference_system) by the EPSG code.
+An empty point geometry is created if latitude or longitude value is missing in the event (e.g. null value) or values are out of range. Allowed values for Longitude are between -180.00 and 180.00; Latitude values between -90.00 and 90.00.
 
 ### 1st parameter
-
+Latitude value
 
 ### 2nd parameter
+Longitude value
+
+### 3rd parameter
+EPSG code value
+
+***
 
 ## Output
+
+Adds a point geometry in the Well Known Text [(WKT)](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) notation and in Longitude (y)  Latitude (x) axis order to the stream.
+
+### Example
+* Input stream: <br>
+  `{latitude=48.5622, longitude=-76.3501, EPSG=4326}`
+
+* Output Stream <br>
+  `{latitude=48.5622, longitude=-76.3501, EPSG=4326, geom_wkt=POINT (-76.3501 48.5622)}`

@@ -16,34 +16,38 @@
   ~
   -->
 
-## Static Google Maps Geocoding
+## EPSG Code Enricher
 
-<p align="center"> 
+<p align="center">
+    <img src="icon.png" width="150px;" class="pe-image-documentation"/>
 </p>
+
 
 ***
 
 ## Description
 
-This processor computes the latitude and longitude values from a fixed location (a place name such as "Karlsruhe
-, Germany
-") and adds the result to the event.
+This processor adds ab integer value to the stream. This integer value represents
+an [EPSG Code](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset) as an Spatial Reference System Identifier [(SRID)](https://en.wikipedia.org/wiki/Spatial_reference_system#Identifier).
+
 
 ***
 
 ## Required input
 
-
+None
 
 ***
 
 ## Configuration
 
-Describe the configuration parameters here
+Integer values, representing a spatial reference system [(SRS)](https://en.wikipedia.org/wiki/Spatial_reference_system#Identifier).  Other possible values can be looked up under https://spatialreference.org/ref/epsg/.
 
-### 1st parameter
+### Parameter
 
+4- to 5-digit key integer number. Default value is 4326 representing the World Geodetic System [(WGS84)](https://en.wikipedia.org/wiki/World_Geodetic_System#WGS84).
 
-### 2nd parameter
-
+***
 ## Output
+
+Adds a number to the event.
