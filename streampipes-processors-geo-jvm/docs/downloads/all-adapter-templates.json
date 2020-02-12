@@ -1,0 +1,14 @@
+{
+  "@context": {
+    "sp": "https://streampipes.org/vocabulary/v1/",
+    "spi": "urn:streampipes.org:spi:",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "@graph": [
+    {
+      "@id": "http://streampipes.org/exportedList",
+      "@type": "sp:AdapterDescriptionList",
+      "sp:list": []
+    }
+  ]
+}
