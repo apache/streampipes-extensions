@@ -37,14 +37,14 @@ public class Compose implements EventProcessor<ComposeParameters> {
 
 
   @Override
-  public void onInvocation(ComposeParameters composeParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ComposeParameters composeParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.outputSchema = composeParameters.getGraph().getOutputStream().getEventSchema();
     this.outputKeySelectors = composeParameters.getOutputKeySelectors();
     this.lastEvents = new HashMap<>();
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
     this.lastEvents.clear();
   }
 

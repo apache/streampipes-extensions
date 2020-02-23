@@ -36,7 +36,7 @@ public class RestPublisher implements EventSink<RestParameters> {
   private JsonDataFormatDefinition jsonDataFormatDefinition;
 
   @Override
-  public void onInvocation(RestParameters params, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(RestParameters params, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     this.url = params.getUrl();
     logger = params.getGraph().getLogger(RestPublisher.class);
     jsonDataFormatDefinition = new JsonDataFormatDefinition();
@@ -65,6 +65,6 @@ public class RestPublisher implements EventSink<RestParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
   }
 }

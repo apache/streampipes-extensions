@@ -31,7 +31,7 @@ public class Projection implements EventProcessor<ProjectionParameters> {
 
 
   @Override
-  public void onInvocation(ProjectionParameters projectionParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ProjectionParameters projectionParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.outputKeys = projectionParameters.getOutputKeys();
   }
 
@@ -41,7 +41,7 @@ public class Projection implements EventProcessor<ProjectionParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

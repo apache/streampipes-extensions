@@ -36,7 +36,7 @@ public class TimestampExtractor implements EventProcessor<TimestampExtractorPara
     private List<String> outputFields;
 
     @Override
-    public void onInvocation(TimestampExtractorParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+    public void onPipelineStarted(TimestampExtractorParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
         LOG = params.getGraph().getLogger(TimestampExtractor.class);
 
         this.timestampField = params.getTimestampField();
@@ -97,6 +97,6 @@ public class TimestampExtractor implements EventProcessor<TimestampExtractorPara
 
 
     @Override
-    public void onDetach() {
+    public void onPipelineStopped() {
     }
 }

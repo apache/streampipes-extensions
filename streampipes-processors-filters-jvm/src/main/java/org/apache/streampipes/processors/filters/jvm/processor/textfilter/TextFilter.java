@@ -28,7 +28,7 @@ public class TextFilter implements EventProcessor<TextFilterParameters> {
   private TextFilterParameters params;
 
   @Override
-  public void onInvocation(TextFilterParameters textFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(TextFilterParameters textFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.params = textFilterParameters;
   }
 
@@ -51,7 +51,7 @@ public class TextFilter implements EventProcessor<TextFilterParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

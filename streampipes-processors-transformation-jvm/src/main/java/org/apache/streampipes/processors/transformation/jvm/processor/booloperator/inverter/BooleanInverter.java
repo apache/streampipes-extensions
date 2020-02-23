@@ -33,9 +33,9 @@ public class BooleanInverter implements EventProcessor<BooleanInverterParameters
 
 
   @Override
-  public void onInvocation(BooleanInverterParameters booleanInverterParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(BooleanInverterParameters booleanInverterParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = booleanInverterParameters.getGraph().getLogger(BooleanInverter.class);
     this.invertFieldName = booleanInverterParameters.getInvertFieldName();
   }
@@ -50,6 +50,6 @@ public class BooleanInverter implements EventProcessor<BooleanInverterParameters
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

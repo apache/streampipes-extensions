@@ -29,12 +29,12 @@ public class SizeMeasure implements EventProcessor<SizeMeasureParameters> {
   private SizeMeasureParameters sizeMeasureParameters;
 
   @Override
-  public void onInvocation(SizeMeasureParameters sizeMeasureParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(SizeMeasureParameters sizeMeasureParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.sizeMeasureParameters = sizeMeasureParameters;
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 
   @Override

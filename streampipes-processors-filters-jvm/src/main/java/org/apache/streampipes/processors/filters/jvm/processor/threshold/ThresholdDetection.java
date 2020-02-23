@@ -28,7 +28,7 @@ public class ThresholdDetection implements EventProcessor<ThresholdDetectionPara
   private ThresholdDetectionParameters params;
 
   @Override
-  public void onInvocation(ThresholdDetectionParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
+  public void onPipelineStarted(ThresholdDetectionParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
           runtimeContext) {
     this.params = numericalFilterParameters;
   }
@@ -67,7 +67,7 @@ public class ThresholdDetection implements EventProcessor<ThresholdDetectionPara
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

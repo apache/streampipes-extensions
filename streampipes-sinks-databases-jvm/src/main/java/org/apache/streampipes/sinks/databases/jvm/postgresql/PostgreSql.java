@@ -30,7 +30,7 @@ public class PostgreSql extends JdbcClient implements EventSink<PostgreSqlParame
   private static Logger LOG;
 
   @Override
-  public void onInvocation(PostgreSqlParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(PostgreSqlParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     LOG = parameters.getGraph().getLogger(PostgreSql.class);
 
     // get(0) because it is the only input stream of the sink (and not two)
@@ -62,7 +62,7 @@ public class PostgreSql extends JdbcClient implements EventSink<PostgreSqlParame
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     closeAll();
   }
 }

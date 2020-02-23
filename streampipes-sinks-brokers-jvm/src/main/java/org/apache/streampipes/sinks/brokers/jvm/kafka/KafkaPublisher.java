@@ -37,7 +37,7 @@ public class KafkaPublisher implements EventSink<KafkaParameters> {
   }
 
   @Override
-  public void onInvocation(KafkaParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(KafkaParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     this.producer = new SpKafkaProducer(parameters.getKafkaHost() + ":" + parameters.getKafkaPort(), parameters
             .getTopic());
   }
@@ -53,7 +53,7 @@ public class KafkaPublisher implements EventSink<KafkaParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.producer.disconnect();
   }
 }

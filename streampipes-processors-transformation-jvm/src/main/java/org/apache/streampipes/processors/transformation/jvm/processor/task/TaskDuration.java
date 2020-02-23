@@ -33,7 +33,7 @@ public class TaskDuration implements EventProcessor<TaskDurationParameters> {
   private Double outputDivisor;
 
   @Override
-  public void onInvocation(TaskDurationParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(TaskDurationParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
     this.taskFieldSelector = parameters.getTaskFieldSelector();
     this.timestampFieldSelector = parameters.getTimestampFieldSelector();
     this.outputDivisor = parameters.getOutputDivisor();
@@ -72,7 +72,7 @@ public class TaskDuration implements EventProcessor<TaskDurationParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.lastValue = null;
   }
 }

@@ -39,7 +39,7 @@ public class OneSignalProducer implements EventSink<OneSignalParameters> {
     private String apiKey;
 
     @Override
-    public void onInvocation(OneSignalParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+    public void onPipelineStarted(OneSignalParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
         this.content = parameters.getContent();
         this.appId = parameters.getAppId();
         this.apiKey = parameters.getApiKey();
@@ -75,6 +75,6 @@ public class OneSignalProducer implements EventSink<OneSignalParameters> {
     }
 
     @Override
-    public void onDetach() throws SpRuntimeException {
+    public void onPipelineStopped() throws SpRuntimeException {
     }
 }

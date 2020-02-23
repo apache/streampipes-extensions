@@ -37,7 +37,7 @@ public class ReverseGeocoding implements EventProcessor<ReverseGeocodingParamete
   private ReverseGeoCode reverseGeoCode;
 
   @Override
-  public void onInvocation(ReverseGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(ReverseGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
     this.latitudeField = parameters.getLatitudeField();
     this.longitudeField = parameters.getLongitudeField();
 
@@ -66,7 +66,7 @@ public class ReverseGeocoding implements EventProcessor<ReverseGeocodingParamete
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
 
   }
 }

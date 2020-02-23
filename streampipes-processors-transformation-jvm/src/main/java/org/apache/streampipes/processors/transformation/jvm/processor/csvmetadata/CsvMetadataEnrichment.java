@@ -51,7 +51,7 @@ public class CsvMetadataEnrichment implements EventProcessor<CsvMetadataEnrichme
   private Map<String, CSVRecord> columnMap;
 
   @Override
-  public void onInvocation(CsvMetadataEnrichmentParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(CsvMetadataEnrichmentParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
     this.mappingFieldSelector = parameters.getMappingFieldSelector();
     this.matchingColumn = parameters.getLookupField();
     try {
@@ -115,7 +115,7 @@ public class CsvMetadataEnrichment implements EventProcessor<CsvMetadataEnrichme
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.columnMap = new HashMap<>();
   }
 }

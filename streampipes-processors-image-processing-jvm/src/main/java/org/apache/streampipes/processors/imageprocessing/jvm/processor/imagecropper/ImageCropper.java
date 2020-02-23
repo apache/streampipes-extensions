@@ -35,7 +35,7 @@ public class ImageCropper implements EventProcessor<ImageCropperParameters> {
   private ImageCropperParameters params;
 
   @Override
-  public void onInvocation(ImageCropperParameters imageCropperParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ImageCropperParameters imageCropperParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.params = imageCropperParameters;
   }
 
@@ -66,7 +66,7 @@ public class ImageCropper implements EventProcessor<ImageCropperParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

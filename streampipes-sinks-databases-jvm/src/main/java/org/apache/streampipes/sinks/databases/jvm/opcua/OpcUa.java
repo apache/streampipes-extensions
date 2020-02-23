@@ -46,7 +46,7 @@ public class OpcUa implements EventSink<OpcUaParameters> {
 	private NodeId node;
 
 	@Override
-	public void onInvocation(OpcUaParameters parameters, EventSinkRuntimeContext runtimeContext) throws
+	public void onPipelineStarted(OpcUaParameters parameters, EventSinkRuntimeContext runtimeContext) throws
 			SpRuntimeException {
 		LOG = parameters.getGraph().getLogger(OpcUa.class);
 
@@ -119,7 +119,7 @@ public class OpcUa implements EventSink<OpcUaParameters> {
 	}
 
 	@Override
-	public void onDetach() throws SpRuntimeException {
+	public void onPipelineStopped() throws SpRuntimeException {
 		opcUaClient.disconnect();
 	}
 

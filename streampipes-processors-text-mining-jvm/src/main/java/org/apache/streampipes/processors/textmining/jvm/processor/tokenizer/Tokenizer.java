@@ -47,9 +47,9 @@ public class Tokenizer implements EventProcessor<TokenizerParameters> {
   }
 
   @Override
-  public void onInvocation(TokenizerParameters tokenizerParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(TokenizerParameters tokenizerParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = tokenizerParameters.getGraph().getLogger(Tokenizer.class);
     this.detection = tokenizerParameters.getDetectionName();
   }
@@ -64,6 +64,6 @@ public class Tokenizer implements EventProcessor<TokenizerParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

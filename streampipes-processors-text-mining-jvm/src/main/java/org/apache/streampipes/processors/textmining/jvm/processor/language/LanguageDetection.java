@@ -48,9 +48,9 @@ public class LanguageDetection implements EventProcessor<LanguageDetectionParame
   }
 
   @Override
-  public void onInvocation(LanguageDetectionParameters languageDetectionParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(LanguageDetectionParameters languageDetectionParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = languageDetectionParameters.getGraph().getLogger(LanguageDetection.class);
     this.detection = languageDetectionParameters.getDetectionName();
   }
@@ -67,6 +67,6 @@ public class LanguageDetection implements EventProcessor<LanguageDetectionParame
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

@@ -28,7 +28,7 @@ public class DistanceCalculator implements EventProcessor<DistanceCalculatorPara
   private DistanceCalculatorParameters params;
 
   @Override
-  public void onInvocation(DistanceCalculatorParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
+  public void onPipelineStarted(DistanceCalculatorParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
           runtimeContext) {
     this.params = numericalFilterParameters;
   }
@@ -49,7 +49,7 @@ public class DistanceCalculator implements EventProcessor<DistanceCalculatorPara
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 

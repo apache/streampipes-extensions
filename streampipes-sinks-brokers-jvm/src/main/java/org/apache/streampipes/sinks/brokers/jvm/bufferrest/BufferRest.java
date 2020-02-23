@@ -50,7 +50,7 @@ public class BufferRest implements EventSink<BufferRestParameters>, BufferListen
   }
 
   @Override
-  public void onInvocation(BufferRestParameters parameters, EventSinkRuntimeContext runtimeContext) {
+  public void onPipelineStarted(BufferRestParameters parameters, EventSinkRuntimeContext runtimeContext) {
     this.fieldsToSend = parameters.getFieldsToSend();
     this.restEndpointURI = parameters.getRestEndpointURI();
     this.buffer = new MessageBuffer(parameters.getBufferSize());
@@ -69,7 +69,7 @@ public class BufferRest implements EventSink<BufferRestParameters>, BufferListen
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
     buffer.removeListener(this);
   }
 

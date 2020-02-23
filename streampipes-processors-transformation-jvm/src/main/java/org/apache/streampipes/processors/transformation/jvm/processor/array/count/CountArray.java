@@ -34,7 +34,7 @@ public class CountArray implements EventProcessor<CountArrayParameters> {
     private CountArrayParameters splitArrayParameters;
 
     @Override
-    public void onInvocation(CountArrayParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+    public void onPipelineStarted(CountArrayParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
         LOG = params.getGraph().getLogger(CountArray.class);
 
         this.splitArrayParameters = params;
@@ -53,6 +53,6 @@ public class CountArray implements EventProcessor<CountArrayParameters> {
 
 
     @Override
-    public void onDetach() {
+    public void onPipelineStopped() {
     }
 }

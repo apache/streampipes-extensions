@@ -42,7 +42,7 @@ public class QrCodeReader implements EventProcessor<QrCodeReaderParameters> {
   private static final Logger LOG = LoggerFactory.getLogger(QrCodeReader.class);
 
   @Override
-  public void onInvocation(QrCodeReaderParameters qrCodeReaderParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(QrCodeReaderParameters qrCodeReaderParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.params = qrCodeReaderParameters;
     this.sendIfNoResult = qrCodeReaderParameters.getSendIfNoResult();
     this.placeholderValue = qrCodeReaderParameters.getPlaceholderValue();
@@ -90,7 +90,7 @@ public class QrCodeReader implements EventProcessor<QrCodeReaderParameters> {
 
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

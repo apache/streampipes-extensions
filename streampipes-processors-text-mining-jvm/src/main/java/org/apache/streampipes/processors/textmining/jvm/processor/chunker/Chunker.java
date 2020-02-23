@@ -53,9 +53,9 @@ public class Chunker implements EventProcessor<ChunkerParameters> {
   }
 
   @Override
-  public void onInvocation(ChunkerParameters chunkerParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ChunkerParameters chunkerParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = chunkerParameters.getGraph().getLogger(Chunker.class);
     this.tags = chunkerParameters.getTags();
     this.tokens = chunkerParameters.getTokens();
@@ -82,6 +82,6 @@ public class Chunker implements EventProcessor<ChunkerParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

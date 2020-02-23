@@ -43,8 +43,8 @@ public class Pulsar implements EventSink<PulsarParameters> {
   }
 
   @Override
-  public void onInvocation(PulsarParameters params,
-                           EventSinkRuntimeContext eventSinkRuntimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(PulsarParameters params,
+                                EventSinkRuntimeContext eventSinkRuntimeContext) throws SpRuntimeException {
     try {
      this.pulsarClient = PulsarClient.builder()
               .serviceUrl(makePulsarUrl(params.getPulsarHost(), params.getPulsarPort()))
@@ -71,7 +71,7 @@ public class Pulsar implements EventSink<PulsarParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     try {
       this.pulsarClient.close();
     } catch (PulsarClientException e) {

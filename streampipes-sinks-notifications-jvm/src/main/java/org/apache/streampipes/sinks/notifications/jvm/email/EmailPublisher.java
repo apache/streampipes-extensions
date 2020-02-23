@@ -46,7 +46,7 @@ public class EmailPublisher implements EventSink<EmailParameters> {
     private String content;
 
     @Override
-    public void onInvocation(EmailParameters parameters, EventSinkRuntimeContext runtimeContext) {
+    public void onPipelineStarted(EmailParameters parameters, EventSinkRuntimeContext runtimeContext) {
         LOG = parameters.getGraph().getLogger(EmailPublisher.class);
 
         String from = SinksNotificationsJvmConfig.INSTANCE.getEmailFrom();
@@ -108,6 +108,6 @@ public class EmailPublisher implements EventSink<EmailParameters> {
     }
 
     @Override
-    public void onDetach() throws SpRuntimeException {
+    public void onPipelineStopped() throws SpRuntimeException {
     }
 }

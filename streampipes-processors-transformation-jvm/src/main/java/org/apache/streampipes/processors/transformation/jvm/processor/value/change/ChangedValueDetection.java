@@ -33,9 +33,9 @@ public class ChangedValueDetection implements EventProcessor<ChangedValueDetecti
   private Object lastObject = null;
 
   @Override
-  public void onInvocation(ChangedValueDetectionParameters changedValueDetectionParameters,
-                            SpOutputCollector spOutputCollector,
-                            EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ChangedValueDetectionParameters changedValueDetectionParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = changedValueDetectionParameters.getGraph().getLogger(ChangedValueDetection.class);
     this.compareParameter = changedValueDetectionParameters.getCompareField();
     this.changeFieldName = changedValueDetectionParameters.getChangeFieldName();
@@ -56,6 +56,6 @@ public class ChangedValueDetection implements EventProcessor<ChangedValueDetecti
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

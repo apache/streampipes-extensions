@@ -31,7 +31,7 @@ public class CouchDb implements EventSink<CouchDbParameters> {
   private CouchDbClient couchDbClient;
 
   @Override
-  public void onInvocation(CouchDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws
+  public void onPipelineStarted(CouchDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws
           SpRuntimeException {
     this.couchDbClient = new CouchDbClient(new CouchDbProperties(
             parameters.getDatabaseName(),
@@ -50,7 +50,7 @@ public class CouchDb implements EventSink<CouchDbParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.couchDbClient.shutdown();
   }
 

@@ -42,7 +42,7 @@ public class RabbitMqConsumer implements EventSink<RabbitMqParameters> {
   }
 
   @Override
-  public void onInvocation(RabbitMqParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(RabbitMqParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     this.publisher = new RabbitMqPublisher(parameters);
     this.topic = parameters.getRabbitMqTopic();
   }
@@ -59,7 +59,7 @@ public class RabbitMqConsumer implements EventSink<RabbitMqParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     publisher.cleanup();
   }
 }

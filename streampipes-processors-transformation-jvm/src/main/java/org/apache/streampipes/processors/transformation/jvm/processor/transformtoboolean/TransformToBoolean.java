@@ -34,9 +34,9 @@ public class TransformToBoolean implements EventProcessor<TransformToBooleanPara
     private List<String> transformFields;
 
     @Override
-    public void onInvocation(TransformToBooleanParameters transformToBooleanParameters,
-                             SpOutputCollector spOutputCollector,
-                             EventProcessorRuntimeContext runtimeContext) {
+    public void onPipelineStarted(TransformToBooleanParameters transformToBooleanParameters,
+                                  SpOutputCollector spOutputCollector,
+                                  EventProcessorRuntimeContext runtimeContext) {
 
         LOG = transformToBooleanParameters.getGraph().getLogger(TransformToBoolean.class);
         this.transformFields = transformToBooleanParameters.getTransformFields();
@@ -62,7 +62,7 @@ public class TransformToBoolean implements EventProcessor<TransformToBooleanPara
     }
 
     @Override
-    public void onDetach() {
+    public void onPipelineStopped() {
     }
 
     private Boolean toBoolean(Object value) throws SpRuntimeException {

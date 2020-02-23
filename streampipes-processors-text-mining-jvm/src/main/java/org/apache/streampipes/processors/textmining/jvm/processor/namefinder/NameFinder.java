@@ -48,9 +48,9 @@ public class NameFinder implements EventProcessor<NameFinderParameters> {
   }
 
   @Override
-  public void onInvocation(NameFinderParameters nameFinderParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(NameFinderParameters nameFinderParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = nameFinderParameters.getGraph().getLogger(NameFinder.class);
 
     String modelPath = TextMiningJvmConfig.INSTANCE.getModelDirectory() + nameFinderParameters.getModel();
@@ -76,7 +76,7 @@ public class NameFinder implements EventProcessor<NameFinderParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 
   private void loadModel(String modelFile) {

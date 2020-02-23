@@ -39,9 +39,9 @@ public class BooleanCounter implements EventProcessor<BooleanCounterParameters> 
 
 
   @Override
-  public void onInvocation(BooleanCounterParameters booleanCounterParametersParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(BooleanCounterParameters booleanCounterParametersParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = booleanCounterParametersParameters.getGraph().getLogger(BooleanCounter.class);
     this.fieldName = booleanCounterParametersParameters.getInvertFieldName();
     this.flankUp = booleanCounterParametersParameters.getFlankUp();
@@ -87,7 +87,7 @@ public class BooleanCounter implements EventProcessor<BooleanCounterParameters> 
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 
 }

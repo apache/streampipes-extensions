@@ -34,9 +34,9 @@ public class CalculateDuration implements EventProcessor<CalculateDurationParame
   private String durationName;
 
   @Override
-  public void onInvocation(CalculateDurationParameters calculateDurationParameters,
-                            SpOutputCollector spOutputCollector,
-                            EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(CalculateDurationParameters calculateDurationParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = calculateDurationParameters.getGraph().getLogger(
         CalculateDuration.class);
 
@@ -66,6 +66,6 @@ public class CalculateDuration implements EventProcessor<CalculateDurationParame
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

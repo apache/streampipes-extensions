@@ -35,7 +35,7 @@ public class GoogleMapsGeocoding implements EventProcessor<GoogleMapsGeocodingPa
   private String placeField;
 
   @Override
-  public void onInvocation(GoogleMapsGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(GoogleMapsGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
     this.placeField = parameters.getPlaceField();
     String googleMapsApiKey = parameters.getGoogleMapsApiKey();
 
@@ -75,7 +75,7 @@ public class GoogleMapsGeocoding implements EventProcessor<GoogleMapsGeocodingPa
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
 
   }
 }

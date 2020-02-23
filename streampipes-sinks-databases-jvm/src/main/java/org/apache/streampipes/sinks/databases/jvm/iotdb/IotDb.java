@@ -38,7 +38,7 @@ public class IotDb extends JdbcClient implements EventSink<IotDbParameters> {
   private String timestampField;
 
   @Override
-  public void onInvocation(IotDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(IotDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     LOG = parameters.getGraph().getLogger(IotDb.class);
     timestampField = parameters.getTimestampField();
 
@@ -75,7 +75,7 @@ public class IotDb extends JdbcClient implements EventSink<IotDbParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     closeAll();
   }
 

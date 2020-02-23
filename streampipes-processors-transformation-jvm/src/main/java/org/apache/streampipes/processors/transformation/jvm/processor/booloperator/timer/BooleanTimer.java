@@ -37,9 +37,9 @@ public class BooleanTimer implements EventProcessor<BooleanTimerParameters> {
 
 
   @Override
-  public void onInvocation(BooleanTimerParameters booleanInverterParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(BooleanTimerParameters booleanInverterParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = booleanInverterParameters.getGraph().getLogger(BooleanTimer.class);
     this.fieldName = booleanInverterParameters.getFieldName();
     this.measureTrue = booleanInverterParameters.isMeasureTrue();
@@ -71,7 +71,7 @@ public class BooleanTimer implements EventProcessor<BooleanTimerParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 
   public static void main(String... args) {

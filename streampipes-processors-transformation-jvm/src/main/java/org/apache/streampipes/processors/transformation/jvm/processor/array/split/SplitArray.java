@@ -39,7 +39,7 @@ public class SplitArray implements EventProcessor<SplitArrayParameters> {
 
 
   @Override
-  public void onInvocation(SplitArrayParameters splitArrayParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(SplitArrayParameters splitArrayParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     LOG = splitArrayParameters.getGraph().getLogger(SplitArray.class);
     this.splitArrayParameters = splitArrayParameters;
   }
@@ -80,6 +80,6 @@ public class SplitArray implements EventProcessor<SplitArrayParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

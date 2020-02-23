@@ -35,7 +35,7 @@ public class StaticGoogleMapsGeocoder implements EventProcessor<StaticGoogleMaps
   private Double longitude;
 
   @Override
-  public void onInvocation(StaticGoogleMapsGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(StaticGoogleMapsGeocodingParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
     String place = parameters.getPlace();
     String googleMapsApiKey = parameters.getGoogleMapsApiKey();
 
@@ -68,7 +68,7 @@ public class StaticGoogleMapsGeocoder implements EventProcessor<StaticGoogleMaps
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
 
   }
 

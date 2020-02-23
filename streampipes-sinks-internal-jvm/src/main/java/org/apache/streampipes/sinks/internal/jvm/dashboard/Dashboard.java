@@ -51,7 +51,7 @@ public class Dashboard implements EventSink<DashboardParameters> {
     }
 
     @Override
-    public void onInvocation(DashboardParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+    public void onPipelineStarted(DashboardParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
         if (!saveToCouchDB(parameters.getGraph(), parameters)) {
             throw new SpRuntimeException("The schema couldn't be stored in the couchDB");
         }
@@ -89,7 +89,7 @@ public class Dashboard implements EventSink<DashboardParameters> {
     }
 
     @Override
-    public void onDetach() throws SpRuntimeException {
+    public void onPipelineStopped() throws SpRuntimeException {
         this.publisher.disconnect();
         if (!removeFromCouchDB()) {
             throw new SpRuntimeException("There was an error while deleting pipeline: '" + pipelineId + "'");

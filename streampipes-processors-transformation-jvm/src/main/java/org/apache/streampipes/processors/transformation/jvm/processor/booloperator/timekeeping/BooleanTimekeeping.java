@@ -42,9 +42,9 @@ public class BooleanTimekeeping implements EventProcessor<BooleanTimekeepingPara
     private double outputDivisor;
 
     @Override
-    public void onInvocation(BooleanTimekeepingParameters booleanInverterParameters,
-                             SpOutputCollector spOutputCollector,
-                             EventProcessorRuntimeContext runtimeContext) {
+    public void onPipelineStarted(BooleanTimekeepingParameters booleanInverterParameters,
+                                  SpOutputCollector spOutputCollector,
+                                  EventProcessorRuntimeContext runtimeContext) {
         LOG = booleanInverterParameters.getGraph().getLogger(BooleanTimekeeping.class);
         this.leftFieldName = booleanInverterParameters.getLeftFieldName();
         this.rightFieldName = booleanInverterParameters.getRightFieldName();
@@ -89,7 +89,7 @@ public class BooleanTimekeeping implements EventProcessor<BooleanTimekeepingPara
     }
 
     @Override
-    public void onDetach() {
+    public void onPipelineStopped() {
     }
 
 }

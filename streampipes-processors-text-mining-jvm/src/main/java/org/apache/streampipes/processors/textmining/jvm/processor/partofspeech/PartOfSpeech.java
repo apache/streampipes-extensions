@@ -47,9 +47,9 @@ public class PartOfSpeech implements EventProcessor<PartOfSpeechParameters> {
   }
 
   @Override
-  public void onInvocation(PartOfSpeechParameters partOfSpeechParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(PartOfSpeechParameters partOfSpeechParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = partOfSpeechParameters.getGraph().getLogger(PartOfSpeech.class);
     this.detection = partOfSpeechParameters.getDetectionName();
   }
@@ -69,6 +69,6 @@ public class PartOfSpeech implements EventProcessor<PartOfSpeechParameters> {
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

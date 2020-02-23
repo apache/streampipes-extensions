@@ -31,7 +31,7 @@ public class SlackNotification implements EventSink<SlackNotificationParameters>
     private SlackNotificationParameters params;
 
     @Override
-    public void onInvocation(SlackNotificationParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+    public void onPipelineStarted(SlackNotificationParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
         this.params = parameters;
     }
 
@@ -47,7 +47,7 @@ public class SlackNotification implements EventSink<SlackNotificationParameters>
     }
 
     @Override
-    public void onDetach() throws SpRuntimeException {
+    public void onPipelineStopped() throws SpRuntimeException {
         try {
             params.getSession().disconnect();
         } catch (IOException e) {

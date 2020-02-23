@@ -110,7 +110,7 @@ public class TestTrendProcessor {
             "::randomValue");
 
     Trend trend = new Trend(event -> actualMatchCount[0]++);
-    trend.onInvocation(params, null, null);
+    trend.onPipelineStarted(params, null, null);
 
     sendEvents(trend);
     LOG.info("Expected match count is {}", expectedMatchCount);

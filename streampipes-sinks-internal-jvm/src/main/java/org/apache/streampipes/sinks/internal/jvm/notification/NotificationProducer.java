@@ -40,7 +40,7 @@ public class NotificationProducer implements EventSink<NotificationParameters> {
 
 
   @Override
-  public void onInvocation(NotificationParameters parameters, EventSinkRuntimeContext runtimeContext) throws
+  public void onPipelineStarted(NotificationParameters parameters, EventSinkRuntimeContext runtimeContext) throws
           SpRuntimeException {
     this.publisher = new ActiveMQPublisher(SinksInternalJvmConfig.INSTANCE.getJmsHost() + ":" + SinksInternalJvmConfig.INSTANCE.getJmsPort(),
             "org.apache.streampipes.notifications");
@@ -62,7 +62,7 @@ public class NotificationProducer implements EventSink<NotificationParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.publisher.disconnect();
   }
 }

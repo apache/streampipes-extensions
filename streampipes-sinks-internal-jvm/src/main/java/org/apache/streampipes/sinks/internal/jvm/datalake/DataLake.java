@@ -57,7 +57,7 @@ public class DataLake implements EventSink<DataLakeParameters> {
   private String timestampField;
 
   @Override
-  public void onInvocation(DataLakeParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(DataLakeParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     LOG = parameters.getGraph().getLogger(DataLake.class);
 
     this.timestampField = parameters.getTimestampField();
@@ -108,7 +108,7 @@ public class DataLake implements EventSink<DataLakeParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     influxDbClient.stop();
   }
 

@@ -47,9 +47,9 @@ public class SentenceDetection implements EventProcessor<SentenceDetectionParame
   }
 
   @Override
-  public void onInvocation(SentenceDetectionParameters sentenceDetectionParameters,
-                           SpOutputCollector spOutputCollector,
-                           EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(SentenceDetectionParameters sentenceDetectionParameters,
+                                SpOutputCollector spOutputCollector,
+                                EventProcessorRuntimeContext runtimeContext) {
     LOG = sentenceDetectionParameters.getGraph().getLogger(SentenceDetection.class);
     this.detection = sentenceDetectionParameters.getDetectionName();
   }
@@ -67,6 +67,6 @@ public class SentenceDetection implements EventProcessor<SentenceDetectionParame
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
   }
 }

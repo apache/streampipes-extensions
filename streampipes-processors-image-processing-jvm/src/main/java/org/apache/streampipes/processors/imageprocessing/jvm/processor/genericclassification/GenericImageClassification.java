@@ -46,7 +46,7 @@ public class GenericImageClassification implements EventProcessor<GenericImageCl
   private List<String> categories;
 
   @Override
-  public void onInvocation(GenericImageClassificationParameters genericImageClassificationParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(GenericImageClassificationParameters genericImageClassificationParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.params = genericImageClassificationParameters;
     //this.cs = FactoryImageClassifier.vgg_cifar10();  // Test set 89.9% for 10 categories
 		ClassifierAndSource cs = FactoryImageClassifier.nin_imagenet(); // Test set 62.6% for 1000 categories
@@ -97,7 +97,7 @@ public class GenericImageClassification implements EventProcessor<GenericImageCl
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

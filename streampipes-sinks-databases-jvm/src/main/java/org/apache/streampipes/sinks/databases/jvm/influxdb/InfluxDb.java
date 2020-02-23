@@ -31,7 +31,7 @@ public class InfluxDb implements EventSink<InfluxDbParameters> {
   private static Logger LOG;
 
   @Override
-  public void onInvocation(InfluxDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(InfluxDbParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
     LOG = parameters.getGraph().getLogger(InfluxDb.class);
 
     this.influxDbClient = new InfluxDbClient(
@@ -58,7 +58,7 @@ public class InfluxDb implements EventSink<InfluxDbParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     influxDbClient.stop();
   }
 }

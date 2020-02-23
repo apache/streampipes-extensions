@@ -34,7 +34,7 @@ public class ImageEnricher implements EventProcessor<ImageEnrichmentParameters> 
   private ImageEnrichmentParameters params;
 
   @Override
-  public void onInvocation(ImageEnrichmentParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
+  public void onPipelineStarted(ImageEnrichmentParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) {
     this.params = params;
   }
 
@@ -75,7 +75,7 @@ public class ImageEnricher implements EventProcessor<ImageEnrichmentParameters> 
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }

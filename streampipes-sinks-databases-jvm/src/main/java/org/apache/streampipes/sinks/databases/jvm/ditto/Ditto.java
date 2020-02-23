@@ -49,7 +49,7 @@ public class Ditto implements EventSink<DittoParameters> {
   private List<String> selectedFields;
 
   @Override
-  public void onInvocation(DittoParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
+  public void onPipelineStarted(DittoParameters parameters, EventSinkRuntimeContext runtimeContext) throws SpRuntimeException {
 
     this.thingId = parameters.getThingId();
     this.featureId = parameters.getFeatureId();
@@ -112,7 +112,7 @@ public class Ditto implements EventSink<DittoParameters> {
   }
 
   @Override
-  public void onDetach() throws SpRuntimeException {
+  public void onPipelineStopped() throws SpRuntimeException {
     this.client.destroy();
   }
 }

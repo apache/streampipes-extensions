@@ -28,7 +28,7 @@ public class NumericalFilter implements EventProcessor<NumericalFilterParameters
   private NumericalFilterParameters params;
 
   @Override
-  public void onInvocation(NumericalFilterParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
+  public void onPipelineStarted(NumericalFilterParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
           runtimeContext) {
     this.params = numericalFilterParameters;
   }
@@ -63,7 +63,7 @@ public class NumericalFilter implements EventProcessor<NumericalFilterParameters
   }
 
   @Override
-  public void onDetach() {
+  public void onPipelineStopped() {
 
   }
 }
