@@ -13,5 +13,3 @@ process-id.description=The ID of the state change detected.
 
 duration-id.title=Duration
 duration-id.description=The duration of the state change.
-
-
