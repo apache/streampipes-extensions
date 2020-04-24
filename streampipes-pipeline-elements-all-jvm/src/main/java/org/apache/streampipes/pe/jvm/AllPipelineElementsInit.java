@@ -56,8 +56,8 @@ import org.apache.streampipes.processors.transformation.jvm.processor.booloperat
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timekeeping.BooleanTimekeepingController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timer.BooleanTimerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.csvmetadata.CsvMetadataEnrichmentController;
-import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.counter.StringCounterController;
 import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.timer.StringTimerController;
+import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.counter.StringCounterController;
 import org.apache.streampipes.processors.transformation.jvm.processor.task.TaskDurationController;
 import org.apache.streampipes.processors.transformation.jvm.processor.timestampextractor.TimestampExtractorController;
 import org.apache.streampipes.processors.transformation.jvm.processor.value.change.ChangedValueDetectionController;
@@ -65,6 +65,7 @@ import org.apache.streampipes.processors.transformation.jvm.processor.value.dura
 import org.apache.streampipes.sinks.brokers.jvm.bufferrest.BufferRestController;
 import org.apache.streampipes.sinks.brokers.jvm.jms.JmsController;
 import org.apache.streampipes.sinks.brokers.jvm.kafka.KafkaController;
+import org.apache.streampipes.sinks.brokers.jvm.mqtt.MqttController;
 import org.apache.streampipes.sinks.brokers.jvm.pulsar.PulsarController;
 import org.apache.streampipes.sinks.brokers.jvm.rabbitmq.RabbitMqController;
 import org.apache.streampipes.sinks.brokers.jvm.rest.RestController;
@@ -110,6 +111,7 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new QrCodeReaderController())
             .add(new GenericImageClassificationController())
             .add(new KafkaController())
+            .add(new MqttController())
             .add(new JmsController())
             .add(new RestController())
             .add(new BufferRestController())
@@ -135,9 +137,9 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new SetEpsgController())
             .add(new LatLngToGeoController())
             .add(new SpeedCalculatorController())
-            .add(new StaticDistanceCalculatorController());
-            // .add(new StringCounterController())
-            // .add(new StringTimerController());
+            .add(new StaticDistanceCalculatorController())
+            .add(new StringCounterController())
+            .add(new StringTimerController());
 
     DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),
             new CborDataFormatFactory(),

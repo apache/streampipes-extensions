@@ -32,16 +32,16 @@ import org.apache.streampipes.wrapper.standalone.declarer.StandaloneEventProcess
 public class StringTimerController extends StandaloneEventProcessingDeclarer<StringTimerParameters> {
 
   public static final String FIELD_ID = "field";
-  public static final String TIMER_FIELD_ID = "timerField";
-  public static final String MEASURED_TIME_ID = "measuresTime";
-
-  private static final String TRUE = "TRUE";
-  private static final String FALSE = "FALSE";
+  public static final String MEASURED_TIME_ID = "measuredTime";
+  public static final String FIELD_VALUE_ID = "fieldValue";
 
   public static final String OUTPUT_UNIT_ID = "outputUnit";
   private static final String MILLISECONDS = "Milliseconds";
   private static final String SECONDS = "Seconds";
   private static final String MINUTES = "Minutes";
+
+  public static final String MEASURED_TIME_FIELD_RUNTIME_NAME = "measured_time";
+  public static final String FIELD_VALUE_RUNTIME_NAME = "field_value";
 
 
   @Override
@@ -51,14 +51,14 @@ public class StringTimerController extends StandaloneEventProcessingDeclarer<Str
             .withAssets(Assets.DOCUMENTATION, Assets.ICON)
             .requiredStream(StreamRequirementsBuilder.create()
                     .requiredPropertyWithUnaryMapping(
-                            EpRequirements.booleanReq(),
+                            EpRequirements.stringReq(),
                             Labels.withId(FIELD_ID),
                             PropertyScope.NONE)
                     .build())
-            .requiredSingleValueSelection(Labels.withId(TIMER_FIELD_ID), Options.from(TRUE, FALSE))
             .requiredSingleValueSelection(Labels.withId(OUTPUT_UNIT_ID), Options.from(MILLISECONDS, SECONDS, MINUTES))
             .outputStrategy(OutputStrategies.append(
-                    EpProperties.numberEp(Labels.withId(MEASURED_TIME_ID), "measured_time", "http://schema.org/Number")
+                    EpProperties.numberEp(Labels.withId(MEASURED_TIME_ID), MEASURED_TIME_FIELD_RUNTIME_NAME, "http://schema.org/Number"),
+                    EpProperties.stringEp(Labels.withId(FIELD_VALUE_ID), FIELD_VALUE_RUNTIME_NAME, "http://schema.org/String")
             ))
             .build();
   }
@@ -66,15 +66,8 @@ public class StringTimerController extends StandaloneEventProcessingDeclarer<Str
   @Override
   public ConfiguredEventProcessor<StringTimerParameters> onInvocation(DataProcessorInvocation graph, ProcessingElementParameterExtractor extractor) {
 
-    String invertFieldName = extractor.mappingPropertyValue(FIELD_ID);
-    String measureTrueString = extractor.selectedSingleValue(TIMER_FIELD_ID, String.class);
+    String selectedFieldName = extractor.mappingPropertyValue(FIELD_ID);
     String outputUnit = extractor.selectedSingleValue(OUTPUT_UNIT_ID, String.class);
-
-    boolean measureTrue = false;
-
-    if (measureTrueString.equals(TRUE)) {
-      measureTrue = true;
-    }
 
     double outputDivisor= 1.0;
     if (outputUnit.equals(SECONDS)) {
@@ -83,7 +76,7 @@ public class StringTimerController extends StandaloneEventProcessingDeclarer<Str
       outputDivisor = 60000.0;
     }
 
-    StringTimerParameters params = new StringTimerParameters(graph, invertFieldName, measureTrue, outputDivisor);
+    StringTimerParameters params = new StringTimerParameters(graph, selectedFieldName, outputDivisor);
 
     return new ConfiguredEventProcessor<>(params, StringTimer::new);
   }

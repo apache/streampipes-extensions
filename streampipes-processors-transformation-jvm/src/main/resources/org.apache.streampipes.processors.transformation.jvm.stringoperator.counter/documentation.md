@@ -16,7 +16,7 @@
   ~
   -->
 
-## Boolean Counter
+## String Counter
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,33 +26,30 @@
 
 ## Description
 
-This processor monitors a boolean value and counts how often the value of the boolean changes. 
-A user can configure whether the changes from FALSE to TRUE, TRUE to FALSE, or BOTH changes should be counted.
+This processor monitors a string field and counts how often the value of the string changes. Hereby, a change is characterized by 
+the value of the field before and the value after the change, combined forming a pair. The processor keeps track of the counter for each pair. 
 
 ***
 
 ## Required input
 
-A boolean value is required in the data stream and can be selected with the field mapping.
+A string field is required in the data stream and can be selected with the field mapping.
 
-### Boolean Field
+### String Field
 
-The boolean value to be monitored.
+The string field to be monitored.
 
 ***
 
 ## Configuration
 
-A user can configure whether the changes from TRUE to FALSE, FALSE to TRUE, or all changes of the boolean value should be counted.
-
-### Flank parameter
-
-Either:
-* TRUE -> FALSE: Increase counter on a true followed by a false 
-* FALSE -> TRUE: Increase counter on a false followed by a true
-* BOTH: Increas counter on each change of the boolean value on two consecutive events
+(no further configuration required)
 
 ## Output
+The following three fields are appended to the event:
+* [counter] numerical field with the current count value for the given value pair
+* [change_from] the value of the string before the change
+* [change_to] the value of the string after the change 
 
-Adds an additional numerical field with the current count value to the event. Events are just emitted when the counter changes.
-Runtime Name: countField
+The event is emitted whenever the value of the string field changes.
+

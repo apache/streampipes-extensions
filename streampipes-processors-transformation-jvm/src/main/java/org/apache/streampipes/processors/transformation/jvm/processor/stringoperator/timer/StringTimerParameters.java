@@ -23,25 +23,20 @@ import org.apache.streampipes.wrapper.params.binding.EventProcessorBindingParams
 
 public class StringTimerParameters extends EventProcessorBindingParams {
     private String fieldName;
-    private boolean measureTrue;
     private double outputDivisor;
 
-    public StringTimerParameters(DataProcessorInvocation graph, String fieldName, boolean measureTrue, double outputDivisor) {
+    public StringTimerParameters(DataProcessorInvocation graph, String fieldName, double outputDivisor) {
         super(graph);
         this.fieldName = fieldName;
-        this.measureTrue = measureTrue;
         this.outputDivisor = outputDivisor;
     }
 
-    public String getFieldName() {
+    public String getSelectedFieldName() {
         return fieldName;
-    }
-
-    public boolean isMeasureTrue() {
-        return measureTrue;
     }
 
     public double getOutputDivisor() {
         return outputDivisor;
     }
+
 }

@@ -24,48 +24,48 @@ import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.runtime.EventProcessor;
 
+import java.util.HashMap;
+
 public class StringCounter implements EventProcessor<StringCounterParameters> {
 
   private static Logger LOG;
 
-  private String fieldName;
+  private String selectedFieldName;
   private String fieldValueOfLastEvent;
 
-  private int counter;
-
+  private HashMap<String, Integer> changeCounter;
 
   @Override
   public void onInvocation(StringCounterParameters stringCounterParametersParameters,
                            SpOutputCollector spOutputCollector,
                            EventProcessorRuntimeContext runtimeContext) {
     LOG = stringCounterParametersParameters.getGraph().getLogger(StringCounter.class);
-    this.fieldName = stringCounterParametersParameters.getSelectedFieldName();
-
+    this.selectedFieldName = stringCounterParametersParameters.getSelectedFieldName();
     this.fieldValueOfLastEvent = "";
-    this.counter = 0;
+    this.changeCounter = new HashMap<>();
   }
 
   @Override
   public void onEvent(Event inputEvent, SpOutputCollector out) {
 
-      String value = inputEvent.getFieldBySelector(fieldName).getAsPrimitive().getAsString();
+      String value = inputEvent.getFieldBySelector(selectedFieldName).getAsPrimitive().getAsString();
+      String key = this.fieldValueOfLastEvent + ">" + value;
       boolean updateCounter = false;
 
-      System.out.println(fieldValueOfLastEvent);
-
-      if (!this.fieldValueOfLastEvent.equals(value)) {
-          System.out.println("if: " + value);
+      if (!this.fieldValueOfLastEvent.equals(value) && !this.fieldValueOfLastEvent.isEmpty()) {
           updateCounter = true;
-      } else {
-          System.out.println("else: " + value);
-          updateCounter = false;
+
+          if (changeCounter.containsKey(key)) {
+              changeCounter.put(key, changeCounter.get(key) + 1);
+          } else {
+              changeCounter.put(key, 1);
+          }
       }
 
       if (updateCounter) {
-          System.out.println("UpdateCounter: " + updateCounter);
-          this.counter++;
-          System.out.println(counter);
-          inputEvent.addField(StringCounterController.COUNT_FIELD_RUNTIME_NAME, this.counter);
+          inputEvent.addField(StringCounterController.CHANGE_FROM_FIELD_RUNTIME_NAME, this.fieldValueOfLastEvent);
+          inputEvent.addField(StringCounterController.CHANGE_TO_FIELD_RUNTIME_NAME, value);
+          inputEvent.addField(StringCounterController.COUNT_FIELD_RUNTIME_NAME, changeCounter.get(key));
           out.collect(inputEvent);
       }
 

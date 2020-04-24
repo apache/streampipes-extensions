@@ -52,7 +52,6 @@ public class BooleanCounterController extends StandaloneEventProcessingDeclarer<
                             Labels.withId(FIELD_ID),
                             PropertyScope.NONE)
                     .build())
-
             .requiredSingleValueSelection(Labels.withId(FLANK_ID), Options.from(BOTH, FLANK_UP, FLANK_DOWN))
             .outputStrategy(OutputStrategies.append(
                     EpProperties.numberEp(Labels.withId(COUNT_FIELD_ID), COUNT_FIELD_RUNTIME_NAME, "http://schema.org/Number")

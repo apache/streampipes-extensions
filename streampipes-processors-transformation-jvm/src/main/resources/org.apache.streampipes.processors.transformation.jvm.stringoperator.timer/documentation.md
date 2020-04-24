@@ -16,7 +16,7 @@
   ~
   -->
 
-## Boolean Timer
+## String Timer
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,25 +26,29 @@
 
 ## Description
 
-This processor measures how long a boolean value does not change. Once the value is changes the event with the measured time is emitted.
+This processor measures how long a value of a string field does not change. Once the value is changes the event with the measured time and the corresponding string value is emitted.
 
 
 ***
 
 ## Required input
 
-A boolean value is required in the data stream.
+A string field is required in the data stream.
 
 ### Field
 
-The boolean field which is monitored for state changes.
+The string field which is monitored for any value changes.
 
 ***
 
 ## Configuration
 
-### Timer value
-Define whether it should be measured how long the value is true or how long the value is false.
+(no further configuration required)
 
 ## Output
-Appends a field with the time how long the value did not change. Is emitted on the change of the boolean value. Runtime name: measured_time
+The following two fields are appended to the event:
+* [measured_time] the measured time for the string value to not change
+* [field_value] the corresponding string value 
+
+The event is emitted whenever the value of the string field changes.
+

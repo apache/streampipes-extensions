@@ -26,60 +26,47 @@ import org.apache.streampipes.wrapper.runtime.EventProcessor;
 
 public class StringTimer implements EventProcessor<StringTimerParameters> {
 
-    private static Logger LOG;
+  private static Logger LOG;
 
-    private String fieldName;
-    private boolean measureTrue;
+  private String selectedFieldName;
+  private Long timestamp;
+  private double outputDivisor;
+  private String fieldValueOfLastEvent;
 
-    private Long timestamp;
+  @Override
+  public void onInvocation(StringTimerParameters stringTimerParameters,
+                           SpOutputCollector spOutputCollector,
+                           EventProcessorRuntimeContext runtimeContext) {
+    LOG = stringTimerParameters.getGraph().getLogger(StringTimer.class);
+    this.selectedFieldName = stringTimerParameters.getSelectedFieldName();
+    this.outputDivisor = stringTimerParameters.getOutputDivisor();
 
-    private double outputDivisor;
+  }
 
+  @Override
+  public void onEvent(Event inputEvent, SpOutputCollector out) {
 
-    @Override
-    public void onInvocation(StringTimerParameters booleanInverterParameters,
-                             SpOutputCollector spOutputCollector,
-                             EventProcessorRuntimeContext runtimeContext) {
-        LOG = booleanInverterParameters.getGraph().getLogger(StringTimer.class);
-        this.fieldName = booleanInverterParameters.getFieldName();
-        this.measureTrue = booleanInverterParameters.isMeasureTrue();
-        this.timestamp = Long.MIN_VALUE;
-        this.outputDivisor = booleanInverterParameters.getOutputDivisor();
-    }
+      String value = inputEvent.getFieldBySelector(selectedFieldName).getAsPrimitive().getAsString();
+      Long currentTime = System.currentTimeMillis();
 
-    @Override
-    public void onEvent(Event inputEvent, SpOutputCollector out) {
+      if (this.fieldValueOfLastEvent == null) {
+          this.timestamp = currentTime;
+      } else {
+          if (!this.fieldValueOfLastEvent.equals(value)) {
+              Long difference = currentTime - this.timestamp;
+              double result = difference / this.outputDivisor;
 
-        boolean field = inputEvent.getFieldBySelector(this.fieldName).getAsPrimitive().getAsBoolean();
+              inputEvent.addField(StringTimerController.MEASURED_TIME_FIELD_RUNTIME_NAME, result);
+              inputEvent.addField(StringTimerController.FIELD_VALUE_RUNTIME_NAME, this.fieldValueOfLastEvent);
+              out.collect(inputEvent);
 
-        if (this.measureTrue == field) {
-            if (timestamp == Long.MIN_VALUE) {
-                timestamp = System.currentTimeMillis();
-            }
-        } else {
-            if (timestamp != Long.MIN_VALUE) {
-                Long difference = System.currentTimeMillis() - timestamp;
+              timestamp = currentTime;
+          }
+      }
+      this.fieldValueOfLastEvent = value;
+  }
 
-                double result = difference / this.outputDivisor;
-
-                inputEvent.addField("measured_time", result);
-                timestamp = Long.MIN_VALUE;
-                out.collect(inputEvent);
-            }
-        }
-
-    }
-
-    @Override
-    public void onDetach() {
-    }
-
-    public static void main(String... args) {
-
-        double result = (60000L / 631.1);
-
-        System.out.println(result);
-
-
-    }
+  @Override
+  public void onDetach() {
+  }
 }

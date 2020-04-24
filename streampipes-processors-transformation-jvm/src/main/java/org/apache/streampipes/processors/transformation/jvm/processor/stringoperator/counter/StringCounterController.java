@@ -31,9 +31,15 @@ import org.apache.streampipes.wrapper.standalone.declarer.StandaloneEventProcess
 
 public class StringCounterController extends StandaloneEventProcessingDeclarer<StringCounterParameters> {
 
-  public static final String FIELD_ID = "field";
-  public static final String COUNT_FIELD_ID = "countField";
+  private static final String FIELD_ID = "field";
+  private static final String COUNT_FIELD_ID = "countField";
+  private static final String CHANGE_FROM_FIELD_ID = "changeFromField";
+  private static final String CHANGE_TO_FIELD_ID = "changeToField";
+
   public static final String COUNT_FIELD_RUNTIME_NAME = "counter";
+  public static final String CHANGE_FROM_FIELD_RUNTIME_NAME = "change_from";
+  public static final String CHANGE_TO_FIELD_RUNTIME_NAME = "change_to";
+
 
   @Override
   public DataProcessorDescription declareModel() {
@@ -47,6 +53,8 @@ public class StringCounterController extends StandaloneEventProcessingDeclarer<S
                             PropertyScope.NONE)
                     .build())
             .outputStrategy(OutputStrategies.append(
+                    EpProperties.stringEp(Labels.withId(CHANGE_FROM_FIELD_ID), CHANGE_FROM_FIELD_RUNTIME_NAME, "http://schema.org/String"),
+                    EpProperties.stringEp(Labels.withId(CHANGE_TO_FIELD_ID), CHANGE_TO_FIELD_RUNTIME_NAME, "http://schema.org/String"),
                     EpProperties.numberEp(Labels.withId(COUNT_FIELD_ID), COUNT_FIELD_RUNTIME_NAME, "http://schema.org/Number")
             ))
             .build();
