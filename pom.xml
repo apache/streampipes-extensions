@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-parent</artifactId>
-        <version>0.66.0-SNAPSHOT</version>
+        <version>0.66.0</version>
     </parent>
 
     <artifactId>streampipes-extensions</artifactId>
@@ -61,7 +61,7 @@
     <properties>
         <owasp.check.skip>true</owasp.check.skip>
 
-        <streampipes.version>0.66.0-SNAPSHOT</streampipes.version>
+        <streampipes.version>0.66.0</streampipes.version>
 
         <amqp-client.version>4.1.0</amqp-client.version>
         <boofcv.version>0.33</boofcv.version>
@@ -380,49 +380,33 @@
             <id>apache-release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>source-release-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration combine.self="append">
-                                    <finalName>apache-streampipes-extensions-${project.version}-incubating</finalName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                    <!--
+                      Create MD5 and SHA512 checksum files for the release artifacts.
+                    -->
                     <plugin>
                         <groupId>net.nicoulaj.maven.plugins</groupId>
                         <artifactId>checksum-maven-plugin</artifactId>
                         <version>1.8</version>
                         <executions>
                             <execution>
-                                <id>sign-source-release</id>
-                                <phase>package</phase>
                                 <goals>
                                     <goal>files</goal>
                                 </goals>
-                                <configuration>
-                                    <algorithms>
-                                        <algorithm>SHA-512</algorithm>
-                                    </algorithms>
-                                    <fileSets>
-                                        <fileSet>
-                                            <directory>${project.build.directory}</directory>
-                                            <includes>
-                                                <include>apache-streampipes-extensions-${project.version}-incubating.zip
-                                                </include>
-                                            </includes>
-                                        </fileSet>
-                                    </fileSets>
-                                </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <algorithms>
+                                <algorithm>SHA-512</algorithm>
+                            </algorithms>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>apache-streampipes-extensions-${project.version}-incubating-source-release.zip</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -532,6 +516,22 @@
                         <arguments>-Papache-release -Dmaven.deploy.skip=true</arguments>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <finalName>apache-streampipes-extensions-${project.version}-incubating</finalName>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -590,6 +590,7 @@
 
                         <!-- External files -->
                         <exclude>streampipes-processors-transformation-flink/src/main/java/com/kohlschutter/boilerpipe/**</exclude>
+                        <exclude>streampipes-processors-geo-jvm/src/main/java/org/apache/streampipes/processors/geo/jvm/processor/revgeocoder/geocode/**</exclude>
 
                     </excludes>
                 </configuration>
