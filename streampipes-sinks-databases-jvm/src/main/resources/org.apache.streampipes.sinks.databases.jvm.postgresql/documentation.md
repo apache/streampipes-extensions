@@ -18,7 +18,7 @@
 
 ## PostgreSQL
 
-<p align="center"> 
+<p align="center">
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
 </p>
 
@@ -61,6 +61,12 @@ The username for the PostgreSQL Server.
 ### Password
 
 The password for the PostgreSQL Server.
+
+### Schema name
+The name of the schema where events will be stored (will be created if it does not exist)
+
+### Drop Table
+Deletes the Tables if it already exists and creates a new new table with the same name
 
 ## Output
 
