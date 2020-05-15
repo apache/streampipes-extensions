@@ -14,6 +14,6 @@
 # limitations under the License.
 
 # Those parameters are used by IntelliJ to set the default consul parameters for development
-SP_PORT=7015
-SP_HOST=host.docker.internal
+SP_PORT=8006
+SP_HOST=172.17.0.1
 SP_DEBUG=true
