@@ -28,8 +28,6 @@ import org.apache.streampipes.processors.geo.jvm.jts.helper.SpGeometryBuilder;
 
 public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCalculatorParameters> {
 
-  private static Logger LOG;
-
   private String latitudeFieldName;
   private String longitudeFieldName;
 
@@ -42,7 +40,6 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
 
   @Override
   public void onInvocation(StaticDistanceCalculatorParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
-    LOG = parameters.getGraph().getLogger(StaticDistanceCalculatorParameters.class);
 
     this.latitudeFieldName = parameters.getLatitudeFieldName();
     this.longitudeFieldName = parameters.getLongitudeFieldName();
@@ -73,13 +70,16 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
       event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
 
       collector.collect(event);
+
     } else {
-      //todo how to handle error visible to the user
-      LOG.error("User Longitude and Latitude value are out of Range. "
-          + latitude  + ": allowed -90 and 90)" + longitude  + ": allowed -180 and 180)" );
+      if ((SpGeometryBuilder.isInWGSCoordinateRange(latitude, -90, 90))) {
+        throw new SpRuntimeException("Input of Latitude value is out of range. Value: "
+            + latitude + " but allowed between -90 and 90)");
+      } else {
+        throw new SpRuntimeException("Input of Longitude value is out of range. Value "
+            + longitude + " but allowed between -180 and 180)");
+      }
     }
-
-
   }
 
   @Override
