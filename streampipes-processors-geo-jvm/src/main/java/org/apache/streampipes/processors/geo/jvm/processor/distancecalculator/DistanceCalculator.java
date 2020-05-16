@@ -68,7 +68,7 @@ public class DistanceCalculator implements EventProcessor<DistanceCalculatorPara
       length.convertUnit(unit);
     }
 
-    event.addField(DistanceCalculatorController.LENGTH_RUNTIME, length.getLengthAsString());
+    event.addField(DistanceCalculatorController.LENGTH_RUNTIME, length.getLengthValueRoundet());
     event.addField(DistanceCalculatorController.UNIT_RUNTIME, length.getLengthUnit());
 
     out.collect(event);

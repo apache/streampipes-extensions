@@ -59,7 +59,7 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
       staticLength.convertUnit(unit);
     }
 
-    event.addField(StaticDistanceCalculatorController.LENGTH_RUNTIME, staticLength.getLengthAsString());
+    event.addField(StaticDistanceCalculatorController.LENGTH_RUNTIME, staticLength.getLengthValueRoundet());
     event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
 
     collector.collect(event);

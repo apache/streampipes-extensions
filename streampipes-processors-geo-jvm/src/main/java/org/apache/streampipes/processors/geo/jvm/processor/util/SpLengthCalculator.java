@@ -19,9 +19,9 @@ public class SpLengthCalculator {
   private final double EARTHRADIUS = 6378137; //meters
 
   private final Unit<Length> M = SI.METRE;
-  private final Unit<Length> KM = MetricPrefix.KILO(SI.METRE);
-  private final Unit<Length> MILE = SI.METRE.multiply(1609344).divide(1000);
-  private final Unit<Length> FOOT = SI.METRE.multiply(3048).divide(10000);
+  private final Unit<Length> KM = MetricPrefix.KILO(M);
+  private final Unit<Length> MILE = M.multiply(1609344).divide(1000);
+  private final Unit<Length> FOOT = M.multiply(3048).divide(10000);
 
   public enum ValidLengthUnits {
     METER(1), KM(2), MILE(3), FOOT(4);
@@ -54,8 +54,12 @@ public class SpLengthCalculator {
     return decimalPosition;
   }
 
+  public Double getLengthValueRoundet() {
+    return roundResult(length.getValue().doubleValue(), this.decimalPosition);
+  }
+
   public Double getLengthValue() {
-    return (length.getValue()).doubleValue();
+    return (length.getValue().doubleValue());
   }
 
   public String getLengthUnit() {
@@ -65,12 +69,6 @@ public class SpLengthCalculator {
   public Unit<Length> getUnit() {
     return length.getUnit();
   }
-
-  public String getLengthAsString() {
-    String result = doubleToString(getLengthValue(), getDecimalPosition());
-    return result;
-  }
-
 
   // ========================== setter
 
@@ -137,7 +135,7 @@ public class SpLengthCalculator {
    * @param decimalPositions
    * @return
    */
-  public static String doubleToString(Double value, int decimalPositions) {
+  protected Double roundResult(Double value, int decimalPositions) {
 
     //handle negative values but should not be possible but if 3 decimal Position will be used
     if (decimalPositions < 0) {
@@ -160,7 +158,7 @@ public class SpLengthCalculator {
     }
 
     //writes the result into a String to parse this into the stream. Cannot be parsed as a Double Otherwise scientific style comes back
-    String result = df.format(value);
+    double result = Double.parseDouble(df.format(value));
 
     return result;
   }
@@ -178,21 +176,5 @@ public class SpLengthCalculator {
 
     setLength(dist, M);
   }
-
-
-
-  public void calcGeodesicDistanceNew(double lat1, double lng1, double lat2, double lng2) {
-    // using haversine formula
-    double dLat = Math.toRadians(lat2-lat1);
-    double dLng = Math.toRadians(lng2-lng1);
-    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-            Math.sin(dLng/2) * Math.sin(dLng/2);
-    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    float dist = (float) (EARTHRADIUS * c);
-
-    setLength(dist, M);
-  }
-
 
 }
