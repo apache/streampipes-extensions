@@ -41,9 +41,8 @@ public class StaticDistanceCalculatorController extends StandaloneEventProcessin
   private static final String LONGITUDE_KEY = "longitude-key";
   private static final String SELECTED_LATITUDE_KEY = "selected-latitude-key";
   private static final String SELECTED_LONGITUDE_KEY = "selected-longitude-key";
-
-  private static final String DECIMAL_POSITION_KEY = "decimalPosition";
-  private static final String UNIT_KEY = "unit";
+  private static final String DECIMAL_POSITION_KEY = "decimalPosition-key";
+  private static final String UNIT_KEY = "unit-key";
 
   protected final static String LENGTH_RUNTIME = "geodesicStaticDistance";
   protected final static String UNIT_RUNTIME = "geodesicStaticDistanceUnit";
@@ -52,8 +51,8 @@ public class StaticDistanceCalculatorController extends StandaloneEventProcessin
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.apache.streampipes.processors.geo.jvm.processor" +
         ".staticdistancecalculator")
-        .category(DataProcessorType.FILTER)
-        .withAssets(Assets.DOCUMENTATION)
+        .category(DataProcessorType.GEO)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
         .withLocales(Locales.EN)
         .requiredStream(StreamRequirementsBuilder
             .create()

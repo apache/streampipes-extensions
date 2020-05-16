@@ -39,12 +39,12 @@ import java.net.URI;
 
 public class DistanceCalculatorController extends StandaloneEventProcessingDeclarer<DistanceCalculatorParameters> {
 
-  private static final String LAT_1_KEY = "lat1";
-  private static final String LONG_1_KEY = "long1";
-  private static final String LAT_2_KEY = "lat2";
-  private static final String LONG_2_KEY = "long2";
-  private static final String DECIMAL_POSITION_KEY = "decimalPosition";
-  private static final String UNIT_KEY = "unit";
+  private static final String LAT_1_KEY = "lat1-key";
+  private static final String LONG_1_KEY = "long1-key";
+  private static final String LAT_2_KEY = "lat2-key";
+  private static final String LONG_2_KEY = "long2-key";
+  private static final String DECIMAL_POSITION_KEY = "decimalPosition-key";
+  private static final String UNIT_KEY = "unit-key";
 
   private static final String CALCULATED_DISTANCE_KEY = "calculatedDistance";
 
@@ -54,8 +54,8 @@ public class DistanceCalculatorController extends StandaloneEventProcessingDecla
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.apache.streampipes.processors.geo.jvm.processor.distancecalculator")
-        .category(DataProcessorType.FILTER)
-        .withAssets(Assets.DOCUMENTATION)
+        .category(DataProcessorType.GEO)
+        .withAssets(Assets.DOCUMENTATION, Assets.ICON)
         .withLocales(Locales.EN)
         .requiredStream(StreamRequirementsBuilder
             .create()

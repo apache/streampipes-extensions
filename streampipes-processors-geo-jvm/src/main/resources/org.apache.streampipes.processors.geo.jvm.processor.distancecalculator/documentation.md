@@ -18,7 +18,7 @@
 
 ## Distance Calculator
 
-<p align="center"> 
+<p align="center">
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
 </p>
 
@@ -26,22 +26,29 @@
 
 ## Description
 
-Calculates the distance between two latitude/longitude pairs in a single event.
+Calculates the geodesic distance between two latitude/longitude pairs in a single event.
 
 ***
 
 ## Required input
 
+* Latitude and Longitude values of Position 1
+* Latitude and Longitude values of Position 2
 
 ***
 
 ## Configuration
 
-Describe the configuration parameters here
+Calculates the geodesic distance between position 1 and position 2. The User can choose the unit of the output value and the number of decimal positions.
 
 ### 1st parameter
 
+Number of the decimal position between 0 and 10.
 
 ### 2nd parameter
+
+Unit of the output result. Possible Units are Meter, KM, Feet or Mile.
+
+***
 
 ## Output

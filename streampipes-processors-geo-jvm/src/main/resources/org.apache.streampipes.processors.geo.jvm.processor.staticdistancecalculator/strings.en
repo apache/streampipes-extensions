@@ -12,3 +12,9 @@ selected-latitude-key.description=The latitude value of the fixed location
 
 selected-longitude-key.title=Longitude
 selected-longitude-key.description=The longitude value of the fixed location
+
+decimalPosition-key.title Decimal Position
+decimalPosition-key.description =  Number of decimal position
+
+unit-key.title=Units
+unit-key.description=Available Units of the result

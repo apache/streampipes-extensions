@@ -22,7 +22,7 @@
 
 ## Description
 
-Calculates the distance (in km) between a fixed location (e.g., a place) and a latitude/longitude pair of an input
+Calculates the distance between a fixed location (e.g., a place) and a latitude/longitude pair of an input
  event.
 
 ***
@@ -35,11 +35,23 @@ Requires a data stream that provides latitude and longitude values.
 
 ## Configuration
 
-Describe the configuration parameters here
+Calculates the geodesic distance between a position and a usr input position. The User can choose the unit of the output value and the number of decimal positions.
+
 
 ### 1st parameter
 
+Number of the decimal position between 0 and 10.
 
 ### 2nd parameter
+
+Unit of the output result. Possible Units are Meter, KM, Feet or Mile.
+
+### 3rd parameter
+Static latitude value in decimal degrees (needs to be in range -90 and 90)
+
+### 4th parameter
+Static longitude field in decimal degrees (needs to be in range 180 and 90)
+
+***
 
 ## Output

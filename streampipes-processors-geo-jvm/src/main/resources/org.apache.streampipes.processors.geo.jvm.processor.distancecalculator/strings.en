@@ -1,17 +1,20 @@
 org.apache.streampipes.processors.geo.jvm.processor.distancecalculator.title=Distance Calculator
 org.apache.streampipes.processors.geo.jvm.processor.distancecalculator.description=Calculates the distance between two geo points
 
-lat1.title=First Latitude
-lat1.description=
+lat1-key.title=First Latitude
+lat1-key.description= Latitude of Position 1
 
-long1.title=First Longitude
-long1.description=
+long1-key.title=First Longitude
+long1-key.description= Longitude of Position 1
 
-lat2.title=Second Latitude
-lat2.description=
+lat2-key.title=Second Latitude
+lat2-key.description=Latitude of Position 2
 
-long2.title=Second Longitude
-long2.description=
+long2-key.title=Second Longitude
+long2-key.description=Longitude of Position 2
 
-calculatedDistance.title=Distance Field
-startingCell.description=
+decimalPosition-key.title Decimal Position of Result
+decimalPosition-key.description =  Number of decimal position
+
+unit-key.title=Units
+unit-key.description=Available Units of the  result
