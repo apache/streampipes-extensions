@@ -18,7 +18,7 @@ package org.apache.streampipes.processors.geo.jvm.processor.staticdistancecalcul
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.model.runtime.Event;
-import org.apache.streampipes.processors.geo.jvm.processor.util.DistanceUtil;
+import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
 import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.runtime.EventProcessor;
@@ -28,8 +28,12 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
   private String latitudeFieldName;
   private String longitudeFieldName;
 
-  private Float selectedLocationLatitude;
-  private Float selectedLocationLongitude;
+  private Double selectedLocationLatitude;
+  private Double selectedLocationLongitude;
+
+  private Integer unit;
+
+  SpLengthCalculator staticLength;
 
   @Override
   public void onInvocation(StaticDistanceCalculatorParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
@@ -38,17 +42,25 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
 
     this.selectedLocationLatitude = parameters.getSelectedLatitude();
     this.selectedLocationLongitude = parameters.getSelectedLongitude();
+
+    this.unit = parameters.getUnit();
+
+    staticLength = new SpLengthCalculator(parameters.getDecimalPosition());
   }
 
   @Override
   public void onEvent(Event event, SpOutputCollector collector) throws SpRuntimeException {
-    Float latitude = event.getFieldBySelector(latitudeFieldName).getAsPrimitive().getAsFloat();
-    Float longitude = event.getFieldBySelector(longitudeFieldName).getAsPrimitive().getAsFloat();
+    Double latitude = event.getFieldBySelector(latitudeFieldName).getAsPrimitive().getAsDouble();
+    Double longitude = event.getFieldBySelector(longitudeFieldName).getAsPrimitive().getAsDouble();
 
-    Float distance = DistanceUtil.dist(latitude, longitude, selectedLocationLatitude,
-            selectedLocationLongitude);
+    staticLength.calcGeodesicDistance(latitude, longitude, selectedLocationLatitude, selectedLocationLongitude);
 
-    event.addField("distance", distance);
+    if (unit != 1) {
+      staticLength.convertUnit(unit);
+    }
+
+    event.addField(StaticDistanceCalculatorController.LENGTH_RUNTIME, staticLength.getLengthAsString());
+    event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
 
     collector.collect(event);
   }

@@ -24,19 +24,26 @@ public class StaticDistanceCalculatorParameters extends EventProcessorBindingPar
   private String latitudeFieldName;
   private String longitudeFieldName;
 
-  private Float selectedLatitude;
-  private Float selectedLongitude;
+  private Double selectedLatitude;
+  private Double selectedLongitude;
+
+  private Integer decimalPosition;
+  private Integer unit;
 
   public StaticDistanceCalculatorParameters(DataProcessorInvocation graph,
                                             String latitudeFieldName,
                                             String longitudeFieldName,
-                                            Float selectedLatitude,
-                                            Float selectedLongitude) {
+                                            Double selectedLatitude,
+                                            Double selectedLongitude,
+                                            Integer decimalPosition,
+                                            Integer unit) {
     super(graph);
     this.latitudeFieldName = latitudeFieldName;
     this.longitudeFieldName = longitudeFieldName;
     this.selectedLatitude = selectedLatitude;
     this.selectedLongitude = selectedLongitude;
+    this.decimalPosition = decimalPosition;
+    this.unit = unit;
   }
 
   public String getLatitudeFieldName() {
@@ -47,19 +54,23 @@ public class StaticDistanceCalculatorParameters extends EventProcessorBindingPar
     return longitudeFieldName;
   }
 
-  public Float getSelectedLatitude() {
+  public Double getSelectedLatitude() {
     return selectedLatitude;
   }
 
-  public void setSelectedLatitude(Float selectedLatitude) {
+  public void setSelectedLatitude(Double selectedLatitude) {
     this.selectedLatitude = selectedLatitude;
   }
 
-  public Float getSelectedLongitude() {
+  public Double getSelectedLongitude() {
     return selectedLongitude;
   }
 
-  public void setSelectedLongitude(Float selectedLongitude) {
+  public void setSelectedLongitude(Double selectedLongitude) {
     this.selectedLongitude = selectedLongitude;
   }
+
+  public Integer getDecimalPosition() { return decimalPosition; }
+
+  public Integer getUnit() { return unit; }
 }
