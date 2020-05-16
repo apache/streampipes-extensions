@@ -22,15 +22,20 @@ import org.apache.streampipes.model.DataProcessorType;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
 import org.apache.streampipes.model.schema.PropertyScope;
+import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
+import org.apache.streampipes.sdk.builder.PrimitivePropertyBuilder;
 import org.apache.streampipes.sdk.builder.ProcessingElementBuilder;
 import org.apache.streampipes.sdk.builder.StreamRequirementsBuilder;
 import org.apache.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
 import org.apache.streampipes.sdk.helpers.*;
 import org.apache.streampipes.sdk.utils.Assets;
+import org.apache.streampipes.sdk.utils.Datatypes;
 import org.apache.streampipes.vocabulary.Geo;
 import org.apache.streampipes.vocabulary.SO;
 import org.apache.streampipes.wrapper.standalone.ConfiguredEventProcessor;
 import org.apache.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDeclarer;
+
+import java.net.URI;
 
 public class DistanceCalculatorController extends StandaloneEventProcessingDeclarer<DistanceCalculatorParameters> {
 
@@ -38,43 +43,84 @@ public class DistanceCalculatorController extends StandaloneEventProcessingDecla
   private static final String LONG_1_KEY = "long1";
   private static final String LAT_2_KEY = "lat2";
   private static final String LONG_2_KEY = "long2";
+  private static final String DECIMAL_POSITION_KEY = "decimalPosition";
+  private static final String UNIT_KEY = "unit";
+
   private static final String CALCULATED_DISTANCE_KEY = "calculatedDistance";
 
+  protected final static String LENGTH_RUNTIME = "geodesicDistance";
+  protected final static String UNIT_RUNTIME = "geodesicDistanceUnit";
 
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("org.apache.streampipes.processors.geo.jvm.processor.distancecalculator")
-            .category(DataProcessorType.FILTER)
-            .withAssets(Assets.DOCUMENTATION)
-            .withLocales(Locales.EN)
-            .requiredStream(StreamRequirementsBuilder
-                    .create()
-                    .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lat)
-                            , Labels.withId(LAT_1_KEY), PropertyScope.MEASUREMENT_PROPERTY)
-                    .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lng)
-                            , Labels.withId(LONG_1_KEY), PropertyScope.MEASUREMENT_PROPERTY)
-                    .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lat)
-                            , Labels.withId(LAT_2_KEY), PropertyScope.MEASUREMENT_PROPERTY)
-                    .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lng)
-                            , Labels.withId(LONG_2_KEY), PropertyScope.MEASUREMENT_PROPERTY)
-                    .build())
-            .outputStrategy(
-                    OutputStrategies.append(EpProperties.numberEp(Labels.withId(CALCULATED_DISTANCE_KEY), "distance", SO.Number))
+        .category(DataProcessorType.FILTER)
+        .withAssets(Assets.DOCUMENTATION)
+        .withLocales(Locales.EN)
+        .requiredStream(StreamRequirementsBuilder
+            .create()
+            .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lat)
+                , Labels.withId(LAT_1_KEY), PropertyScope.MEASUREMENT_PROPERTY)
+            .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lng)
+                , Labels.withId(LONG_1_KEY), PropertyScope.MEASUREMENT_PROPERTY)
+            .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lat)
+                , Labels.withId(LAT_2_KEY), PropertyScope.MEASUREMENT_PROPERTY)
+            .requiredPropertyWithUnaryMapping(EpRequirements.domainPropertyReq(Geo.lng)
+                , Labels.withId(LONG_2_KEY), PropertyScope.MEASUREMENT_PROPERTY)
+            .build())
+        .requiredIntegerParameter(
+            Labels.withId(DECIMAL_POSITION_KEY), 0, 10, 1)
+        .requiredSingleValueSelection(
+            Labels.withId(UNIT_KEY),
+            Options.from(
+                SpLengthCalculator.ValidLengthUnits.METER.name(),
+                SpLengthCalculator.ValidLengthUnits.KM.name(),
+                SpLengthCalculator.ValidLengthUnits.MILE.name(),
+                SpLengthCalculator.ValidLengthUnits.FOOT.name()
             )
-            .build();
+        )
 
+        .outputStrategy(OutputStrategies.append(
+            PrimitivePropertyBuilder
+                .create(Datatypes.Double,LENGTH_RUNTIME)
+                .domainProperty(SO.Number)
+                //todo dynamic
+                //.measurementUnit(URI.create("http://qudt.org/vocab/unit#Meter"))
+                .build(),
+            PrimitivePropertyBuilder
+                .create(Datatypes.Double,UNIT_RUNTIME)
+                .domainProperty(SO.Text)
+                // todo unit type?
+                .measurementUnit(URI.create("http://qudt.org/vocab/quantitykind/Length"))
+                .build())
+        )
+        .build();
   }
 
   @Override
   public ConfiguredEventProcessor<DistanceCalculatorParameters> onInvocation
-          (DataProcessorInvocation sepa, ProcessingElementParameterExtractor extractor) {
+      (DataProcessorInvocation sepa, ProcessingElementParameterExtractor extractor) {
 
     String lat1PropertyName = extractor.mappingPropertyValue(LAT_1_KEY);
     String long11PropertyName = extractor.mappingPropertyValue(LONG_1_KEY);
     String lat2PropertyName = extractor.mappingPropertyValue(LAT_2_KEY);
     String long2PropertyName = extractor.mappingPropertyValue(LONG_2_KEY);
 
-    DistanceCalculatorParameters staticParam = new DistanceCalculatorParameters(sepa, lat1PropertyName, long11PropertyName, lat2PropertyName, long2PropertyName);
+    Integer decimalPosition = extractor.singleValueParameter(DECIMAL_POSITION_KEY, Integer.class);
+
+    String chosenUnit = extractor.selectedSingleValue(UNIT_KEY, String.class);
+
+    // convert enum to integer values default meter
+    int unit = 1;
+    if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.KM.name())){
+      unit = SpLengthCalculator.ValidLengthUnits.KM.getNumber();
+    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.MILE.name())){
+      unit = SpLengthCalculator.ValidLengthUnits.MILE.getNumber();
+    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.FOOT.name())){
+      unit = SpLengthCalculator.ValidLengthUnits.FOOT.getNumber();
+    }
+
+    DistanceCalculatorParameters staticParam = new DistanceCalculatorParameters(sepa, lat1PropertyName, long11PropertyName, lat2PropertyName, long2PropertyName, decimalPosition, unit);
 
     return new ConfiguredEventProcessor<>(staticParam, DistanceCalculator::new);
   }

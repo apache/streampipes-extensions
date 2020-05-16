@@ -18,33 +18,58 @@
 
 package org.apache.streampipes.processors.geo.jvm.processor.distancecalculator;
 
+import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.runtime.Event;
-import org.apache.streampipes.processors.geo.jvm.processor.util.DistanceUtil;
+import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
 import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.runtime.EventProcessor;
 
 public class DistanceCalculator implements EventProcessor<DistanceCalculatorParameters> {
 
-  private DistanceCalculatorParameters params;
+  private static Logger LOG;
+  private SpLengthCalculator length;
+
+  private String latitute1;
+  private String longitude1;
+  private String latitude2;
+  private String longitude2;
+  private Integer unit;
+
+
 
   @Override
-  public void onInvocation(DistanceCalculatorParameters numericalFilterParameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
+  public void onInvocation(DistanceCalculatorParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
           runtimeContext) {
-    this.params = numericalFilterParameters;
+
+    LOG = params.getGraph().getLogger(DistanceCalculatorParameters.class);
+    this.latitute1 = params.getLat1PropertyName();
+    this.longitude1 = params.getLong1PropertyName();
+    this.latitude2 = params.getLat2PropertyName();
+    this.longitude2 = params.getLong2PropertyName();
+    this.unit = params.getUnit();
+
+    // init class with constructor
+    length = new SpLengthCalculator(params.getDecimalPosition());
+
   }
 
   @Override
   public void onEvent(Event event, SpOutputCollector out) {
 
-    float lat1 = event.getFieldBySelector(this.params.getLat1PropertyName()).getAsPrimitive().getAsFloat();
-    float long1 = event.getFieldBySelector(this.params.getLong1PropertyName()).getAsPrimitive().getAsFloat();
-    float lat2 = event.getFieldBySelector(this.params.getLat2PropertyName()).getAsPrimitive().getAsFloat();
-    float long2 = event.getFieldBySelector(this.params.getLong2PropertyName()).getAsPrimitive().getAsFloat();
+    double lat1 = event.getFieldBySelector(latitute1).getAsPrimitive().getAsDouble();
+    double lng1 = event.getFieldBySelector(longitude1).getAsPrimitive().getAsDouble();
+    double lat2 = event.getFieldBySelector(latitude2).getAsPrimitive().getAsDouble();
+    double lng2 = event.getFieldBySelector(longitude2).getAsPrimitive().getAsDouble();
 
-    double resultDist = DistanceUtil.dist(lat1, long1, lat2, long2);
+    length.calcGeodesicDistance(lat1, lng1, lat2, lng2);
 
-    event.addField("distance", resultDist);
+    if (unit != 1) {
+      length.convertUnit(unit);
+    }
+
+    event.addField(DistanceCalculatorController.LENGTH_RUNTIME, length.getLengthAsString());
+    event.addField(DistanceCalculatorController.UNIT_RUNTIME, length.getLengthUnit());
 
     out.collect(event);
   }

@@ -27,17 +27,21 @@ public class DistanceCalculatorParameters extends EventProcessorBindingParams {
   public String long1PropertyName;
   public String lat2PropertyName;
   public String long2PropertyName;
+  protected Integer decimalPosition;
+  protected Integer unit;
 
   public DistanceCalculatorParameters(DataProcessorInvocation graph) {
     super(graph);
   }
 
-  public DistanceCalculatorParameters(DataProcessorInvocation graph, String lat1PropertyName, String long1PropertyName, String lat2PropertyName, String long2PropertyName) {
+  public DistanceCalculatorParameters(DataProcessorInvocation graph, String lat1PropertyName, String long1PropertyName, String lat2PropertyName, String long2PropertyName, Integer decimalPosition, Integer unit) {
     super(graph);
     this.lat1PropertyName = lat1PropertyName;
     this.long1PropertyName = long1PropertyName;
     this.lat2PropertyName = lat2PropertyName;
     this.long2PropertyName = long2PropertyName;
+    this.decimalPosition = decimalPosition;
+    this.unit = unit;
   }
 
 
@@ -56,4 +60,8 @@ public class DistanceCalculatorParameters extends EventProcessorBindingParams {
   public String getLong2PropertyName() {
     return long2PropertyName;
   }
+
+  public Integer getDecimalPosition() { return decimalPosition; }
+
+  public Integer getUnit() { return unit; }
 }
