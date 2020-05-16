@@ -17,13 +17,18 @@
 package org.apache.streampipes.processors.geo.jvm.processor.staticdistancecalculator;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
+import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.runtime.Event;
 import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
 import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.runtime.EventProcessor;
 
+import org.apache.streampipes.processors.geo.jvm.jts.helper.SpGeometryBuilder;
+
 public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCalculatorParameters> {
+
+  private static Logger LOG;
 
   private String latitudeFieldName;
   private String longitudeFieldName;
@@ -37,6 +42,8 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
 
   @Override
   public void onInvocation(StaticDistanceCalculatorParameters parameters, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext runtimeContext) throws SpRuntimeException {
+    LOG = parameters.getGraph().getLogger(StaticDistanceCalculatorParameters.class);
+
     this.latitudeFieldName = parameters.getLatitudeFieldName();
     this.longitudeFieldName = parameters.getLongitudeFieldName();
 
@@ -53,16 +60,26 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
     Double latitude = event.getFieldBySelector(latitudeFieldName).getAsPrimitive().getAsDouble();
     Double longitude = event.getFieldBySelector(longitudeFieldName).getAsPrimitive().getAsDouble();
 
-    staticLength.calcGeodesicDistance(latitude, longitude, selectedLocationLatitude, selectedLocationLongitude);
+    if ((SpGeometryBuilder.isInWGSCoordinateRange(latitude, -90, 90))
+        && (SpGeometryBuilder.isInWGSCoordinateRange(longitude, -180, 180))) {
 
-    if (unit != 1) {
-      staticLength.convertUnit(unit);
+      staticLength.calcGeodesicDistance(latitude, longitude, selectedLocationLatitude, selectedLocationLongitude);
+
+      if (unit != 1) {
+        staticLength.convertUnit(unit);
+      }
+
+      event.addField(StaticDistanceCalculatorController.LENGTH_RUNTIME, staticLength.getLengthValueRoundet());
+      event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
+
+      collector.collect(event);
+    } else {
+      //todo how to handle error visible to the user
+      LOG.error("User Longitude and Latitude value are out of Range. "
+          + latitude  + ": allowed -90 and 90)" + longitude  + ": allowed -180 and 180)" );
     }
 
-    event.addField(StaticDistanceCalculatorController.LENGTH_RUNTIME, staticLength.getLengthValueRoundet());
-    event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
 
-    collector.collect(event);
   }
 
   @Override
