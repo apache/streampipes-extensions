@@ -22,7 +22,7 @@ import org.apache.streampipes.model.DataProcessorType;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
 import org.apache.streampipes.model.schema.PropertyScope;
-import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
+import org.apache.streampipes.processors.geo.jvm.jts.helper.SpLengthCalculator;
 import org.apache.streampipes.sdk.builder.PrimitivePropertyBuilder;
 import org.apache.streampipes.sdk.builder.ProcessingElementBuilder;
 import org.apache.streampipes.sdk.builder.StreamRequirementsBuilder;
@@ -45,8 +45,6 @@ public class DistanceCalculatorController extends StandaloneEventProcessingDecla
   private static final String LONG_2_KEY = "long2-key";
   private static final String DECIMAL_POSITION_KEY = "decimalPosition-key";
   private static final String UNIT_KEY = "unit-key";
-
-  private static final String CALCULATED_DISTANCE_KEY = "calculatedDistance";
 
   protected final static String LENGTH_RUNTIME = "geodesicDistance";
   protected final static String UNIT_RUNTIME = "geodesicDistanceUnit";

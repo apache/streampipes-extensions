@@ -1,12 +1,11 @@
-package org.apache.streampipes.processors.geo.jvm.processor.util;
+package org.apache.streampipes.processors.geo.jvm.jts.helper;
 
+
+import net.sf.geographiclib.Geodesic;
+import net.sf.geographiclib.GeodesicData;
 import si.uom.SI;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.MetricPrefix;
-
-
-//import com.github.jqudt.Quantity;
-//import com.github.jqudt.Unit;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -18,10 +17,10 @@ public class SpLengthCalculator {
 
   private final double EARTHRADIUS = 6378137; //meters
 
-  private final Unit<Length> M = SI.METRE;
-  private final Unit<Length> KM = MetricPrefix.KILO(M);
-  private final Unit<Length> MILE = M.multiply(1609344).divide(1000);
-  private final Unit<Length> FOOT = M.multiply(3048).divide(10000);
+  private final Unit<Length> METER = SI.METRE;
+  private final Unit<Length> KM = MetricPrefix.KILO(METER);
+  private final Unit<Length> MILE = METER.multiply(1609344).divide(1000);
+  private final Unit<Length> FOOT = METER.multiply(3048).divide(10000);
 
   public enum ValidLengthUnits {
     METER(1), KM(2), MILE(3), FOOT(4);
@@ -43,7 +42,7 @@ public class SpLengthCalculator {
 
   // ========================= constructor
   public SpLengthCalculator(int decimalPosition) {
-    this.length = Quantities.getQuantity(-9999, M);
+    this.length = Quantities.getQuantity(-9999, METER);
     this.decimalPosition = decimalPosition;
   }
 
@@ -82,6 +81,7 @@ public class SpLengthCalculator {
 
 
   // unit Transformation
+
   /**
    * convert  Quantity<Length>  value to Unit<Length>
    *
@@ -90,7 +90,7 @@ public class SpLengthCalculator {
   public void convertUnit(ValidLengthUnits value) {
     switch (value.getNumber()) {
       case 1:
-        setLength(this.length.to(M));
+        setLength(this.length.to(METER));
         break;
       case 2:
         setLength(this.length.to(KM));
@@ -112,7 +112,7 @@ public class SpLengthCalculator {
   public void convertUnit(int value) {
     switch (value) {
       case 1:
-        setLength(this.length.to(M));
+        setLength(this.length.to(METER));
         break;
       case 2:
         setLength(this.length.to(KM));
@@ -164,17 +164,28 @@ public class SpLengthCalculator {
   }
 
 
-  public void calcGeodesicDistance(double lat1, double lng1, double lat2, double lng2) {
-     // using haversine formula
-    double dLat = Math.toRadians(lat2-lat1);
-    double dLng = Math.toRadians(lng2-lng1);
-    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  public void calcGeodesicDistanceOld(double lat1, double lng1, double lat2, double lng2) {
+    // using haversine formula
+    double dLat = Math.toRadians(lat2 - lat1);
+    double dLng = Math.toRadians(lng2 - lng1);
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-            Math.sin(dLng/2) * Math.sin(dLng/2);
-    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     float dist = (float) (EARTHRADIUS * c);
 
-    setLength(dist, M);
+    setLength(dist, METER);
   }
 
+
+  public void calcGeodesicDistance(double lat1, double lng1, double lat2, double lng2) {
+    //uses WGS847 Ellipsoid
+    Geodesic geod = Geodesic.WGS84;
+    // calculates all kind of parameters via Inverse method
+    GeodesicData dist = geod.Inverse(lat1, lng1, lat2, lng2);
+    // we only need s12 parameter -> length
+    double result = dist.s12;
+
+    setLength(result, METER);
+  }
 }

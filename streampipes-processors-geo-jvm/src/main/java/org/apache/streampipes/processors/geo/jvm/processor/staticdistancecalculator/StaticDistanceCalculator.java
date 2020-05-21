@@ -17,9 +17,8 @@
 package org.apache.streampipes.processors.geo.jvm.processor.staticdistancecalculator;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
-import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.runtime.Event;
-import org.apache.streampipes.processors.geo.jvm.processor.util.SpLengthCalculator;
+import org.apache.streampipes.processors.geo.jvm.jts.helper.SpLengthCalculator;
 import org.apache.streampipes.wrapper.context.EventProcessorRuntimeContext;
 import org.apache.streampipes.wrapper.routing.SpOutputCollector;
 import org.apache.streampipes.wrapper.runtime.EventProcessor;
@@ -70,6 +69,7 @@ public class StaticDistanceCalculator implements EventProcessor<StaticDistanceCa
       event.addField(StaticDistanceCalculatorController.UNIT_RUNTIME, staticLength.getLengthUnit());
 
       collector.collect(event);
+
 
     } else {
       if ((SpGeometryBuilder.isInWGSCoordinateRange(latitude, -90, 90))) {

@@ -17,7 +17,8 @@
   ~
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
@@ -26,6 +27,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>streampipes-processors-geo-jvm</artifactId>
+
+    <properties>
+        <geographiclib.version>1.50</geographiclib.version>
+        <javax.measur.version>1.0</javax.measur.version>
+        <tec.units.version>1.0.3</tec.units.version>
+        <si.uom.version>1.0</si.uom.version>
+    </properties>
 
     <dependencies>
         <!-- StreamPipes dependencies -->
@@ -87,24 +95,31 @@
             <version>1.16.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.geographiclib</groupId>
+            <artifactId>GeographicLib-Java</artifactId>
+            <version>${geographiclib.version}</version>
+        </dependency>
 
-
+        <!-- units -->
         <dependency>
             <groupId>javax.measure</groupId>
             <artifactId>unit-api</artifactId>
-            <version>1.0</version>
+            <version>${javax.measur.version}</version>
         </dependency>
+
         <dependency>
             <groupId>tec.units</groupId>
             <artifactId>unit-ri</artifactId>
-            <version>1.0.3</version>
+            <version>${tec.units.version}</version>
         </dependency>
 
         <dependency>
             <groupId>si.uom</groupId>
             <artifactId>si-units</artifactId>
-            <version>1.0</version>
+            <version>${si.uom.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.streampipes</groupId>
             <artifactId>streampipes-measurement-units</artifactId>
