@@ -56,9 +56,7 @@ public class IotDb extends JdbcClient implements EventSink<IotDbParameters> {
             ".*",
             "org.apache.iotdb.jdbc.IoTDBDriver",
             "iotdb",
-            LOG,
-            "public",
-            false);
+            LOG);
 
   }
 
