@@ -81,7 +81,7 @@ public enum SinksInternalJvmConfig implements PeConfig {
 	}
 
 	public String getJmsHost() {
-		return "tcp://" + config.getString(ConfigKeys.JMS_HOST);
+		return config.getString(ConfigKeys.JMS_HOST);
 	}
 
 	public int getJmsPort() {
