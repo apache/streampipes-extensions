@@ -23,11 +23,11 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-parent</artifactId>
-        <version>0.65.1-SNAPSHOT</version>
+        <version>0.67.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>streampipes-extensions</artifactId>
-    <version>0.65.1-SNAPSHOT</version>
+    <version>0.67.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -59,19 +59,36 @@
     </modules>
 
     <properties>
-        <streampipes.version>0.65.1-SNAPSHOT</streampipes.version>
+        <owasp.check.skip>true</owasp.check.skip>
+
+        <streampipes.version>0.67.0-SNAPSHOT</streampipes.version>
 
         <amqp-client.version>4.1.0</amqp-client.version>
+        <animal-sniffer-annotations.version>1.17</animal-sniffer-annotations.version>
         <boofcv.version>0.33</boofcv.version>
+        <bcprov.version>1.61</bcprov.version>
+        <classindex.version>3.9</classindex.version>
+        <checker-qual.version>2.5.2</checker-qual.version>
         <commons-math3.version>3.6.1</commons-math3.version>
+        <commons-compress.version>1.18</commons-compress.version>
+        <commons-text.version>1.4</commons-text.version>
         <ditto-client.version>1.0.0</ditto-client.version>
         <data-generator.version>1.4.1</data-generator.version>
+        <ddogleg.version>0.16</ddogleg.version>
+        <errorprone-annotations.version>2.2.0</errorprone-annotations.version>
         <google-maps-services.version>0.10.0</google-maps-services.version>
         <iotdb.version>0.8.0</iotdb.version>
+        <jackson.version>2.10.0</jackson.version>
+        <java-websocket.version>1.4.0</java-websocket.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <javax-websocket-client-api.version>1.1</javax-websocket-client-api.version>
+        <jsrosbridge.version>0.2.0</jsrosbridge.version>
+        <jedis.version>3.3.0</jedis.version>
+
         <language-detector.version>0.6</language-detector.version>
         <log4j-to-slf4j.version>2.8.2</log4j-to-slf4j.version>
         <mailapi.version>1.4.3</mailapi.version>
-        <milo.version>2.22.1</milo.version>
+        <metrics-core.version>3.1.2</metrics-core.version>
         <nekohtml.version>1.9.13</nekohtml.version>
         <okhttp.version>3.13.1</okhttp.version>
         <opennlp.version>1.9.0</opennlp.version>
@@ -87,10 +104,213 @@
         <hawtbuf.version>1.11</hawtbuf.version>
 
         <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
+
+        <!-- Connect Dependencies-->
+        <animal-sniffer-annotations.version>1.17</animal-sniffer-annotations.version>
+        <bcprov.version>1.61</bcprov.version>
+        <checker-qual.version>2.5.2</checker-qual.version>
+        <commons-compress.version>1.18</commons-compress.version>
+        <commons-text.version>1.8</commons-text.version>
+        <errorprone-annotations.version>2.2.0</errorprone-annotations.version>
+        <java-websocket.version>1.4.0</java-websocket.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <javax-websocket-client-api.version>1.1</javax-websocket-client-api.version>
+        <jsrosbridge.version>0.2.0</jsrosbridge.version>
+        <influxdb.java.version>2.14</influxdb.java.version>
+        <hadoop.version>3.2.1</hadoop.version>
+        <eclipse.milo.version>0.4.0</eclipse.milo.version>
+        <mysql-binlog-connector.version>0.18.1</mysql-binlog-connector.version>
+        <mysql-connector-java.version>8.0.15</mysql-connector-java.version>
+        <netty.version>4.1.39.Final</netty.version>
+        <nimbus-jose-jwt.version>4.41.1</nimbus-jose-jwt.version>
+        <opencsv.version>4.6</opencsv.version>
+        <plc4x.version>0.6.0</plc4x.version>
+        <protobuf.version>3.6.1</protobuf.version>
+        <pulsar.version>2.5.1</pulsar.version>
+        <slack.version>1.2.0</slack.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- External Connect dependencies -->
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>animal-sniffer-annotations</artifactId>
+                <version>${animal-sniffer-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bcprov.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.checkerframework</groupId>
+                <artifactId>checker-qual</artifactId>
+                <version>${checker-qual.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.java-websocket</groupId>
+                <artifactId>Java-WebSocket</artifactId>
+                <version>${java-websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.websocket</groupId>
+                <artifactId>javax.websocket-api</artifactId>
+                <version>${javax-websocket-client-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>edu.wpi.rail</groupId>
+                <artifactId>jrosbridge</artifactId>
+                <version>${jsrosbridge.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.influxdb</groupId>
+                <artifactId>influxdb-java</artifactId>
+                <version>${influxdb.java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>${hadoop.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jetty-server</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jetty-servlet</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jetty-servlets</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jetty-webapp</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jetty-util</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.jersey</groupId>
+                        <artifactId>jersey-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.jersey</groupId>
+                        <artifactId>jersey-client</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.jersey</groupId>
+                        <artifactId>jersey-servlet</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.milo</groupId>
+                <artifactId>sdk-client</artifactId>
+                <version>${eclipse.milo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.shyiko</groupId>
+                <artifactId>mysql-binlog-connector-java</artifactId>
+                <version>${mysql-binlog-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>${opencsv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.plc4x</groupId>
+                <artifactId>plc4j-api</artifactId>
+                <version>${plc4x.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.plc4x</groupId>
+                <artifactId>plc4j-driver-s7</artifactId>
+                <version>${plc4x.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pulsar</groupId>
+                <artifactId>pulsar-client</artifactId>
+                <version>${pulsar.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ullink.slack</groupId>
+                <artifactId>simpleslackapi</artifactId>
+                <version>${slack.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_annotations</artifactId>
+                <version>${errorprone-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-sse</artifactId>
+                <version>${jersey.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.glassfish.jersey.core</groupId>
+                        <artifactId>jersey-server</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <!-- StreamPipes dependencies -->
             <dependency>
                 <groupId>org.apache.streampipes</groupId>
@@ -210,6 +430,11 @@
                 <version>${slack-api.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${metrics-core.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mailapi</artifactId>
                 <version>${mailapi.version}</version>
@@ -223,11 +448,6 @@
                 <groupId>net.sourceforge.nekohtml</groupId>
                 <artifactId>nekohtml</artifactId>
                 <version>${nekohtml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-milo</artifactId>
-                <version>${milo.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -275,9 +495,24 @@
                 <version>${pulsar.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.atteo.classindex</groupId>
+                <artifactId>classindex</artifactId>
+                <version>${classindex.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.boofcv</groupId>
                 <artifactId>boofcv-core</artifactId>
                 <version>${boofcv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ddogleg</groupId>
+                <artifactId>ddogleg</artifactId>
+                <version>${ddogleg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ditto</groupId>
+                <artifactId>ditto-client</artifactId>
+                <version>${ditto-client.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.elasticsearch</groupId>
@@ -319,6 +554,12 @@
                 <artifactId>hawtbuf</artifactId>
                 <version>${hawtbuf.version}</version>
             </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+
 
             <!-- Test dependencies -->
             <dependency>
@@ -339,15 +580,16 @@
                 <version>${flink.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-runtime_2.11</artifactId>
+                <version>${flink.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.streampipes</groupId>
                 <artifactId>streampipes-test-utils</artifactId>
                 <version>${streampipes.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.ditto</groupId>
-                <artifactId>ditto-client</artifactId>
-                <version>${ditto-client.version}</version>
             </dependency>
 
         </dependencies>
@@ -355,14 +597,37 @@
 
     <profiles>
         <profile>
-            <id>release</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
+            <id>apache-release</id>
             <build>
                 <plugins>
+                    <!--
+                      Create MD5 and SHA512 checksum files for the release artifacts.
+                    -->
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>files</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <algorithms>
+                                <algorithm>SHA-512</algorithm>
+                            </algorithms>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>apache-streampipes-extensions-${project.version}-incubating-source-release.zip</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -372,57 +637,25 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                                    <doclint>none</doclint>
+                                    <source>8</source>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <failOnError>false</failOnError>
-                            <doclint>none</doclint>
-                            <additionalJOption>-Xdoclint:none</additionalJOption>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>external.atlassian.jgitflow</groupId>
-                        <artifactId>jgitflow-maven-plugin</artifactId>
-                        <version>1.0-m5.1</version>
-                        <configuration>
-                            <flowInitContext>
-                                <masterBranchName>master</masterBranchName>
-                                <developBranchName>dev</developBranchName>
-                                <featureBranchPrefix>feature-</featureBranchPrefix>
-                                <releaseBranchPrefix>release-</releaseBranchPrefix>
-                                <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
-                            </flowInitContext>
-                            <noDeploy>true</noDeploy>
-                            <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <pushReleases>false</pushReleases>
-                            <localOnly>true</localOnly>
-                            <squash>false</squash>
-                            <scmCommentPrefix>[RELEASE] [skip-ci]</scmCommentPrefix>
-                            <enableSshAgent>true</enableSshAgent>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>java8-doclint-disabled</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
+            </properties>
         </profile>
     </profiles>
 
@@ -496,6 +729,29 @@
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <arguments>-Papache-release -Dmaven.deploy.skip=true</arguments>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <finalName>apache-streampipes-extensions-${project.version}-incubating</finalName>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -547,14 +803,22 @@
 
                         <exclude>**/system</exclude>
 
+                        <exclude>DISCLAIMER-WIP</exclude>
+
                         <!-- Language Files -->
                         <exclude>**/*.en</exclude>
 
                         <!-- External files -->
                         <exclude>streampipes-processors-transformation-flink/src/main/java/com/kohlschutter/boilerpipe/**</exclude>
+                        <exclude>streampipes-processors-geo-jvm/src/main/java/org/apache/streampipes/processors/geo/jvm/processor/revgeocoder/geocode/**</exclude>
 
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.streampipes</groupId>
+                <artifactId>streampipes-maven-plugin</artifactId>
+                <version>${streampipes.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -566,11 +830,6 @@
                     </rules>
                 </configuration>
             </plugin>
-<!--                        <plugin>-->
-<!--                            <groupId>org.streampipes</groupId>-->
-<!--                            <artifactId>streampipes-maven-plugin</artifactId>-->
-<!--                            <version>1.0-SNAPSHOT</version>-->
-<!--                        </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -603,11 +862,12 @@
         </repository>
     </repositories>
 
+
     <scm>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/incubator-streampipes-extensions.git
-        </developerConnection>
-        <connection>scm:git:https://gitbox.apache.org/repos/asf/incubator-streampipes-extensions.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/apache/incubator-streampipes-extensions.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/apache/incubator-streampipes-extensions.git</connection>
         <url>https://github.com/apache/incubator-streampipes-extensions</url>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 
 </project>

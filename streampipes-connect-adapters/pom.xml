@@ -23,86 +23,99 @@
     <parent>
         <groupId>org.apache.streampipes</groupId>
         <artifactId>streampipes-extensions</artifactId>
-        <version>0.65.1-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <version>0.67.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>streampipes-connect-adapters</artifactId>
 
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>streampipes-connect-adapter</module>
-    </modules>
-
-    <properties>
-        <camel.version>2.22.1</camel.version>
-        <java-websocket.version>1.4.0</java-websocket.version>
-        <javax-validation.version>2.0.1.Final</javax-validation.version>
-        <javax-websocket-client-api.version>1.1</javax-websocket-client-api.version>
-        <jsrosbridge.version>0.2.0</jsrosbridge.version>
-        <influxdb.java.version>2.14</influxdb.java.version>
-        <hadoop.version>3.2.0</hadoop.version>
-        <lightcouch.version>0.1.8</lightcouch.version>
-        <mqtt-client.version>1.12</mqtt-client.version>
-        <mysql-binlog-connector.version>0.18.1</mysql-binlog-connector.version>
-        <mysql-connector-java.version>8.0.15</mysql-connector-java.version>
-        <okio.version>1.15.0</okio.version>
-        <opencsv.version>4.0</opencsv.version>
-        <plc4x.version>0.4.0</plc4x.version>
-        <pulsar.version>2.4.1</pulsar.version>
-        <slack.version>1.2.0</slack.version>
-
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.18.3</mockito.version>
-        <powermock.version>2.0.2</powermock.version>
-        <wiremock.version>2.24.1</wiremock.version>
-    </properties>
-
-    <dependencyManagement>
         <dependencies>
             <!-- StreamPipes dependencies -->
             <dependency>
                 <groupId>org.apache.streampipes</groupId>
                 <artifactId>streampipes-connect-container-worker</artifactId>
-                <version>${streampipes.version}</version>
+                <version>0.67.0-SNAPSHOT</version>
             </dependency>
 
             <!-- External dependencies -->
             <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+            </dependency>
+            <dependency>
                 <groupId>com.github.shyiko</groupId>
                 <artifactId>mysql-binlog-connector-java</artifactId>
-                <version>${mysql-binlog-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.influxdb</groupId>
+                <artifactId>influxdb-java</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_annotations</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
             </dependency>
             <dependency>
                 <groupId>com.opencsv</groupId>
                 <artifactId>opencsv</artifactId>
-                <version>${opencsv.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ullink.slack</groupId>
                 <artifactId>simpleslackapi</artifactId>
-                <version>${slack.version}</version>
             </dependency>
             <dependency>
                 <groupId>edu.wpi.rail</groupId>
                 <artifactId>jrosbridge</artifactId>
-                <version>${jsrosbridge.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource.mqtt-client</groupId>
+                <artifactId>mqtt-client</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>javax.websocket</groupId>
+                <artifactId>javax.websocket-api</artifactId>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector-java.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-milo</artifactId>
-                <version>${camel.version}</version>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-client</artifactId>
-                <version>${hadoop.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>jetty-server</artifactId>
@@ -141,28 +154,35 @@
             <dependency>
                 <groupId>org.apache.plc4x</groupId>
                 <artifactId>plc4j-api</artifactId>
-                <version>${plc4x.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.plc4x</groupId>
                 <artifactId>plc4j-driver-s7</artifactId>
-                <version>${plc4x.version}</version>
                 <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.pulsar</groupId>
                 <artifactId>pulsar-client</artifactId>
-                <version>${pulsar.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.fusesource.mqtt-client</groupId>
-                <artifactId>mqtt-client</artifactId>
-                <version>${mqtt-client.version}</version>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.checkerframework</groupId>
+                <artifactId>checker-qual</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>animal-sniffer-annotations</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.milo</groupId>
+                <artifactId>sdk-client</artifactId>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.media</groupId>
                 <artifactId>jersey-media-sse</artifactId>
-                <version>${jersey.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.glassfish.jersey.core</groupId>
@@ -173,14 +193,12 @@
             <dependency>
                 <groupId>org.java-websocket</groupId>
                 <artifactId>Java-WebSocket</artifactId>
-                <version>${java-websocket.version}</version>
             </dependency>
 
             <!-- Test dependencies -->
             <dependency>
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock</artifactId>
-                <version>${wiremock.version}</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -201,48 +219,46 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
-    </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>embed</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.apache.streampipes.connect.ConnectAdapterInit</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>streampipes-connect-adapters</finalName>
     </build>
 
 </project>
