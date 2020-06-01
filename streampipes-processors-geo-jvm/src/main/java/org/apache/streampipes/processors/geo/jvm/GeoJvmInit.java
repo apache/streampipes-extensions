@@ -27,6 +27,7 @@ import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.processors.geo.jvm.config.GeoJvmConfig;
+import org.apache.streampipes.processors.geo.jvm.jts.geofence.storing.StoreGeofenceController;
 import org.apache.streampipes.processors.geo.jvm.jts.processor.latLngToGeo.LatLngToGeoController;
 import org.apache.streampipes.processors.geo.jvm.jts.processor.setEPSG.SetEpsgController;
 import org.apache.streampipes.processors.geo.jvm.jts.processor.trajectory.CreateTrajectoryFromPointsController;
@@ -50,7 +51,8 @@ public class GeoJvmInit extends StandaloneModelSubmitter {
             .add(new LatLngToGeoController())
             .add(new CreateTrajectoryFromPointsController())
             .add(new SpeedCalculatorController())
-            .add(new StaticDistanceCalculatorController());
+            .add(new StaticDistanceCalculatorController())
+            .add(new StoreGeofenceController());
 
 
     DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),

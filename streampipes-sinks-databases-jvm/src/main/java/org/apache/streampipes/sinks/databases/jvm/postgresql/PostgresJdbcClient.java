@@ -211,7 +211,7 @@ public class PostgresJdbcClient {
      * @throws SpRuntimeException When the connection could not be established (because of a
      *                            wrong identification, missing database etc.)
      */
-    private void connect(String host, int port, String urlName, String databaseName) throws SpRuntimeException {
+    protected void connect(String host, int port, String urlName, String databaseName) throws SpRuntimeException {
 		String url = "jdbc:" + urlName + "://" + host + ":" + port + "/";
         try {
             c = DriverManager.getConnection(url, user, password);
