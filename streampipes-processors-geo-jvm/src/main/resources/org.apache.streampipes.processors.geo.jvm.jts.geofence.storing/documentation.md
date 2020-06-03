@@ -16,7 +16,7 @@
   ~
   -->
 
-## Trajectory from JTS Point
+## Geofence Sink
 
 <p align="center">
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -33,45 +33,25 @@ This processor creates a JTS LineString geometry from  JTS Points events, repres
 
 *  WKT String of a JTS Point Geometry
 *  Integer value representing EPSG code
-*  Number value for M-value
+*  String Geofence name
 
 
 ***
 
 ## Configuration
 
-Creates a JTS Geometry LineString from a JTS Point Geometries events representing a trajectory.
+STores a geometry in the internal PostGIS database. Geofence can be extraxted with the Geofence Enricher and chose geofence table.
 
 
 ### 1st parameter
-Point WKT String
+Geometry WKT String
 
 ### 2nd parameter
 EPSG code value
 
 ### 3rd parameter
-M-value for each sub-point of the trajectory
-
-### 4rd parameter
-String for a description text for the trajectory
-
-### 5rd parameter
-Number of allowed sub-points
+name of the geofence. Has to be unique compared with other geofences.
 
 ***
 
-## Output
-
-Adds a LineString geometry in the Well Known Text to the event, representing a trajectory. Also the description text is added to the event stream. The first existing event creates an empty LineString.
-
 ### Example
-Creating a LineString with a threshold of 2 allowed sub-points:
-
-* First Event:
-  * Point(8.12 41.23) --> LineString <empty>
-* Second Event:
-  * Point(8.56 41.25) --> LineString(8.12 41.23, 8.56 41.25)
-* Second Event:
-  * Point(8.84 40.98) --> LineString(8.56 41.25, 8.84 40.98)
-
-M-value is not represented in the LineString but will be stored for internal use!
