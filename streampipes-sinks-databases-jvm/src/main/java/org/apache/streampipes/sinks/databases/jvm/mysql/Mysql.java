@@ -24,6 +24,7 @@ import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.schema.EventPropertyNested;
 import org.apache.streampipes.model.schema.EventPropertyPrimitive;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.JdbcClient;
+import org.apache.streampipes.sinks.databases.jvm.jdbcclient.SqlAttribute;
 import org.apache.streampipes.vocabulary.SO;
 import org.apache.streampipes.vocabulary.XSD;
 import org.apache.streampipes.wrapper.context.EventSinkRuntimeContext;
@@ -32,8 +33,6 @@ import org.apache.streampipes.model.schema.EventProperty;
 
 import java.sql.*;
 import java.util.*;
-import java.util.Objects;
-
 
 public class Mysql extends JdbcClient implements EventSink<MysqlParameters> {
 
@@ -80,7 +79,6 @@ public class Mysql extends JdbcClient implements EventSink<MysqlParameters> {
     }
 
 
-    @Override
     protected void ensureDatabaseExists(String url, String databaseName) throws SpRuntimeException {
         checkRegEx(databaseName, "databasename");
         try {
@@ -218,13 +216,13 @@ public class Mysql extends JdbcClient implements EventSink<MysqlParameters> {
     }
 
 
-    private StringBuilder extractEventProperties(List<EventProperty> properties)
+    protected StringBuilder extractEventProperties(List<EventProperty> properties)
             throws SpRuntimeException {
         return extractEventProperties(properties, "");
     }
 
 
-    private StringBuilder extractEventProperties(List<EventProperty> properties, String preProperty)
+    protected StringBuilder extractEventProperties(List<EventProperty> properties, String preProperty)
             throws SpRuntimeException {
 
         StringBuilder s = new StringBuilder();

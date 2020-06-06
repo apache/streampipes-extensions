@@ -1,0 +1,117 @@
+    //========== Testing
+
+    Double lat_ka = 49.00689;
+    Double lng_ka = 8.403653;
+
+    Double lat_NY = 40.730610;
+    Double lng_NY = -73.935242;
+
+    SpLengthCalculator tester1 = new SpLengthCalculator(10);
+
+    tester1.calcGeodesicDistance(lat_ka, lng_ka, lat_NY, lng_NY);
+    tester1.convertUnit(SpLengthCalculator.ValidLengthUnits.KM);
+
+
+
+    double result_ka_ny = tester1.getLengthValue();
+
+    Double lat_ra = 48.8591174;
+    Double lng_ra = 8.2059096;
+
+    SpLengthCalculator tester2 = new SpLengthCalculator(10);
+
+    tester2.calcGeodesicDistance(lat_ka, lng_ka, lat_ra, lng_ra);
+    tester2.convertUnit(SpLengthCalculator.ValidLengthUnits.KM);
+
+    double result_ka_ra = tester2.getLengthValue();
+
+
+
+
+
+
+
+
+//  private boolean createInfoGeofenceTable(String url, String databaseName) throws SpRuntimeException {
+//    boolean returnValue = false;
+//
+//    try {
+//      // Database should exist by now so we can establish a connection
+//      c = DriverManager.getConnection(url + databaseName, user, password);
+//      st = c.createStatement();
+//      ResultSet rs = c.getMetaData().getTables(null, null, geofenceInfoTable, null);
+//      while (rs.next()) {
+//        // same table names can exists in different schmemas
+//        if (!rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
+//
+//          StringBuilder statement = new StringBuilder("CREATE TABLE ");
+//          statement.append(schemaName);
+//          statement.append(".");
+//          statement.append(geofenceInfoTable).append(" ( ");
+//          statement.append("name TEXT NOT NULL UNIQUE,");
+//          statement.append("geom GEOMETRY,");
+//          statement.append("FOREIGN KEY (name) REFERENCES )");
+//          statement.append(schema + "." + geofenceMainTable);
+//          statement.append("(name) ON UPDATE CASCADE ON DELETE CASCADE");
+//          statement.append(" );");
+//
+//          try {
+//            st.executeUpdate(statement.toString());
+//            returnValue = true;
+//          } catch (SQLException e) {
+//            e.getErrorCode();
+//            if (e.getSQLState().equals("42P07")) {
+//              throw new SpRuntimeException("Something went wrong during table creation with error message: " + e.getMessage());
+//            }
+//          }
+//        }
+//      }
+//    } catch (SQLException e) {
+//      closeAll();
+//      throw new SpRuntimeException(e.getMessage());
+//    }
+//    return returnValue;
+//  }
+
+
+//  @Override
+//  protected void ensureTableExists(String url, String databaseName) throws SpRuntimeException {
+//    try {
+//      // Database should exist by now so we can establish a connection
+//      c = DriverManager.getConnection(url + databaseName, user, password);
+//      st = c.createStatement();
+//      ResultSet rs = c.getMetaData().getTables(null, null, tableName, null);
+//      while (rs.next()) {
+//        // same table names can exists in different schmemas
+//        if (rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
+//          if (isToDropTable) {
+//            createTable();
+//          }
+//          validateTable();
+//        } else {
+//          createTable();
+//        }
+//      }
+//      tableExists = true;
+//      rs.close();
+//    } catch (SQLException e) {
+//      closeAll();
+//      throw new SpRuntimeException(e.getMessage());
+//    }
+//  }
+
+
+
+
+
+
+
+INSERT INTO geofence.geofences (created_at, geofencename) VALUES ('2020-06-01T11:09:09.456' , 'blubber');
+
+
+CREATE TABLE geofence.geofences ( id SERIAL PRIMARY KEY,created_at TIMESTAMP,updated_at TIMESTAMP,geofencename TEXT NOT NULL UNIQUEgeom GEOMETRY);
+
+
+UPDATE geofence.geofences SET updated_at = 2020-06-01T11:46:14.038,geom = ST_GeomFromText('POINT (11.7689 -21.3234)' ,4326)WHERE name = blubber;
+
+UPDATE geofence.geofences SET updated_at = '2020-06-01T11:58:21.276',geom = ST_GeomFromText('POINT (39.3197 15.4693)' ,4326) WHERE geofencename = blubber;

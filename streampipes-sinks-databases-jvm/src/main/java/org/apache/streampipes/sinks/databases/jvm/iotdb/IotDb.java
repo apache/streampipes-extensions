@@ -24,6 +24,8 @@ import org.apache.streampipes.model.runtime.Event;
 import org.apache.streampipes.model.schema.EventProperty;
 import org.apache.streampipes.model.schema.EventPropertyPrimitive;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.JdbcClient;
+import org.apache.streampipes.sinks.databases.jvm.jdbcclient.Parameterinfo;
+import org.apache.streampipes.sinks.databases.jvm.jdbcclient.SqlAttribute;
 import org.apache.streampipes.vocabulary.XSD;
 import org.apache.streampipes.wrapper.context.EventSinkRuntimeContext;
 import org.apache.streampipes.wrapper.runtime.EventSink;
@@ -110,27 +112,15 @@ public class IotDb extends JdbcClient implements EventSink<IotDbParameters> {
     }
   }
 
-  @Override
-  protected void ensureDatabaseExists(String url, String databaseName) throws SpRuntimeException {
-    checkRegEx(tableName, "Storage Group name");
-    try {
-      Statement statement = c.createStatement();
-      statement.execute("SET STORAGE GROUP TO " + tableName);
-    } catch (SQLException e) {
-      // Storage group already exists
-      //TODO: Catch other exceptions
-    }
-  }
+
 
   /**
    * Needs to be reimplemented since the IoTDB JDBC implementation does not support the methods used in the
    * JDBC-Client class
-   *
-   * @param url The JDBC url containing the needed information (e.g. "jdbc:iotdb://127.0.0.1:6667/")
    * @throws SpRuntimeException
    */
   @Override
-  protected void ensureTableExists(String url, String databaseName) throws SpRuntimeException {
+  protected void ensureTableExists() throws SpRuntimeException {
     int index = 1;
     parameters.put("timestamp", new Parameterinfo(index++, SqlAttribute.LONG));
     for (EventProperty eventProperty : eventProperties) {

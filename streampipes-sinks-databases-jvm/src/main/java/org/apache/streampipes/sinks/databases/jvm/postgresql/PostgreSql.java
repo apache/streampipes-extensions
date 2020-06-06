@@ -21,11 +21,10 @@ package org.apache.streampipes.sinks.databases.jvm.postgresql;
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.logging.api.Logger;
 import org.apache.streampipes.model.runtime.Event;
-import org.apache.streampipes.sinks.databases.jvm.jdbcclient.JdbcClient;
 import org.apache.streampipes.wrapper.context.EventSinkRuntimeContext;
 import org.apache.streampipes.wrapper.runtime.EventSink;
 
-public class PostgreSql extends JdbcClient implements EventSink<PostgreSqlParameters> {
+public class PostgreSql extends PostgresJdbcClient implements EventSink<PostgreSqlParameters> {
 
   private static Logger LOG;
 
@@ -47,7 +46,9 @@ public class PostgreSql extends JdbcClient implements EventSink<PostgreSqlParame
             "^[a-zA-Z_][a-zA-Z0-9_]*$",
             "org.postgresql.Driver",
             "postgresql",
-            LOG);
+            LOG,
+            parameters.getSchemaName(),
+            parameters.isToDropTable());
   }
 
   @Override
