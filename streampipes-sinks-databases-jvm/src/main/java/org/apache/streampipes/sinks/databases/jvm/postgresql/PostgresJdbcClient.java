@@ -261,6 +261,8 @@ public class PostgresJdbcClient extends JdbcClient {
     StringBuilder statement1 = new StringBuilder("INSERT INTO ");
     StringBuilder statement2 = new StringBuilder("VALUES ( ");
     checkRegEx(tableName, "Tablename");
+    checkRegEx(schemaName, "Tablename");
+    statement1.append(schemaName).append(".");
     statement1.append(tableName).append(" ( ");
 
     // Starts index at 1, since the parameterIndex in the PreparedStatement starts at 1 as well
