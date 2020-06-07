@@ -40,7 +40,7 @@ public enum SqlAttribute {
   //MYSQL
   MYSQL_DATETIME("DATETIME"),
   //POSTGRES / POSTGIS
-  PG_DOUBLE("DOUBLE PRECISION");
+  PG_DOUBLE("NUMERIC");
   private final String sqlName;
 
   SqlAttribute(String s) {
