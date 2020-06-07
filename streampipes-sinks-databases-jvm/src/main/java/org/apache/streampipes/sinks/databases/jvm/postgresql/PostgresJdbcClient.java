@@ -126,7 +126,7 @@ public class PostgresJdbcClient extends JdbcClient {
       // Database should exist by now so we can establish a connection
       c = DriverManager.getConnection(url + databaseName, user, password);
       st = c.createStatement();
-      ResultSet rs = c.getMetaData().getTables(null, null, tableName, null);
+      ResultSet rs = c.getMetaData().getTables(null, null, schemaName, null);
       while (rs.next()) {
         // same table names can exists in different schmemas
         if (rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
@@ -138,14 +138,13 @@ public class PostgresJdbcClient extends JdbcClient {
           createTable();
         }
       }
-      tableExists = true;
+      super.tableExists = true;
       rs.close();
     } catch (SQLException e) {
       closeAll();
       throw new SpRuntimeException(e.getMessage());
     }
   }
-
 
 
   /**
@@ -252,42 +251,26 @@ public class PostgresJdbcClient extends JdbcClient {
     }
   }
 
+  @Override
+  protected void generatePreparedStatement(final Map<String, Object> event)
+      throws SQLException, SpRuntimeException {
+    // input: event
+    // wanted: INSERT INTO test4321 ( randomString, randomValue ) VALUES ( ?,? );
+    checkConnected();
+    parameters.clear();
+    StringBuilder statement1 = new StringBuilder("INSERT INTO ");
+    StringBuilder statement2 = new StringBuilder("VALUES ( ");
+    checkRegEx(tableName, "Tablename");
+    statement1.append(tableName).append(" ( ");
 
-//  protected StringBuilder extractEventProperties(List<EventProperty> properties, String preProperty)
-//      throws SpRuntimeException {
-//    // output: "randomString VARCHAR(255), randomValue INT"
-//    StringBuilder s = new StringBuilder();
-//    String pre = "";
-//    for (EventProperty property : properties) {
-//      // Protection against SqlInjection
-//
-//      checkRegEx(property.getRuntimeName(), "Column name");
-//      if (property instanceof EventPropertyNested) {
-//        // if it is a nested property, recursively extract the needed properties
-//        StringBuilder tmp = extractEventProperties(((EventPropertyNested) property).getEventProperties(),
-//            preProperty + property.getRuntimeName() + "_");
-//        if (tmp.length() > 0) {
-//          s.append(pre).append(tmp);
-//        }
-//      } else {
-//        // Adding the name of the property (e.g. "randomString")
-//        // Or for properties in a nested structure: input1_randomValue
-//        // "pre" is there for the ", " part
-//        s.append(pre).append("\"").append(preProperty).append(property.getRuntimeName()).append("\" ");
-//
-//        // adding the type of the property (e.g. "VARCHAR(255)")
-//        if (property instanceof EventPropertyPrimitive) {
-//          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()));
-//        } else {
-//          // Must be an EventPropertyList then
-//          s.append(SqlAttribute.getFromUri(XSD._string.toString()));
-//        }
-//      }
-//      pre = ", ";
-//    }
-//
-//    return s;
-//  }
+    // Starts index at 1, since the parameterIndex in the PreparedStatement starts at 1 as well
+    extendPreparedStatement(event, statement1, statement2, 1);
+
+    statement1.append(" ) ");
+    statement2.append(" );");
+    String finalStatement = statement1.append(statement2).toString();
+    ps = c.prepareStatement(finalStatement);
+  }
 
   @Override
   protected StringBuilder extractEventProperties(List<EventProperty> properties, String preProperty)
