@@ -19,3 +19,8 @@ db_user.description=The username for the PostgreSQL Server
 db_password.title=Password
 db_password.description=The password for the PostgreSQL Server
 
+db_schema.title=Schema Name
+db_schema.description=The name of the schema where events will be stored (will be created if it does not exist)
+
+db_replaceTable.title=Replace Table if Exists
+db_replaceTable.description=Drops the table if exists and create a new table
