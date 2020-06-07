@@ -249,7 +249,7 @@ public class Mysql extends JdbcClient implements EventSink<MysqlParameters> {
                     // If domain property is a timestamp
                     if (property.getDomainProperties() != null && property.getDomainProperties().stream().anyMatch(x ->
                        SO.DateTime.equals(x.toString()))) {
-                        s.append(SqlAttribute.DATETIME);
+                        s.append(SqlAttribute.MYSQL_DATETIME);
                         this.timestampKeys.add(property.getRuntimeName());
                     } else {
                         s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()));

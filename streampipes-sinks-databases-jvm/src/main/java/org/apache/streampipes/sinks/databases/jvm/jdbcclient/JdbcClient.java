@@ -78,7 +78,6 @@ public class JdbcClient {
                                 String driver,
                                 String urlName,
                                 Logger logger) throws SpRuntimeException {
-
     this.eventProperties = eventProperties;
     this.databaseName = databaseName;
     this.tableName = tableName;
@@ -86,7 +85,6 @@ public class JdbcClient {
     this.password = password;
     this.allowedRegEx = allowedRegEx;
     this.logger = logger;
-
     this.url = "jdbc:" + urlName + "://" + host + ":" + port + "/";
     try {
       Class.forName(driver);

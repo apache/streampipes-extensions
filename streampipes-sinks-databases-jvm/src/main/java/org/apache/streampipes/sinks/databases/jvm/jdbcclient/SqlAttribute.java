@@ -30,8 +30,17 @@ import java.sql.SQLException;
  * If no matching type is found, it is interpreted as a String (VARCHAR(255))
  */
 public enum SqlAttribute {
-  INTEGER("INT"), LONG("BIGINT"), FLOAT("FLOAT"), DOUBLE("DOUBLE"), STRING("VARCHAR(255)"),
-  BOOLEAN("BOOLEAN"), DATETIME("DATETIME");
+  // DEFAULT
+  INTEGER("INT"),
+  LONG("BIGINT"),
+  FLOAT("FLOAT"),
+  DOUBLE("DOUBLE"),
+  STRING("VARCHAR(255)"),
+  BOOLEAN("BOOLEAN"),
+  //MYSQL
+  MYSQL_DATETIME("DATETIME"),
+  //POSTGRES / POSTGIS
+  PG_DOUBLE("DOUBLE PRECISION");
   private final String sqlName;
 
   SqlAttribute(String s) {
