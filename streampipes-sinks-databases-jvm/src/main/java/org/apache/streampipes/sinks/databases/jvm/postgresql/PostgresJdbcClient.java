@@ -126,7 +126,7 @@ public class PostgresJdbcClient extends JdbcClient {
       // Database should exist by now so we can establish a connection
       c = DriverManager.getConnection(url + databaseName, user, password);
       st = c.createStatement();
-      ResultSet rs = c.getMetaData().getTables(null, null, schemaName, null);
+      ResultSet rs = c.getMetaData().getTables(null, null, tableName, null);
       while (rs.next()) {
         // same table names can exists in different schmemas
         if (rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
@@ -138,7 +138,7 @@ public class PostgresJdbcClient extends JdbcClient {
           createTable();
         }
       }
-      super.tableExists = true;
+      tableExists = true;
       rs.close();
     } catch (SQLException e) {
       closeAll();
