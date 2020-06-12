@@ -315,7 +315,7 @@ public class JdbcClient {
       } else {
         checkRegEx(pair.getKey(), "Columnname");
         parameters.put(pair.getKey(), new Parameterinfo(index, SqlAttribute.getFromObject(pair.getValue())));
-        s1.append(pre).append("\"").append(preProperty).append(pair.getKey()).append("\"");
+        s1.append(pre).append("\"").append(preProperty).append(pair.getKey().toLowerCase()).append("\"");
         s2.append(pre).append("?");
         index++;
       }
