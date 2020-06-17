@@ -75,7 +75,6 @@ public class PostgresJdbcClient extends JdbcClient {
       throw new SpRuntimeException("Driver '" + driver + "' not found.");
     }
     connect();
-    ensureDatabaseExists();
     ensureSchemaExists();
     ensureTableExists();
   }
