@@ -47,7 +47,8 @@ public class PostgresJdbcClient extends JdbcClient {
 
 
   protected void initializeJdbc(List<EventProperty> eventProperties,
-                                String host, Integer port,
+                                String host,
+                                Integer port,
                                 String databaseName,
                                 String tableName,
                                 String user,
@@ -65,7 +66,11 @@ public class PostgresJdbcClient extends JdbcClient {
     super.password = password;
     super.allowedRegEx = allowedRegEx;
     super.logger = logger;
-    super.url = "jdbc:" + urlName + "://" + host + ":" + port + "/";
+    // needed for fallback
+    super.urlName = urlName;
+    super.host = host;
+    super.port = port;
+    super.url = "jdbc:" + urlName + "://" + host + ":" + port + "/" + databaseName;
     this.schemaName = schemaName;
     this.isToDropTable = isToDropTable;
 
@@ -89,7 +94,7 @@ public class PostgresJdbcClient extends JdbcClient {
   protected void ensureSchemaExists() throws SpRuntimeException {
     try {
       // Database should exist by now so we can establish a connection
-      c = DriverManager.getConnection(url + databaseName, user, password);
+      c = DriverManager.getConnection(url, user, password);
       st = c.createStatement();
       ResultSet rs = c.getMetaData().getSchemas();
 
@@ -123,21 +128,29 @@ public class PostgresJdbcClient extends JdbcClient {
   protected void ensureTableExists() throws SpRuntimeException {
     try {
       // Database should exist by now so we can establish a connection
-      c = DriverManager.getConnection(url + databaseName, user, password);
+      c = DriverManager.getConnection(url, user, password);
       st = c.createStatement();
       ResultSet rs = c.getMetaData().getTables(null, null, tableName, null);
-      while (rs.next()) {
-        // same table names can exists in different schmemas
-        if (rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
-          if (isToDropTable) {
+
+      // no table at all found in db so create table
+      if (!rs.next()){
+        createTable();
+        tableExists = true;
+      } else {
+        while (rs.next()) {
+          // same table names can exists in different schmemas
+          if (rs.getString("TABLE_SCHEM").toLowerCase().equals(schemaName.toLowerCase())) {
+            if (isToDropTable) {
+              createTable();
+              tableExists = true;
+            }
+            validateTable();
+          } else {
             createTable();
+            tableExists = true;
           }
-          validateTable();
-        } else {
-          createTable();
         }
       }
-      tableExists = true;
       rs.close();
     } catch (SQLException e) {
       closeAll();
@@ -299,14 +312,14 @@ public class PostgresJdbcClient extends JdbcClient {
         // Adding the type of the property (e.g. "VARCHAR(255)")
         if (property instanceof EventPropertyPrimitive) {
           // use PG_DOUBLE instead of DEFAULT
-          if ((((EventPropertyPrimitive) property).getRuntimeType().equals(XSD._double.toString()))) {
-            s.append(SqlAttribute.PG_DOUBLE);
-          } else {
-            s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()));
-          }
+//          if ((((EventPropertyPrimitive) property).getRuntimeType().equals(XSD._double.toString()))) {
+//            s.append(SqlAttribute.PG_DOUBLE.sqlName);
+//          } else {
+            s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()).sqlName);
+//          }
         } else {
           // Must be an EventPropertyList then
-          s.append(SqlAttribute.getFromUri(XSD._string.toString()));
+          s.append(SqlAttribute.getFromUri(XSD._string.toString()).sqlName);
         }
       }
       pre = ", ";

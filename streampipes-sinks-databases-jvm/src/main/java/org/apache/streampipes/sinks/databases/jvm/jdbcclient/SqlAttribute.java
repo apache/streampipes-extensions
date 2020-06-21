@@ -19,10 +19,12 @@
 package org.apache.streampipes.sinks.databases.jvm.jdbcclient;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
+import org.apache.streampipes.vocabulary.SO;
 import org.apache.streampipes.vocabulary.XSD;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 
 /**
@@ -34,15 +36,13 @@ public enum SqlAttribute {
   INTEGER("INT"),
   LONG("BIGINT"),
   FLOAT("FLOAT"),
-  DOUBLE("DOUBLE"),
-  STRING("VARCHAR(255)"),
+  DOUBLE("DOUBLE PRECISION"),
+  STRING("TEXT"),
   BOOLEAN("BOOLEAN"),
-  //MYSQL
-  MYSQL_DATETIME("DATETIME"),
-  //POSTGRES / POSTGIS
-  PG_DOUBLE("NUMERIC");
-
-  private final String sqlName;
+  TIMESTAMP("TIMESTAMP"),
+  GEOMETRY("GEOMETRY");
+  
+  public final String sqlName;
 
   SqlAttribute(String s) {
     sqlName = s;
@@ -85,6 +85,10 @@ public enum SqlAttribute {
       r = SqlAttribute.DOUBLE;
     } else if (s.equals(XSD._boolean.toString())) {
       r = SqlAttribute.BOOLEAN;
+    } else if (s.equals(SO.DateTime)) {
+      r = SqlAttribute.TIMESTAMP;
+    } else if (s.equals("http://www.opengis.net/ont/geosparql#Geometry")) {
+      r = SqlAttribute.GEOMETRY;
     } else {
       r = SqlAttribute.STRING;
     }
@@ -122,13 +126,15 @@ public enum SqlAttribute {
       case STRING:
         ps.setString(p.index, value.toString());
         break;
+      case TIMESTAMP:
+        java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp((Long) value);
+        ps.setString(p.index,  sqlTimestamp.toString());
+      case GEOMETRY:
+        //todo extract unit and SRID after #
+        int epsg = 4326;
+        ps.setString(p.index,  "ST_GeomFromText('" + value.toString() + "', "+ epsg + "))");
       default:
         throw new SpRuntimeException("Unknown SQL datatype");
     }
-  }
-
-  @Override
-  public String toString() {
-    return sqlName;
   }
 }

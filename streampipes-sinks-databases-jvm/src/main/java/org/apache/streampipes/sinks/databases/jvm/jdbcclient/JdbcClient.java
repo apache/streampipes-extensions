@@ -40,6 +40,9 @@ public class JdbcClient {
   protected String tableName;
   protected String user;
   protected String password;
+  protected String urlName;
+  protected String host;
+  protected Integer port;
 
   protected boolean tableExists = false;
 
@@ -85,6 +88,10 @@ public class JdbcClient {
     this.password = password;
     this.allowedRegEx = allowedRegEx;
     this.logger = logger;
+    // needed for fallback
+    this.urlName = urlName;
+    this.host = host;
+    this.port = port;
     this.url = "jdbc:" + urlName + "://" + host + ":" + port + "/" + databaseName;
     try {
       Class.forName(driver);
@@ -116,7 +123,8 @@ public class JdbcClient {
         throw new SpRuntimeException("User authentication error. Check username or password: \n" + e.getMessage());
       } else if (e.getSQLState().substring(0, 2).equals("3D")){
         try {
-          c = DriverManager.getConnection(url.replaceAll(databaseName, ""), user, password);
+          String urlFallback= "jdbc:" + urlName + "://" + host + ":" + port + "/";
+          c = DriverManager.getConnection(urlFallback, user, password);
           ensureDatabaseExists();
         } catch (SQLException e2) {
           closeAll();
@@ -414,10 +422,10 @@ public class JdbcClient {
 
         // adding the type of the property (e.g. "VARCHAR(255)")
         if (property instanceof EventPropertyPrimitive) {
-          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()));
+          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()).sqlName);
         } else {
           // Must be an EventPropertyList then
-          s.append(SqlAttribute.getFromUri(XSD._string.toString()));
+          s.append(SqlAttribute.getFromUri(XSD._string.toString()).sqlName);
         }
       }
       pre = ", ";
