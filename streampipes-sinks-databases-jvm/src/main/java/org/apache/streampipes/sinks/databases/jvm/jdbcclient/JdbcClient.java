@@ -30,6 +30,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class JdbcClient {
@@ -40,7 +41,7 @@ public class JdbcClient {
   protected String tableName;
   protected String user;
   protected String password;
-  protected String urlName;
+  protected String subprotocol;
   protected String host;
   protected Integer port;
 
@@ -79,7 +80,7 @@ public class JdbcClient {
                                 String password,
                                 String allowedRegEx,
                                 String driver,
-                                String urlName,
+                                String subprotocol,
                                 Logger logger) throws SpRuntimeException {
     this.eventProperties = eventProperties;
     this.databaseName = databaseName;
@@ -89,10 +90,10 @@ public class JdbcClient {
     this.allowedRegEx = allowedRegEx;
     this.logger = logger;
     // needed for fallback
-    this.urlName = urlName;
+    this.subprotocol = subprotocol;
     this.host = host;
     this.port = port;
-    this.url = "jdbc:" + urlName + "://" + host + ":" + port + "/" + databaseName;
+    this.url = "jdbc:" + subprotocol + "://" + host + ":" + port + "/" + databaseName;
     try {
       Class.forName(driver);
     } catch (ClassNotFoundException e) {
@@ -123,7 +124,7 @@ public class JdbcClient {
         throw new SpRuntimeException("User authentication error. Check username or password: \n" + e.getMessage());
       } else if (e.getSQLState().substring(0, 2).equals("3D")){
         try {
-          String urlFallback= "jdbc:" + urlName + "://" + host + ":" + port + "/";
+          String urlFallback= "jdbc:" + subprotocol + "://" + host + ":" + port + "/";
           c = DriverManager.getConnection(urlFallback, user, password);
           ensureDatabaseExists();
         } catch (SQLException e2) {
@@ -281,6 +282,12 @@ public class JdbcClient {
           generatePreparedStatement(event);
         }
         Parameterinfo p = parameters.get(newKey);
+////        newKey;
+//        Optional<EventProperty> result = eventProperties.stream().filter(name -> name.equals(newKey)).findFirst();
+//
+////        SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName
+//
+//        SqlAttribute type = SqlAttribute.getFromUri(p.toString(), null, subprotocol);
         SqlAttribute.setValue(p, pair.getValue(), ps);
       }
     }
@@ -339,6 +346,7 @@ public class JdbcClient {
             pair.getKey() + "_", pre);
       } else {
         checkRegEx(pair.getKey(), "Columnname");
+
         parameters.put(pair.getKey(), new Parameterinfo(index, SqlAttribute.getFromObject(pair.getValue())));
         s1.append(pre).append("\"").append(preProperty).append(pair.getKey().toLowerCase()).append("\"");
         s2.append(pre).append("?");
@@ -390,10 +398,11 @@ public class JdbcClient {
   /**
    * Creates a SQL-Query with the given Properties (SQL-Injection safe). For nested properties it
    * recursively extracts the information. EventPropertyList are getting converted to a string (so
-   * in SQL to a VARCHAR(255)). For each type it uses {@link SqlAttribute#getFromUri(String)}
+   * in SQL to a VARCHAR(255)). For each type it uses {@link SqlAttribute#getFromUri(String, String, String)}
    * internally to identify the SQL-type from the runtimeType.
    *
    * @param properties  The list of properties which should be included in the query
+   *
    * @param preProperty A string which gets prepended to all property runtimeNames
    * @return A StringBuilder with the query which needs to be executed in order to create the table
    * @throws SpRuntimeException If the runtimeName of any property is not allowed
@@ -422,10 +431,10 @@ public class JdbcClient {
 
         // adding the type of the property (e.g. "VARCHAR(255)")
         if (property instanceof EventPropertyPrimitive) {
-          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()).sqlName);
+          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName);
         } else {
           // Must be an EventPropertyList then
-          s.append(SqlAttribute.getFromUri(XSD._string.toString()).sqlName);
+          s.append(SqlAttribute.getFromUri(XSD._string.toString(), property.getDomainProperties().toString(), subprotocol).sqlName);
         }
       }
       pre = ", ";

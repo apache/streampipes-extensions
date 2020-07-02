@@ -26,7 +26,6 @@ import org.apache.streampipes.model.schema.EventPropertyPrimitive;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.JdbcClient;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.SqlAttribute;
 import org.apache.streampipes.vocabulary.SO;
-import org.apache.streampipes.vocabulary.XSD;
 import org.apache.streampipes.wrapper.context.EventSinkRuntimeContext;
 import org.apache.streampipes.wrapper.runtime.EventSink;
 import org.apache.streampipes.model.schema.EventProperty;
@@ -252,11 +251,11 @@ public class Mysql extends JdbcClient implements EventSink<MysqlParameters> {
                         s.append(SqlAttribute.TIMESTAMP);
                         this.timestampKeys.add(property.getRuntimeName());
                     } else {
-                        s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()));
+                        s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName);
                     }
                 } else {
                     // Must be an EventPropertyList then
-                    s.append(SqlAttribute.getFromUri(XSD._string.toString()));
+                    s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName);
                 }
             }
             pre = ", ";

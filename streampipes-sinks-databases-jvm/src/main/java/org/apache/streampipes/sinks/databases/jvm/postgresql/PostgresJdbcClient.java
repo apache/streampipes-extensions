@@ -26,8 +26,6 @@ import org.apache.streampipes.model.schema.EventPropertyNested;
 import org.apache.streampipes.model.schema.EventPropertyPrimitive;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.JdbcClient;
 import org.apache.streampipes.sinks.databases.jvm.jdbcclient.SqlAttribute;
-import org.apache.streampipes.vocabulary.SO;
-import org.apache.streampipes.vocabulary.XSD;
 
 import java.sql.*;
 import java.util.List;
@@ -55,7 +53,7 @@ public class PostgresJdbcClient extends JdbcClient {
                                 String password,
                                 String allowedRegEx,
                                 String driver,
-                                String urlName,
+                                String subprotocol,
                                 Logger logger,
                                 String schemaName,
                                 boolean isToDropTable) throws SpRuntimeException {
@@ -67,10 +65,10 @@ public class PostgresJdbcClient extends JdbcClient {
     super.allowedRegEx = allowedRegEx;
     super.logger = logger;
     // needed for fallback
-    super.urlName = urlName;
+    super.subprotocol = subprotocol;
     super.host = host;
     super.port = port;
-    super.url = "jdbc:" + urlName + "://" + host + ":" + port + "/" + databaseName;
+    super.url = "jdbc:" + subprotocol + "://" + host + ":" + port + "/" + databaseName;
     this.schemaName = schemaName;
     this.isToDropTable = isToDropTable;
 
@@ -315,11 +313,11 @@ public class PostgresJdbcClient extends JdbcClient {
 //          if ((((EventPropertyPrimitive) property).getRuntimeType().equals(XSD._double.toString()))) {
 //            s.append(SqlAttribute.PG_DOUBLE.sqlName);
 //          } else {
-            s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType()).sqlName);
+            s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName);
 //          }
         } else {
           // Must be an EventPropertyList then
-          s.append(SqlAttribute.getFromUri(XSD._string.toString()).sqlName);
+          s.append(SqlAttribute.getFromUri(((EventPropertyPrimitive) property).getRuntimeType(), property.getDomainProperties().toString(), subprotocol).sqlName);
         }
       }
       pre = ", ";

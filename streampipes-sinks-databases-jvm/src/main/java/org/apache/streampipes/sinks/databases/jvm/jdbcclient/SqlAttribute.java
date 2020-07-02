@@ -57,7 +57,16 @@ public enum SqlAttribute {
    */
   public static SqlAttribute getFromObject(final Object o) {
     SqlAttribute r;
-    if (o instanceof Integer) {
+
+    String subprotocol = "postgresql";
+    // check domain first
+    if (o.equals(SO.DateTime)){
+      r = SqlAttribute.TIMESTAMP;
+    } else if (o.equals("[http://www.opengis.net/ont/geosparql#Geometry]") && subprotocol.equals("postgresql")) {
+      r = SqlAttribute.GEOMETRY;
+    }
+    // default
+    else if (o instanceof Integer) {
       r = SqlAttribute.INTEGER;
     } else if (o instanceof Long) {
       r = SqlAttribute.LONG;
@@ -73,22 +82,25 @@ public enum SqlAttribute {
     return r;
   }
 
-  public static SqlAttribute getFromUri(final String s) {
+  public static SqlAttribute getFromUri(final String type, final String domain, final String subprotocol) {
     SqlAttribute r;
-    if (s.equals(XSD._integer.toString())) {
-      r = SqlAttribute.INTEGER;
-    } else if (s.equals(XSD._long.toString())) {
-      r = SqlAttribute.LONG;
-    } else if (s.equals(XSD._float.toString())) {
-      r = SqlAttribute.FLOAT;
-    } else if (s.equals(XSD._double.toString())) {
-      r = SqlAttribute.DOUBLE;
-    } else if (s.equals(XSD._boolean.toString())) {
-      r = SqlAttribute.BOOLEAN;
-    } else if (s.equals(SO.DateTime)) {
+    // check domain first
+    if (domain.equals(SO.DateTime)){
       r = SqlAttribute.TIMESTAMP;
-    } else if (s.equals("http://www.opengis.net/ont/geosparql#Geometry")) {
-      r = SqlAttribute.GEOMETRY;
+    } else if (domain.equals("[http://www.opengis.net/ont/geosparql#Geometry]") && subprotocol.equals("postgresql")) {
+    r = SqlAttribute.GEOMETRY;
+    }
+    // and then types
+    else if (type.equals(XSD._integer.toString())) {
+      r = SqlAttribute.INTEGER;
+    } else if (type.equals(XSD._long.toString())) {
+      r = SqlAttribute.LONG;
+    } else if (type.equals(XSD._float.toString())) {
+      r = SqlAttribute.FLOAT;
+    } else if (type.equals(XSD._double.toString())) {
+      r = SqlAttribute.DOUBLE;
+    } else if (type.equals(XSD._boolean.toString())) {
+      r = SqlAttribute.BOOLEAN;
     } else {
       r = SqlAttribute.STRING;
     }
