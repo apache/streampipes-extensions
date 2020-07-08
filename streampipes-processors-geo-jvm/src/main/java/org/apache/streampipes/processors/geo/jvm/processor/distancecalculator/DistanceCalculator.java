@@ -37,10 +37,9 @@ public class DistanceCalculator implements EventProcessor<DistanceCalculatorPara
   private Integer unit;
 
 
-
   @Override
   public void onInvocation(DistanceCalculatorParameters params, SpOutputCollector spOutputCollector, EventProcessorRuntimeContext
-          runtimeContext) {
+      runtimeContext) {
 
     LOG = params.getGraph().getLogger(DistanceCalculatorParameters.class);
     this.latitute1 = params.getLat1PropertyName();
@@ -51,7 +50,6 @@ public class DistanceCalculator implements EventProcessor<DistanceCalculatorPara
 
     // init class with constructor
     length = new SpLengthCalculator(params.getDecimalPosition());
-
   }
 
   @Override

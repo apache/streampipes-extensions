@@ -80,13 +80,13 @@ public class DistanceCalculatorController extends StandaloneEventProcessingDecla
 
         .outputStrategy(OutputStrategies.append(
             PrimitivePropertyBuilder
-                .create(Datatypes.Double,LENGTH_RUNTIME)
+                .create(Datatypes.Double, LENGTH_RUNTIME)
                 .domainProperty(SO.Number)
                 //todo dynamic
                 //.measurementUnit(URI.create("http://qudt.org/vocab/unit#Meter"))
                 .build(),
             PrimitivePropertyBuilder
-                .create(Datatypes.Double,UNIT_RUNTIME)
+                .create(Datatypes.Double, UNIT_RUNTIME)
                 .domainProperty(SO.Text)
                 // todo unit type?
                 .measurementUnit(URI.create("http://qudt.org/vocab/quantitykind/Length"))
@@ -105,16 +105,15 @@ public class DistanceCalculatorController extends StandaloneEventProcessingDecla
     String long2PropertyName = extractor.mappingPropertyValue(LONG_2_KEY);
 
     Integer decimalPosition = extractor.singleValueParameter(DECIMAL_POSITION_KEY, Integer.class);
-
     String chosenUnit = extractor.selectedSingleValue(UNIT_KEY, String.class);
 
     // convert enum to integer values default meter
     int unit = 1;
-    if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.KM.name())){
+    if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.KM.name())) {
       unit = SpLengthCalculator.ValidLengthUnits.KM.getNumber();
-    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.MILE.name())){
+    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.MILE.name())) {
       unit = SpLengthCalculator.ValidLengthUnits.MILE.getNumber();
-    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.FOOT.name())){
+    } else if (chosenUnit.equals(SpLengthCalculator.ValidLengthUnits.FOOT.name())) {
       unit = SpLengthCalculator.ValidLengthUnits.FOOT.getNumber();
     }
 
