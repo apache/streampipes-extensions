@@ -100,11 +100,16 @@ public class TestTrendProcessor {
     final Integer[] actualMatchCount = {0};
     DataProcessorDescription originalGraph = new TrendController().declareModel();
     originalGraph.setSupportedGrounding(EventGroundingGenerator.makeDummyGrounding());
+
     DataProcessorInvocation graph =
             InvocationGraphGenerator.makeEmptyInvocation(originalGraph);
+
     graph.setInputStreams(Collections
             .singletonList(EventStreamGenerator
                     .makeStreamWithProperties(Collections.singletonList("randomValue"))));
+
+    graph.setOutputStream(EventStreamGenerator.makeStreamWithProperties(Collections.singletonList("randomValue")));
+
     graph.getOutputStream().getEventGrounding().getTransportProtocol().getTopicDefinition().setActualTopicName("output-topic");
     TrendParameters params = new TrendParameters(graph, trendOperator, increase, timeWindow, "s0" +
             "::randomValue");

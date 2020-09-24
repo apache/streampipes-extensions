@@ -36,15 +36,10 @@ import java.util.List;
 
 public class BooleanToStateController extends StandaloneEventProcessingDeclarer<BooleanToStateParameters> {
 
-  public static final String COLLECTION_ID = "collection-id";
-  public static final String GROUP_ID = "group-id";
-  public static final String STATE_NAME_ID = "state-name-id";
-  public static final String STATE_MAPPING_ID = "state-mapping-id";
   public static final String BOOLEAN_STATE_FIELD = "boolean_state_field";
   public static final String DEFAULT_STATE_ID = "default-state-id";
 
   public static final String CURRENT_STATE = "current_state";
-
 
   @Override
   public DataProcessorDescription declareModel() {
@@ -54,13 +49,6 @@ public class BooleanToStateController extends StandaloneEventProcessingDeclarer<
             .requiredStream(StreamRequirementsBuilder.create()
                     .requiredPropertyWithNaryMapping(EpRequirements.booleanReq(), Labels.withId(BOOLEAN_STATE_FIELD), PropertyScope.NONE)
                     .build())
-            // TODO UI does not render collections with group
-//            .requiredParameterAsCollection(
-//                    Labels.withId(COLLECTION_ID),
-//                    StaticProperties.group(
-//                            Labels.withId(GROUP_ID),
-//                            StaticProperties.stringFreeTextProperty(Labels.withId(STATE_NAME_ID)),
-//                            StaticProperties.mappingPropertyUnary(Labels.withId(STATE_MAPPING_ID), PropertyScope.NONE)))
             .requiredTextParameter(Labels.withId(DEFAULT_STATE_ID))
             .outputStrategy(OutputStrategies.append(
                     EpProperties.listStringEp(Labels.withId(CURRENT_STATE), CURRENT_STATE, SPSensor.STATE)

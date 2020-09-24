@@ -1,18 +1,20 @@
 /*
-Copyright 2020 FZI Forschungszentrum Informatik
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 package org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.model;
 
@@ -48,25 +50,21 @@ public class StatementUtils {
     }
 
 
-    /**
-     * Extracts Statements from Strings
-     * @param statementStrings
-     * @return
-     * @throws SpRuntimeException
-     */
-    public static List<Statement> getStatements(List<String> statementStrings) throws SpRuntimeException {
-        List<Statement> statements = new ArrayList<>();
 
-        for (String s : statementStrings) {
-            Statement statement = getStatement(s);
-            if (statement == null) {
-                throw new SpRuntimeException("Statement: " + s + " is not correctly formatted");
-            }
-            statements.add(statement);
+    public static List<Statement> getStatements(List<Integer> numberValues, List<String> labelStrings, List<String> comparators) throws SpRuntimeException {
+
+        List<Statement> result = new ArrayList<>();
+
+        for (int i = 0; i < numberValues.size(); i++) {
+            Statement statement = new Statement();
+            statement.setLabel(labelStrings.get(i));
+            statement.setOperator(comparators.get(i));
+            statement.setValue(numberValues.get(i));
+
+            result.add(statement);
         }
 
-        Collections.reverse(statements);
-        return statements;
+        return result;
     }
 
     /**
@@ -124,6 +122,10 @@ public class StatementUtils {
     private static boolean condition(Statement statement, double calculatedValue) {
         if (">".equals(statement.getOperator())) {
             return calculatedValue > statement.getValue();
+        } else if (">=".equals(statement.getOperator())) {
+            return calculatedValue >= statement.getValue();
+        } else if ("<=".equals(statement.getOperator())) {
+            return calculatedValue <= statement.getValue();
         } else if ("<".equals(statement.getOperator())) {
             return calculatedValue < statement.getValue();
         } else if ("=".equals(statement.getOperator())) {
