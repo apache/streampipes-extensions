@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>streampipes-extensions</artifactId>
-    <version>0.67.0</version>
+    <version>0.67.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -910,7 +910,7 @@
         <developerConnection>scm:git:ssh://git@github.com/apache/incubator-streampipes-extensions.git</developerConnection>
         <connection>scm:git:ssh://git@github.com/apache/incubator-streampipes-extensions.git</connection>
         <url>https://github.com/apache/incubator-streampipes-extensions</url>
-      <tag>release/0.67.0</tag>
+      <tag>rel/0.67.0</tag>
   </scm>
 
 </project>
