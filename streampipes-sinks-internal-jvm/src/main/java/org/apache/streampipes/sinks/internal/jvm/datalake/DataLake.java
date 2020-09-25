@@ -71,6 +71,8 @@ public class DataLake implements EventSink<DataLakeParameters> {
             parameters.getBatchSize(),
             parameters.getFlushDuration(),
             parameters.getDimensionProperties(),
+            parameters.getCustomRpName(),
+            parameters.getCustomRpDuration(),
             LOG
     );
 

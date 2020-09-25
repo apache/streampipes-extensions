@@ -6,3 +6,22 @@ db_measurement.description=The name of the identifier under which the data is to
 
 timestamp_mapping.title=Timestamp Field
 timestamp_mapping.description=The value which contains a timestamp
+
+retention_policy.title=Retention Policy
+retention_policy.description=Specify the retention policy for the data
+
+default_retention_policy.title=Default Retention Policy
+default_retention_policy.description=
+
+custom_retention_policy.title=Custom Retention Policy
+custom_retention_policy.description=
+
+custom_retention_policy_group.title=Custom RP Group
+custom_retention_policy_group.description=
+
+custom_retention_policy_name.title=Retention Policy Name
+custom_retention_policy_name.description=
+
+custom_retention_policy_duration.title=Retention Policy Duration
+custom_retention_policy_duration.description=Specify the amount of time to retain the data (Example: 1h, 3d, 10w, ...)
+

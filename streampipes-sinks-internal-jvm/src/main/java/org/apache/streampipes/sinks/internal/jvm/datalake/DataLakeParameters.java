@@ -38,6 +38,8 @@ public class DataLakeParameters extends EventSinkBindingParams {
   private Integer batchSize;
   private Integer flushDuration;
   private List<String> dimensionProperties;
+  private String customRpName;
+  private String customRpDuration;
 
   public DataLakeParameters(DataSinkInvocation graph,
                             String influxDbHost,
@@ -49,7 +51,9 @@ public class DataLakeParameters extends EventSinkBindingParams {
                             String timestampField,
                             Integer batchSize,
                             Integer flushDuration,
-                            List<String> dimensionProperties) {
+                            List<String> dimensionProperties,
+                            String customRpName,
+                            String customRpDuration) {
     super(graph);
 
     this.influxDbHost = influxDbHost;
@@ -62,6 +66,8 @@ public class DataLakeParameters extends EventSinkBindingParams {
     this.batchSize = batchSize;
     this.flushDuration = flushDuration;
     this.dimensionProperties = dimensionProperties;
+    this.customRpName = customRpName;
+    this.customRpDuration = customRpDuration;
   }
 
   public String getInfluxDbHost() {
@@ -103,4 +109,8 @@ public class DataLakeParameters extends EventSinkBindingParams {
   public List<String> getDimensionProperties() {
     return dimensionProperties;
   }
+
+  public String getCustomRpName() { return customRpName; }
+
+  public String getCustomRpDuration() { return customRpDuration; }
 }

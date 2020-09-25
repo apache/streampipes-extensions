@@ -22,9 +22,11 @@ import org.apache.streampipes.model.DataSinkType;
 import org.apache.streampipes.model.graph.DataSinkDescription;
 import org.apache.streampipes.model.graph.DataSinkInvocation;
 import org.apache.streampipes.model.schema.PropertyScope;
+import org.apache.streampipes.sdk.StaticProperties;
 import org.apache.streampipes.sdk.builder.DataSinkBuilder;
 import org.apache.streampipes.sdk.builder.StreamRequirementsBuilder;
 import org.apache.streampipes.sdk.extractor.DataSinkParameterExtractor;
+import org.apache.streampipes.sdk.helpers.Alternatives;
 import org.apache.streampipes.sdk.helpers.EpRequirements;
 import org.apache.streampipes.sdk.helpers.Labels;
 import org.apache.streampipes.sdk.helpers.Locales;
@@ -39,7 +41,12 @@ public class DataLakeController extends StandaloneEventSinkDeclarer<DataLakePara
 
   private static final String DATABASE_MEASUREMENT_KEY = "db_measurement";
   private static final String TIMESTAMP_MAPPING_KEY = "timestamp_mapping";
-
+  private static final String RETENTION_POLICY_KEY = "retention_policy";
+  private static final String DEFAULT_RETENTION_POLICY = "default_retention_policy";
+  private static final String CUSTOM_RETENTION_POLICY = "custom_retention_policy";
+  private static final String CUSTOM_RETENTION_POLICY_GROUP = "custom_retention_policy_group";
+  private static final String CUSTOM_RETENTION_POLICY_NAME= "custom_retention_policy_name";
+  private static final String CUSTOM_RETENTION_POLICY_DURATION = "custom_retention_policy_duration";
 
   @Override
   public DataSinkDescription declareModel() {
@@ -52,6 +59,12 @@ public class DataLakeController extends StandaloneEventSinkDeclarer<DataLakePara
                     Labels.withId(TIMESTAMP_MAPPING_KEY),
                     PropertyScope.NONE).build())
             .requiredTextParameter(Labels.withId(DATABASE_MEASUREMENT_KEY))
+            .requiredAlternatives(Labels.withId(RETENTION_POLICY_KEY),
+                                  Alternatives.from(Labels.withId(DEFAULT_RETENTION_POLICY)),
+                                  Alternatives.from(Labels.withId(CUSTOM_RETENTION_POLICY),
+                                      StaticProperties.group(Labels.withId(CUSTOM_RETENTION_POLICY_GROUP),
+                                      StaticProperties.stringFreeTextProperty(Labels.withId(CUSTOM_RETENTION_POLICY_NAME)),
+                                      StaticProperties.stringFreeTextProperty(Labels.withId(CUSTOM_RETENTION_POLICY_DURATION)))))
             .build();
   }
 
@@ -59,10 +72,18 @@ public class DataLakeController extends StandaloneEventSinkDeclarer<DataLakePara
   public ConfiguredEventSink<DataLakeParameters> onInvocation(DataSinkInvocation graph,
                                                               DataSinkParameterExtractor extractor) {
 
-
     String measureName = extractor.singleValueParameter(DATABASE_MEASUREMENT_KEY, String.class);
     measureName = DataLake.prepareString(measureName);
     String timestampField = extractor.mappingPropertyValue(TIMESTAMP_MAPPING_KEY);
+
+    String selectedAlternative = extractor.selectedAlternativeInternalId(RETENTION_POLICY_KEY);
+    String custom_rp_name = "";
+    String custom_rp_duration = "";
+
+    if (selectedAlternative.equals(CUSTOM_RETENTION_POLICY)) {
+        custom_rp_name = extractor.singleValueParameter(CUSTOM_RETENTION_POLICY_NAME, String.class);
+        custom_rp_duration = extractor.singleValueParameter(CUSTOM_RETENTION_POLICY_DURATION, String.class);
+    }
 
     String hostname = SinksInternalJvmConfig.INSTANCE.getDataLakeProtocol() + "://" + SinksInternalJvmConfig.INSTANCE.getDataLakeHost();
     Integer port = SinksInternalJvmConfig.INSTANCE.getDataLakePort();
@@ -84,8 +105,9 @@ public class DataLakeController extends StandaloneEventSinkDeclarer<DataLakePara
             timestampField,
             batch_size,
             flush_duration,
-            dimensionProperties);
-
+            dimensionProperties,
+            custom_rp_name,
+            custom_rp_duration);
 
     return new ConfiguredEventSink<>(params, DataLake::new);
   }

@@ -18,8 +18,11 @@
 
 package org.apache.streampipes.sinks.internal.jvm.datalake;
 
+import org.apache.streampipes.config.backend.BackendConfig;
+import org.checkerframework.checker.units.qual.C;
 import org.influxdb.BatchOptions;
 import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBException;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Pong;
@@ -47,6 +50,8 @@ public class DataLakeInfluxDbClient {
     private Integer batchSize;
     private Integer flushDuration;
     private List<String> tagFields;
+    private String customRpName;
+    private String customRpDuration;
 
 
     private Logger logger;
@@ -63,7 +68,10 @@ public class DataLakeInfluxDbClient {
                          Integer batchSize,
                          Integer flushDuration,
                          List<String> tagsFields,
+                         String customRpName,
+                         String customRpDuration,
                          Logger logger) throws SpRuntimeException {
+
 		this.influxDbHost = influxDbHost;
 		this.influxDbPort = influxDbPort;
 		this.databaseName = databaseName;
@@ -73,6 +81,8 @@ public class DataLakeInfluxDbClient {
 		this.timestampField = timestampField;
 		this.batchSize = batchSize;
 		this.flushDuration = flushDuration;
+		this.customRpName = customRpName;
+		this.customRpDuration = customRpDuration;
 		this.logger = logger;
 		this.tagFields = tagsFields;
 
@@ -108,7 +118,7 @@ public class DataLakeInfluxDbClient {
    * be found
    */
 	private void connect() throws SpRuntimeException {
-	  // Connecting to the server
+    // Connecting to the server
     // "http://" must be in front
     String urlAndPort = influxDbHost + ":" + influxDbPort;
     influxDb = InfluxDBFactory.connect(urlAndPort, user, password);
@@ -125,9 +135,24 @@ public class DataLakeInfluxDbClient {
       createDatabase(databaseName);
     }
 
-    // setting up the database
+    // Setting up the database
     influxDb.setDatabase(databaseName);
     influxDb.enableBatch(batchSize, flushDuration, TimeUnit.MILLISECONDS);
+
+    // Optional: Set Retention Policy
+    if (customRpName != "" && customRpDuration != "") {
+
+        QueryResult result = influxDb.query(new Query("CREATE RETENTION POLICY "
+                                            + customRpName + " ON "
+                                            + BackendConfig.INSTANCE.getInfluxDatabaseName()
+                                            + " Duration " + customRpDuration
+                                            + " REPLICATION 1",
+                                            BackendConfig.INSTANCE.getInfluxDatabaseName()));
+
+        if (result.hasError() || result.getResults().get(0).getError() != null) {
+            throw new SpRuntimeException("Could not create the retention policy '" + customRpName + "': "  + result.getResults().get(0).getError());
+        }
+    }
 	}
 
   /**
@@ -190,8 +215,11 @@ public class DataLakeInfluxDbClient {
               }
           }
       }
-
-      influxDb.write(p.build());
+      if (customRpName != "" && customRpDuration != "") {
+          influxDb.write(BackendConfig.INSTANCE.getInfluxDatabaseName(), customRpName, p.build());
+      } else {
+          influxDb.write(p.build());
+      }
 	}
 
   /**
