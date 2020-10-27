@@ -1,0 +1,14 @@
+org.apache.streampipes.processors.transformation.jvm.processor.booloperator.state.title=Boolean To State
+org.apache.streampipes.processors.transformation.jvm.processor.booloperator.state.description=Transforms boolean properties into a string state property
+
+state-field.title=State field
+state-field.description=Test
+
+collection-id.title=Collection Field
+collection-id.description=Test
+
+default-state-id.title=Default State
+default-state-id.description=Define a default state, when all values are false
+
+boolean_state_field.title=Current State
+boolean_state_field.description=When value is true runtime name is added as state to resulting event

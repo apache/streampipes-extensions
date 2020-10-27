@@ -30,10 +30,18 @@ import org.apache.streampipes.processors.transformation.jvm.config.Transformatio
 import org.apache.streampipes.processors.transformation.jvm.processor.array.count.CountArrayController;
 import org.apache.streampipes.processors.transformation.jvm.processor.array.split.SplitArrayController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.counter.BooleanCounterController;
+import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.edge.SignalEdgeFilterController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.inverter.BooleanInverterController;
+import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.state.BooleanToStateController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timekeeping.BooleanTimekeepingController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timer.BooleanTimerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.csvmetadata.CsvMetadataEnrichmentController;
+import org.apache.streampipes.processors.transformation.jvm.processor.state.buffer.StateBufferController;
+import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.buffer.StateBufferLabelerController;
+import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.number.NumberLabelerController;
+import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.counter.StringCounterController;
+import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.state.StringToStateController;
+import org.apache.streampipes.processors.transformation.jvm.processor.stringoperator.timer.StringTimerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.task.TaskDurationController;
 import org.apache.streampipes.processors.transformation.jvm.processor.timestampextractor.TimestampExtractorController;
 import org.apache.streampipes.processors.transformation.jvm.processor.transformtoboolean.TransformToBooleanController;
@@ -57,7 +65,15 @@ public class TransformationJvmInit extends StandaloneModelSubmitter {
             .add(new CsvMetadataEnrichmentController())
             .add(new TaskDurationController())
             .add(new BooleanInverterController())
-            .add(new TransformToBooleanController());
+            .add(new TransformToBooleanController())
+            .add(new StringTimerController())
+            .add(new SignalEdgeFilterController())
+            .add(new BooleanToStateController())
+            .add(new StateBufferController())
+            .add(new StateBufferLabelerController())
+            .add(new NumberLabelerController())
+            .add(new StringToStateController())
+            .add(new StringCounterController());
 
     DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),
             new CborDataFormatFactory(),

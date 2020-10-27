@@ -21,7 +21,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.66.0</version>
+        <version>0.67.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -108,7 +108,6 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-runtime_2.11</artifactId>
-            <version>${flink.version}</version>
             <type>test-jar</type>
         </dependency>
         <dependency>

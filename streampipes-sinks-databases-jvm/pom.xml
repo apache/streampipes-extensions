@@ -21,7 +21,7 @@
     <parent>
         <artifactId>streampipes-extensions</artifactId>
         <groupId>org.apache.streampipes</groupId>
-        <version>0.66.0</version>
+        <version>0.67.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -88,13 +88,20 @@
             <artifactId>iotdb-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-milo</artifactId>
+            <groupId>org.eclipse.milo</groupId>
+            <artifactId>sdk-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.ditto</groupId>
             <artifactId>ditto-client</artifactId>
-            <version>${ditto-client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
         <!-- 3rd party dependencies to avoid convergence errors -->
@@ -105,6 +112,12 @@
         <dependency>
             <groupId>org.atteo.classindex</groupId>
             <artifactId>classindex</artifactId>
+        </dependency>
+
+        <!-- dependency convergence -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
         </dependency>
 
     </dependencies>
