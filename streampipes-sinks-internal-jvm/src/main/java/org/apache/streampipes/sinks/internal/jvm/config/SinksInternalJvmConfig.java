@@ -88,10 +88,6 @@ public enum SinksInternalJvmConfig implements PeConfig {
 		return config.getInteger(ConfigKeys.JMS_PORT);
 	}
 
-	public String getJmsUrl() {
-		return getJmsHost() + ":" + getJmsPort();
-	}
-
 	public String getDataLakeHost() {
 		return config.getString(ConfigKeys.DATA_LAKE_HOST);
 	}
