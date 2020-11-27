@@ -11,7 +11,7 @@
       <env name="SP_DATA_LAKE_PORT" value="8086" />
       <env name="SP_BACKEND_HOST" value="localhost" />
       <env name="SP_BACKEND_PORT" value="8030" />
-      <env name="SP_NODE_ID" value="edge-01.node-controller" />
+      <env name="SP_NODE_CONTROLLER_ID" value="edge-01.node-controller" />
       <env name="SP_NODE_CONTROLLER_HOST" value="edge-01.fzi.de" />
       <env name="SP_NODE_CONTROLLER_PORT" value="7077" />
     </envs>
