@@ -19,9 +19,9 @@
       <env name="CONSUL_LOCATION" value="host.docker.internal" />
       <env name="SP_NODE_CONTROLLER_ID" value="edge-01.node-controller" />
       <env name="SP_NODE_CONTROLLER_PORT" value="7077" />
-      <env name="SP_NODE_HOST" value="edge-01.fzi.de" />
+      <env name="SP_NODE_HOST" value="edge01.example.de" />
       <env name="SP_NODE_TYPE" value="edge" />
-      <env name="SP_NODE_ACCESSIBLE_SENSOR_ACTUATOR_ROS" value="ros;universalrobot;ipe-k3s-pi1.fzi.de;network" />
+      <env name="SP_NODE_ACCESSIBLE_SENSOR_ACTUATOR_ROS" value="ros;universalrobot;k3s-pi1.example.de;network" />
       <env name="SP_NODE_HAS_GPU" value="false" />
       <env name="SP_NODE_LOCATION_BUILDING" value="holl" />
       <env name="SP_NODE_LOCATION_MACHINE" value="UR" />

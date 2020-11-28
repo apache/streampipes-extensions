@@ -19,7 +19,7 @@
       <env name="CONSUL_LOCATION" value="host.docker.internal" />
       <env name="SP_NODE_CONTROLLER_ID" value="edge-02.node-controller" />
       <env name="SP_NODE_CONTROLLER_PORT" value="7078" />
-      <env name="SP_NODE_HOST" value="edge-02.fzi.de" />
+      <env name="SP_NODE_HOST" value="edge02.example.de" />
       <env name="SP_NODE_TYPE" value="edge" />
       <env name="SP_NODE_ACCESSIBLE_SENSOR_ACTUATOR_ZED" value="zed;sensor;/dev/video1;usb" />
       <env name="SP_NODE_HAS_GPU" value="true" />

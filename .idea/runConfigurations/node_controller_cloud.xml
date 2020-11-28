@@ -19,10 +19,10 @@
       <env name="CONSUL_LOCATION" value="host.docker.internal" />
       <env name="SP_NODE_CONTROLLER_ID" value="cloud.node-controller" />
       <env name="SP_NODE_CONTROLLER_PORT" value="7080" />
-      <env name="SP_NODE_HOST" value="cloud.fzi.de" />
+      <env name="SP_NODE_HOST" value="cloud.example.de" />
       <env name="SP_NODE_TYPE" value="cloud" />
       <env name="SP_NODE_HAS_GPU" value="true" />
-      <env name="SP_NODE_LOCATION_CLOUD" value="bwcloud" />
+      <env name="SP_NODE_LOCATION_CLOUD" value="aws" />
       <env name="SP_DEBUG" value="true" />
     </envs>
     <method v="2">
