@@ -17,23 +17,37 @@
  */
 package org.apache.streampipes.processors.filters.jvm.processor.enrich;
 
+import org.apache.streampipes.container.api.ResolvesContainerProvidedOptions;
 import org.apache.streampipes.model.DataProcessorType;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
+import org.apache.streampipes.model.runtime.RuntimeOptions;
+import org.apache.streampipes.model.staticproperty.Option;
 import org.apache.streampipes.processors.filters.jvm.config.FiltersJvmConfig;
+import org.apache.streampipes.sdk.StaticProperties;
 import org.apache.streampipes.sdk.builder.ProcessingElementBuilder;
 import org.apache.streampipes.sdk.builder.StreamRequirementsBuilder;
 import org.apache.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
+import org.apache.streampipes.sdk.extractor.StaticPropertyExtractor;
 import org.apache.streampipes.sdk.helpers.*;
 import org.apache.streampipes.sdk.utils.Assets;
 import org.apache.streampipes.wrapper.standalone.ConfiguredEventProcessor;
 import org.apache.streampipes.wrapper.standalone.declarer.StandaloneEventProcessingDeclarer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class MergeByEnrichController extends StandaloneEventProcessingDeclarer<MergeByEnrichParameters> {
+public class MergeByEnrichController extends StandaloneEventProcessingDeclarer<MergeByEnrichParameters> implements ResolvesContainerProvidedOptions {
 
   private static final String SELECT_STREAM = "select-stream";
+  private static final String GROUP_STREAM = "group-stream";
+  private static final String DISABLE_GROUPING = "disable-grouping";
+
+  private static final String ENABLE_GROUPING = "enable-grouping";
+  private static final String GROUP_CONFIG = "group-config";
+  private static final String GROUP_ID_STREAM_1 = "group_id_stream_1";
+  private static final String GROUP_ID_STREAM_2 = "group_id_stream_2";
 
   @Override
   public DataProcessorDescription declareModel() {
@@ -51,6 +65,16 @@ public class MergeByEnrichController extends StandaloneEventProcessingDeclarer<M
                     .build())
             .requiredSingleValueSelection(Labels.withId(SELECT_STREAM),
                     Options.from("Stream 1", "Stream 2"))
+
+            .requiredAlternatives(
+                    Labels.withId(GROUP_STREAM),
+                    Alternatives.from(Labels.withId(DISABLE_GROUPING)),
+
+                    Alternatives.from(Labels.withId(ENABLE_GROUPING),
+                            StaticProperties.group(Labels.withId(GROUP_CONFIG),
+                                    StaticProperties.singleValueSelectionFromContainer(Labels.withId(GROUP_ID_STREAM_1)),
+                                    StaticProperties.singleValueSelectionFromContainer(Labels.withId(GROUP_ID_STREAM_2)))))
+
             .outputStrategy(OutputStrategies.custom(true))
             .build();
   }
@@ -67,5 +91,12 @@ public class MergeByEnrichController extends StandaloneEventProcessingDeclarer<M
             graph, outputKeySelectors, selectedStream);
 
     return new ConfiguredEventProcessor<>(staticParam, MergeByEnrich::new);
+  }
+
+  @Override
+  public List<Option> resolveOptions(String requestId, StaticPropertyExtractor parameterExtractor) {
+
+    System.out.println(requestId);
+      return new ArrayList<>();
   }
 }

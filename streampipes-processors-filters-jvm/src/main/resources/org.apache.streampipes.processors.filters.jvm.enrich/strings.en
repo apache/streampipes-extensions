@@ -3,3 +3,21 @@ org.apache.streampipes.processors.filters.jvm.enrich.description=One data stream
 
 select-stream.title=Select Output Frequency
 select-stream.description=The output frequency of the selected stream is maintained
+
+group-stream.title=Group Stream By Id
+group-stream.description=Define id's in each stream that are used for grouping
+
+disable-grouping.title=Disable Grouping
+disable-grouping.description=
+
+enable-grouping.title=Enable Grouping
+enable-grouping.description=
+
+group-config.title=Group Config
+group-config.description=
+
+group_id_stream_1.title=Group id in stream 1
+group_id_stream_1.description=
+
+group_id_stream_2.title=Group id in stream 2
+group_id_stream_2.description=
