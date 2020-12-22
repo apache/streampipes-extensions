@@ -20,59 +20,51 @@ package org.apache.streampipes.connect.config;
 
 
 import org.apache.streampipes.config.SpConfig;
+import org.apache.streampipes.container.model.ExtensionsConfig;
 
-public enum ConnectWorkerConfig {
+public enum ConnectWorkerConfig implements ExtensionsConfig {
   INSTANCE;
 
-
-  private SpConfig config;
+  private static final String CONNECT_ID = "connect/org.apache.streampipes.connect.adapter";
+  private final static String SERVICE_CONTAINER_NAME = "connect-worker-main";
+  private final SpConfig config;
 
   ConnectWorkerConfig() {
-    String name = "connect-worker-main";
-    config = SpConfig.getSpConfig("connect-worker-main");
+    config = SpConfig.getSpConfig(CONNECT_ID);
 
-    config.register(ConfigKeys.KAFKA_HOST, "kafka", "Hostname for backend service for kafka");
-    config.register(ConfigKeys.KAFKA_PORT, 9092, "Port for backend service for kafka");
-
-    config.register(ConfigKeys.CONNECT_CONTAINER_WORKER_PORT, 8098, "The port of the connect container");
-    config.register(ConfigKeys.CONNECT_CONTAINER_WORKER_HOST, name, "The hostname of the connect container");
-
-    config.register(ConfigKeys.BACKEND_HOST, "backend", "The host of the backend to register the worker");
-    config.register(ConfigKeys.BACKEND_PORT, 8030, "The port of the backend to register the worker");
-
+    config.register(ConfigKeys.SP_HOST, SERVICE_CONTAINER_NAME, "Connect container host");
+    config.register(ConfigKeys.SP_PORT, 8098, "Connect container port");
+    config.register(ConfigKeys.BACKEND_HOST, "backend", "Backend host");
+    config.register(ConfigKeys.BACKEND_PORT, 8030, "Backend port");
   }
 
-  public String getConnectContainerWorkerUrl() {
-    return "http://" + config.getString(ConfigKeys.CONNECT_CONTAINER_WORKER_HOST) + ":" + config.getInteger(ConfigKeys.CONNECT_CONTAINER_WORKER_PORT) + "/";
+  @Override
+  public String getId() {
+    return CONNECT_ID;
   }
 
-  public String getBackendUrl() {
-    return "http://" + config.getString(ConfigKeys.BACKEND_HOST) + ":" + config.getInteger(ConfigKeys.BACKEND_PORT) + "/streampipes-backend";
+  @Override
+  public String getHost() {
+    return config.getString(ConfigKeys.SP_HOST);
   }
 
-  public String getKafkaHost() {
-    return config.getString(ConfigKeys.KAFKA_HOST);
+  @Override
+  public int getPort() {
+    return config.getInteger(ConfigKeys.SP_PORT);
   }
 
-  public int getKafkaPort() {
-    return config.getInteger(ConfigKeys.KAFKA_PORT);
+  @Override
+  public String getName() {
+    return null;
   }
 
-  public String getKafkaUrl() {
-    return getKafkaHost() + ":" + getKafkaPort();
+  @Override
+  public String getBackendHost() {
+    return config.getString(ConfigKeys.BACKEND_HOST);
   }
 
-  public void setKafkaHost(String s) {
-    config.setString(ConfigKeys.KAFKA_HOST, s);
+  @Override
+  public int getBackendPort() {
+    return config.getInteger(ConfigKeys.BACKEND_PORT);
   }
-
-
-  public String getConnectContainerWorkerHost() {
-    return config.getString(ConfigKeys.CONNECT_CONTAINER_WORKER_HOST);
-  }
-
-  public Integer getConnectContainerWorkerPort() {
-    return config.getInteger(ConfigKeys.CONNECT_CONTAINER_WORKER_PORT);
-  }
-
 }

@@ -18,13 +18,18 @@
 package org.apache.streampipes.extensions.all.jvm.config;
 
 public class ConfigKeys {
-    final static String HOST = "SP_HOST";
-    final static String PORT = "SP_PORT";
-    final static String SERVICE_NAME_KEY = "SP_SERVICE_NAME";
-    final static String KAFKA_HOST = "SP_KAFKA_HOST";
-    final static String KAFKA_PORT = "SP_KAFKA_PORT";
-    final static String CONNECT_CONTAINER_WORKER_HOST = "SP_CONNECT_CONTAINER_WORKER_HOST";
-    final static String CONNECT_CONTAINER_WORKER_PORT = "SP_CONNECT_CONTAINER_WORKER_PORT";
-    final static String BACKEND_HOST = "SP_BACKEND_HOST";
-    final static String BACKEND_PORT = "SP_BACKEND_PORT";
+    public static final String HOST = "SP_HOST";
+    public static final String PORT = "SP_PORT";
+    public static final String SERVICE_NAME_KEY = "SP_SERVICE_NAME";
+    public static final String KAFKA_HOST = "SP_KAFKA_HOST";
+    public static final String KAFKA_PORT = "SP_KAFKA_PORT";
+    public static final String CONNECT_CONTAINER_WORKER_HOST = "SP_CONNECT_CONTAINER_WORKER_HOST";
+    public static final String CONNECT_CONTAINER_WORKER_PORT = "SP_CONNECT_CONTAINER_WORKER_PORT";
+    public static final String BACKEND_HOST = "SP_BACKEND_HOST";
+    public static final String BACKEND_PORT = "SP_BACKEND_PORT";
+    public static final String NODE_CONTROLLER_ID = "SP_NODE_CONTROLLER_ID";
+    public static final String NODE_CONTROLLER_CONTAINER_HOST = "SP_NODE_CONTROLLER_CONTAINER_HOST";
+    public static final String NODE_CONTROLLER_CONTAINER_PORT = "SP_NODE_CONTROLLER_CONTAINER_PORT";
+    public static final String NODE_BROKER_CONTAINER_HOST = "SP_NODE_BROKER_CONTAINER_HOST";
+    public static final String NODE_BROKER_CONTAINER_PORT = "SP_NODE_BROKER_CONTAINER_PORT";
 }

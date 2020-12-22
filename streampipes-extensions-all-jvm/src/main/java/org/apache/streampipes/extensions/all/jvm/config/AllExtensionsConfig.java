@@ -18,32 +18,34 @@
 package org.apache.streampipes.extensions.all.jvm.config;
 
 import org.apache.streampipes.config.SpConfig;
+import org.apache.streampipes.container.model.EdgeExtensionsConfig;
 import org.apache.streampipes.container.model.ExtensionsConfig;
 
-public enum AllExtensionsConfig implements ExtensionsConfig {
+public enum AllExtensionsConfig implements EdgeExtensionsConfig {
     INSTANCE;
 
     private final SpConfig peConfig;
     private final SpConfig adapterConfig;
-    private final static String PE_ID = "pe/org.apache.streampipes.extensions.all.jvm";
+    private final static String PE_ID = "pe/org.apache.streampipes.processors.all.jvm";
+    private final static String CONNECT_ID = "connect/org.apache.streampipes.connect.adapter";
     private final static String SERVICE_NAME = "StreamPipes Extensions (JVM)";
     private final static String SERVICE_CONTAINER_NAME = "extensions-all-jvm";
 
     AllExtensionsConfig() {
         // TODO: harmonize config
         peConfig = SpConfig.getSpConfig(PE_ID);
-        adapterConfig = SpConfig.getSpConfig("connect-worker-main");
+        adapterConfig = SpConfig.getSpConfig(CONNECT_ID);
 
         peConfig.register(ConfigKeys.HOST, SERVICE_CONTAINER_NAME, "Host for extensions");
         peConfig.register(ConfigKeys.PORT, 8090, "Port for extensions");
         peConfig.register(ConfigKeys.SERVICE_NAME_KEY, SERVICE_NAME, "Service name");
 
-        adapterConfig.register(ConfigKeys.KAFKA_HOST, "kafka", "Hostname for backend service for kafka");
-        adapterConfig.register(ConfigKeys.KAFKA_PORT, 9092, "Port for backend service for kafka");
-        adapterConfig.register(ConfigKeys.CONNECT_CONTAINER_WORKER_PORT, 8090, "The port of the connect container");
-        adapterConfig.register(ConfigKeys.CONNECT_CONTAINER_WORKER_HOST, SERVICE_CONTAINER_NAME, "The hostname of the connect container");
-        adapterConfig.register(ConfigKeys.BACKEND_HOST, "backend", "The host of the backend to register the worker");
-        adapterConfig.register(ConfigKeys.BACKEND_PORT, 8030, "The port of the backend to register the worker");
+        // TODO: del when working
+        adapterConfig.register(ConfigKeys.BACKEND_HOST, "backend", "backend host");
+        adapterConfig.register(ConfigKeys.BACKEND_PORT, 8030, "backed port");
+
+        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST, "node-controller", "node controller host");
+        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT, 7077, "node controller port");
     }
 
     @Override
@@ -64,6 +66,16 @@ public enum AllExtensionsConfig implements ExtensionsConfig {
     @Override
     public String getName() {
         return peConfig.getString(ConfigKeys.SERVICE_NAME_KEY);
+    }
+
+    @Override
+    public String getNodeControllerHost() {
+        return adapterConfig.getString(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST);
+    }
+
+    @Override
+    public int getNodeControllerPort() {
+        return adapterConfig.getInteger(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT);
     }
 
     @Override

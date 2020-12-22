@@ -12,8 +12,8 @@
       <env name="SP_BACKEND_HOST" value="localhost" />
       <env name="SP_BACKEND_PORT" value="8030" />
       <env name="SP_NODE_CONTROLLER_ID" value="fog.node-controller" />
-      <env name="SP_NODE_CONTROLLER_HOST" value="fog01.example.de" />
-      <env name="SP_NODE_CONTROLLER_PORT" value="7079" />
+      <env name="SP_NODE_CONTROLLER_CONTAINER_HOST" value="fog01.example.de" />
+      <env name="SP_NODE_CONTROLLER_CONTAINER_PORT" value="7079" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="org.apache.streampipes.pe.jvm.AllPipelineElementsInit" />
     <module name="streampipes-pipeline-elements-all-jvm" />

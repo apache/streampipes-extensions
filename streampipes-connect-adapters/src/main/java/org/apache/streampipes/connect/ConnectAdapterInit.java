@@ -98,11 +98,6 @@ public class ConnectAdapterInit extends AdapterWorkerContainer {
             .add(new IssAdapter())
             .add(new FlicMQTTAdapter());
 
-    String workerUrl = ConnectWorkerConfig.INSTANCE.getConnectContainerWorkerUrl();
-    String backendUrl = ConnectWorkerConfig.INSTANCE.getBackendUrl();
-    Integer workerPort = ConnectWorkerConfig.INSTANCE.getConnectContainerWorkerPort();
-
-    new ConnectAdapterInit().init(workerUrl, backendUrl, workerPort);
-
+    new ConnectAdapterInit().init(ConnectWorkerConfig.INSTANCE);
   }
 }

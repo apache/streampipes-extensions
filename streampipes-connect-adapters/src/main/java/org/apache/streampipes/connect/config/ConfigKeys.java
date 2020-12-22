@@ -22,8 +22,8 @@ public class ConfigKeys {
     final static String KAFKA_HOST = "SP_KAFKA_HOST";
     final static String KAFKA_PORT = "SP_KAFKA_PORT";
 
-    final static String CONNECT_CONTAINER_WORKER_HOST = "SP_CONNECT_CONTAINER_WORKER_HOST";
-    final static String CONNECT_CONTAINER_WORKER_PORT = "SP_CONNECT_CONTAINER_WORKER_PORT";
+    final static String SP_HOST = "SP_HOST";
+    final static String SP_PORT = "SP_PORT";
 
     final static String BACKEND_HOST = "SP_BACKEND_HOST";
     final static String BACKEND_PORT = "SP_BACKEND_PORT";
