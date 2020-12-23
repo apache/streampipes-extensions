@@ -44,8 +44,8 @@ public enum AllExtensionsConfig implements EdgeExtensionsConfig {
         adapterConfig.register(ConfigKeys.BACKEND_HOST, "backend", "backend host");
         adapterConfig.register(ConfigKeys.BACKEND_PORT, 8030, "backed port");
 
-        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST, "node-controller", "node controller host");
-        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT, 7077, "node controller port");
+//        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST, "node-controller", "node controller host");
+//        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT, 7077, "node controller port");
     }
 
     @Override
@@ -70,12 +70,12 @@ public enum AllExtensionsConfig implements EdgeExtensionsConfig {
 
     @Override
     public String getNodeControllerHost() {
-        return adapterConfig.getString(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST);
+        return getEnvOrDefault(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST, "node-controller", String.class);
     }
 
     @Override
     public int getNodeControllerPort() {
-        return adapterConfig.getInteger(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT);
+        return getEnvOrDefault(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT, 7077, Integer.class);
     }
 
     @Override
@@ -86,5 +86,15 @@ public enum AllExtensionsConfig implements EdgeExtensionsConfig {
     @Override
     public int getBackendPort() {
         return adapterConfig.getInteger(ConfigKeys.BACKEND_PORT);
+    }
+
+    private <T> T getEnvOrDefault(String k, T defaultValue, Class<T> type) {
+        if(type.equals(Integer.class)) {
+            return System.getenv(k) != null ? (T) Integer.valueOf(System.getenv(k)) : defaultValue;
+        } else if(type.equals(Boolean.class)) {
+            return System.getenv(k) != null ? (T) Boolean.valueOf(System.getenv(k)) : defaultValue;
+        } else {
+            return System.getenv(k) != null ? type.cast(System.getenv(k)) : defaultValue;
+        }
     }
 }
