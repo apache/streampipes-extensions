@@ -43,7 +43,7 @@ public class CusumController extends StandaloneEventProcessingDeclarer<CusumPara
     public DataProcessorDescription declareModel() {
         return ProcessingElementBuilder.create("org.apache.streampipes.processors.changedetection.jvm.cusum")
                 .category(DataProcessorType.FILTER)
-                .withAssets(Assets.DOCUMENTATION, Assets.ICON)
+                .withAssets(Assets.DOCUMENTATION)
                 .withLocales(Locales.EN)
                 .requiredStream(StreamRequirementsBuilder
                         .create()

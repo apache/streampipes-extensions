@@ -50,6 +50,7 @@ import org.apache.streampipes.connect.protocol.stream.pulsar.PulsarProtocol;
 import org.apache.streampipes.container.extensions.ExtensionsModelSubmitter;
 import org.apache.streampipes.container.init.DeclarersSingleton;
 import org.apache.streampipes.extensions.all.jvm.config.AllExtensionsConfig;
+import org.apache.streampipes.processors.dummy.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
@@ -191,7 +192,9 @@ public class AllExtensionsInit extends ExtensionsModelSubmitter {
                 .add(new TransformToBooleanController())
                 .add(new StringCounterController())
                 .add(new StringTimerController())
-                .add(new NumberLabelerController());
+                .add(new NumberLabelerController())
+                // streampipes-processors-dummy-jvm
+                .add(new DummyController());
 //                // streampipes-sinks-brokers-jvm
 //                .add(new KafkaController())
 //                .add(new JmsController())

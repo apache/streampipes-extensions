@@ -25,96 +25,57 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>streampipes-pipeline-elements-all-jvm</artifactId>
+    <artifactId>streampipes-processors-dummy-jvm</artifactId>
 
     <dependencies>
+        <!-- StreamPipes dependencies -->
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-filters-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-image-processing-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-config</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-filters-siddhi</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-container-standalone</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-text-mining-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-dataformat-json</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-transformation-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-dataformat-cbor</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-sinks-brokers-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-dataformat-smile</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-sinks-databases-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-dataformat-fst</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-sinks-internal-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-messaging-jms</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-sinks-notifications-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-messaging-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-enricher-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-messaging-mqtt</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-geo-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-sdk</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-change-detection-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <classifier>embed</classifier>
+            <artifactId>streampipes-wrapper-standalone</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.streampipes</groupId>
-            <artifactId>streampipes-processors-dummy-jvm</artifactId>
-            <version>${streampipes.version}</version>
-            <scope>embded</scope>
-        </dependency>
-
-        <!-- 3rd party dependencies to avoid convergence errors -->
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.atteo.classindex</groupId>
-            <artifactId>classindex</artifactId>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
         </dependency>
     </dependencies>
 
@@ -143,13 +104,11 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
-                        <configuration>
-                            <mainClass>org.apache.streampipes.pe.jvm.AllPipelineElementsInit</mainClass>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        <finalName>streampipes-processors-all-jvm</finalName>
+        <finalName>streampipes-processors-dummy-jvm</finalName>
+
     </build>
 </project>

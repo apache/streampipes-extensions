@@ -28,6 +28,7 @@ import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.pe.jvm.config.AllPipelineElementsConfig;
 import org.apache.streampipes.processors.changedetection.jvm.cusum.CusumController;
+import org.apache.streampipes.processors.dummy.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
@@ -200,7 +201,10 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new EmailController())
             .add(new TelegramController())
             .add(new OneSignalController())
-            .add(new SlackNotificationController());
+            .add(new SlackNotificationController())
+            // TODO: delete this one after testing
+            // streampipes-projecessors-dummy-jvm
+            .add(new DummyController());
 
     DeclarersSingleton.getInstance().registerDataFormats(
             new JsonDataFormatFactory(),
