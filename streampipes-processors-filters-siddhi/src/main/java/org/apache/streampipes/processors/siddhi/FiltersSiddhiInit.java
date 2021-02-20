@@ -28,9 +28,11 @@ import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.processors.siddhi.config.FilterSiddhiConfig;
+import org.apache.streampipes.processors.siddhi.count.CountAggregation;
 import org.apache.streampipes.processors.siddhi.filter.NumericalFilterController;
 import org.apache.streampipes.processors.siddhi.listcollector.ListCollector;
 import org.apache.streampipes.processors.siddhi.listfilter.ListFilter;
+import org.apache.streampipes.processors.siddhi.topk.TopK;
 import org.apache.streampipes.processors.siddhi.trend.TrendController;
 
 public class FiltersSiddhiInit extends StandaloneModelSubmitter {
@@ -40,7 +42,9 @@ public class FiltersSiddhiInit extends StandaloneModelSubmitter {
             .add(new TrendController())
             .add(new NumericalFilterController())
             .add(new ListFilter())
-            .add(new ListCollector());
+            .add(new ListCollector())
+            .add(new CountAggregation())
+            .add(new TopK());
     // TODO: currently not working
 //            .add(new StreamStopController())
 //            .add(new FrequencyController())

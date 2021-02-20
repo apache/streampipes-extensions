@@ -107,7 +107,8 @@ import org.apache.streampipes.processors.transformation.jvm.processor.value.dura
 import org.apache.streampipes.sinks.brokers.jvm.bufferrest.BufferRestController;
 import org.apache.streampipes.sinks.brokers.jvm.jms.JmsController;
 import org.apache.streampipes.sinks.brokers.jvm.kafka.KafkaController;
-import org.apache.streampipes.sinks.brokers.jvm.mqtt.MqttController;
+import org.apache.streampipes.sinks.brokers.jvm.mqtt.MqttPublisherSink;
+import org.apache.streampipes.sinks.brokers.jvm.websocket.WebsocketServerSink;
 import org.apache.streampipes.sinks.brokers.jvm.pulsar.PulsarController;
 import org.apache.streampipes.sinks.brokers.jvm.rabbitmq.RabbitMqController;
 import org.apache.streampipes.sinks.brokers.jvm.rest.RestController;
@@ -193,6 +194,33 @@ public class AllExtensionsInit extends ExtensionsModelSubmitter {
                 .add(new StringCounterController())
                 .add(new StringTimerController())
                 .add(new NumberLabelerController())
+                // streampipes-sinks-brokers-jvm
+                .add(new WebsocketServerSink())
+                .add(new KafkaController())
+                .add(new JmsController())
+                .add(new RestController())
+                .add(new BufferRestController())
+                .add(new RabbitMqController())
+                .add(new PulsarController())
+                .add(new MqttPublisherSink())
+                // streampipes-sinks-databases-jvm
+                .add(new CouchDbController())
+                .add(new InfluxDbController())
+                .add(new UpcUaController())
+                .add(new PostgreSqlController())
+                .add(new IotDbController())
+                .add(new DittoController())
+                .add(new RedisController())
+                .add(new MysqlController())
+                // streampipes-sinks-internal-jvm
+                .add(new NotificationController())
+                .add(new DataLakeController())
+                .add(new DashboardController())
+                // streampipes-sinks-notifications-jvm
+                .add(new EmailController())
+                .add(new TelegramController())
+                .add(new OneSignalController())
+                .add(new SlackNotificationController())
                 // streampipes-processors-dummy-jvm
                 .add(new DummyController());
 //                // streampipes-sinks-brokers-jvm

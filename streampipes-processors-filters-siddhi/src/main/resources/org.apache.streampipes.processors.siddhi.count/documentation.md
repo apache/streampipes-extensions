@@ -16,7 +16,7 @@
   ~
   -->
 
-## MQTT Publisher
+## Count Aggregation
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,30 +26,36 @@
 
 ## Description
 
-Publishes events to MQTT.
+Performs an aggregation based on a given field and outputs the number of occurrences.
+Example: Count the number of vehicle positions per vehicleId.
+The Count aggregation requires a time window, used to perform the count aggregation and a field used to aggregate
+values.
 
 ***
 
 ## Required input
 
-This sink does not have any requirements and works with any incoming event type.
 
 ***
 
 ## Configuration
 
-### MQTT Broker Settings
+### FieldToCount    
+Specifies the field containing the values that should be counted.
 
-The basic settings to connect to the broker. 
-The MQTT broker URL indicates the URL of the broker (e.g., localhost), the port indicates the port of the broker
-(e.g., 1883)
+### TimeWindowSize  
+Specifies the size of the time window and consequently the number of values that are aggregated each time. 
 
-
-### MQTT Topic
-
-The topic where events should be sent to.
-
+### Time Window Scale
+Specifies the scale/unit of the time window. There are three different time scales to choose from: seconds, minutes or hours.
 
 ## Output
-
-(not applicable for data sinks)
+The output event is composed of two fields. The field "value" specifies the value to count.
+The second field "count" returns the number of occurrences.
+Example:
+```
+{
+  'value': 'vehicleId', 
+  'count': 12
+}
+```
