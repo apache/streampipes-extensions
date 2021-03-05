@@ -15,7 +15,7 @@
       <env name="SP_NODE_BROKER_CONTAINER_PORT" value="1887" />
       <env name="SP_NODE_ACCESSIBLE_FIELD_DEVICE_ZED" value="zed;camera;usb;/dev/video0" />
       <env name="SP_NODE_HAS_GPU" value="true" />
-      <env name="SP_NODE_LOCATION_BUILDING" value="holl" />
+      <env name="SP_NODE_LOCATION" value="fzi;main" />
       <env name="SP_DEBUG" value="true" />
       <env name="SP_VERSION" value="0.68.0-SNAPSHOT" />
     </envs>
