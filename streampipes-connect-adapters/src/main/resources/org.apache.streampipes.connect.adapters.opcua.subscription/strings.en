@@ -1,5 +1,5 @@
-org.apache.streampipes.connect.adapters.opcua.title=OPC UA
-org.apache.streampipes.connect.adapters.opcua.description=Reads values from an OPC-UA server
+org.apache.streampipes.connect.adapters.opcua.subscription.title=OPC UA Subscription
+org.apache.streampipes.connect.adapters.opcua.subscription.description=Reads values from an OPC-UA server only on changes
 
 
 OPC_HOST_OR_URL.title=OPC Server
@@ -12,10 +12,10 @@ OPC_HOST.title=Host/Port
 OPC_HOST.description=
 
 OPC_SERVER_URL.title=URL
-OPC_SERVER_URL.description=Example: opc.tcp://test-server.com:4840
+OPC_SERVER_URL.description=Example: opc.tcp://test-server.com:4840,
 
 OPC_SERVER_HOST.title=Host
-OPC_SERVER_HOST.description=Example: test-server.com (No leading opc.tcp://)
+OPC_SERVER_HOST.description=Example: test-server.com, opc.tcp://test-server.com)
 
 OPC_SERVER_PORT.title=Port
 OPC_SERVER_PORT.description=Example: 4840
@@ -41,3 +41,6 @@ USERNAME.description=
 
 PASSWORD.title=Password
 PASSWORD.description=
+
+AVAILABLE_NODES.title=Available Nodes
+AVAILABLE_NODES.description=Select the nodes that are relevant for you. Please ensure to select one option each for access mode and OPC UA server
