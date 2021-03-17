@@ -1,0 +1,8 @@
+org.apache.streampipes.processors.filters.jvm.dummy.title=Dummy Processor
+org.apache.streampipes.processors.filters.jvm.dummy.description=Dummy Processor Description
+
+static-float.title=static-float
+static-float.description=
+
+i-am-reconfigurable.title=reconfigurable-float
+i-am-reconfigurable.description=

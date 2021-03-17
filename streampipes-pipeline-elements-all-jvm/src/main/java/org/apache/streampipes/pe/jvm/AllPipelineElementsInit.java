@@ -28,10 +28,10 @@ import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.pe.jvm.config.AllPipelineElementsConfig;
 import org.apache.streampipes.processors.changedetection.jvm.cusum.CusumController;
-import org.apache.streampipes.processors.dummy.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
+import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.filters.jvm.processor.enrich.MergeByEnrichController;
 import org.apache.streampipes.processors.filters.jvm.processor.limit.RateLimitController;
 import org.apache.streampipes.processors.filters.jvm.processor.merge.MergeByTimeController;
@@ -205,7 +205,7 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new OneSignalController())
             .add(new SlackNotificationController())
             // TODO: delete this one after testing
-            // streampipes-projecessors-dummy-jvm
+            // streampipes-processors-filters-jvm
             .add(new DummyController());
 
     DeclarersSingleton.getInstance().registerDataFormats(

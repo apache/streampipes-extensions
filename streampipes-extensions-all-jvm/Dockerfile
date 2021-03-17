@@ -16,8 +16,9 @@
 ARG BASE_IMAGE=adoptopenjdk/openjdk9-openj9:alpine
 FROM $BASE_IMAGE
 
-ENV CONSUL_LOCATION consul
+MAINTAINER dev@streampipes.apache.org
 
+ENV CONSUL_LOCATION consul
 EXPOSE 8090
 
 # needed pkgs processors-image-processing-jvm

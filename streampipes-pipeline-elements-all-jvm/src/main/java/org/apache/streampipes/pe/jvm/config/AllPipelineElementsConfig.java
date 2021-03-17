@@ -20,6 +20,9 @@ package org.apache.streampipes.pe.jvm.config;
 import org.apache.streampipes.config.SpConfig;
 import org.apache.streampipes.container.model.PeConfig;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public enum AllPipelineElementsConfig implements PeConfig {
   INSTANCE;
 

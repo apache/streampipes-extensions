@@ -4,21 +4,14 @@
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.streampipes.node.controller.container.NodeControllerInit" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
-      <env name="SP_BACKEND_HOST" value="host.docker.internal" />
-      <env name="CONSUL_LOCATION" value="host.docker.internal" />
-      <env name="SP_NODE_HOST" value="edge01.example.de" />
-      <env name="SP_NODE_TYPE" value="edge" />
       <env name="SP_NODE_CONTROLLER_ID" value="edge-01.node-controller" />
-      <env name="SP_NODE_CONTROLLER_CONTAINER_HOST" value="edge01.example.de" />
-      <env name="SP_NODE_CONTROLLER_CONTAINER_PORT" value="7077" />
-      <env name="SP_NODE_BROKER_CONTAINER_HOST" value="localhost" />
       <env name="SP_NODE_BROKER_CONTAINER_PORT" value="1884" />
       <env name="SP_NODE_ACCESSIBLE_FIELD_DEVICE_ROS" value="ros;universalrobot;network;192.168.0.90:9090" />
-      <env name="SP_NODE_HAS_GPU" value="false" />
       <env name="SP_NODE_LOCATION" value="fzi;holl;UR" />
       <env name="SP_DEBUG" value="true" />
-      <env name="SP_VERSION" value="0.68.0-SNAPSHOT" />
       <env name="SP_NODE_ACCESSIBLE_FIELD_DEVICE_ZED" value="zed;camera;usb;/dev/video1" />
+      <env name="SP_URL" value="http://host.docker.internal:8030" />
+      <env name="SP_NODE_CONTROLLER_URL" value="http://edge01.example.de:7077" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

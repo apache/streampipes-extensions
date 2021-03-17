@@ -21,6 +21,9 @@ import org.apache.streampipes.config.SpConfig;
 import org.apache.streampipes.container.model.EdgeExtensionsConfig;
 import org.apache.streampipes.container.model.ExtensionsConfig;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public enum AllExtensionsConfig implements EdgeExtensionsConfig {
     INSTANCE;
 
@@ -47,6 +50,7 @@ public enum AllExtensionsConfig implements EdgeExtensionsConfig {
 //        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_HOST, "node-controller", "node controller host");
 //        adapterConfig.register(ConfigKeys.NODE_CONTROLLER_CONTAINER_PORT, 7077, "node controller port");
     }
+
 
     @Override
     public String getHost() {
@@ -86,6 +90,19 @@ public enum AllExtensionsConfig implements EdgeExtensionsConfig {
     @Override
     public int getBackendPort() {
         return adapterConfig.getInteger(ConfigKeys.BACKEND_PORT);
+    }
+
+
+    private String checkHostOrUseDefault(String key, String defaultValue) {
+        if ("true".equals(System.getenv("SP_DEBUG"))) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                throw new RuntimeException("Could not retrieve host IP", e);
+            }
+        } else {
+            return getEnvOrDefault(key, defaultValue, String.class);
+        }
     }
 
     private <T> T getEnvOrDefault(String k, T defaultValue, Class<T> type) {
