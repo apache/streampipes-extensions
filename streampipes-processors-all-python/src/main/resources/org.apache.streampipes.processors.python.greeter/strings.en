@@ -1,0 +1,5 @@
+org.apache.streampipes.processors.python.greeter.title=Python Greeter
+org.apache.streampipes.processors.python.greeter.description=Python Greeter Description
+
+greeting-key.title=Greeting
+greeting-key.description=Specifies the greeting you want to send

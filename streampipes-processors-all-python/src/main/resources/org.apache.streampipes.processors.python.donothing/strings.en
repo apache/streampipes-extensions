@@ -1,0 +1,2 @@
+org.apache.streampipes.processors.python.donothing.title=DoNothing Python
+org.apache.streampipes.processors.python.donothing.description=DoNothing Description

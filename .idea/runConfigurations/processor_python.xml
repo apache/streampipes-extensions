@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="processor-python" type="Application" factoryName="Application">
+    <envs>
+      <env name="SP_DEBUG" value="true" />
+      <env name="SP_HOST" value="host.docker.internal" />
+      <env name="SP_PORT" value="8005" />
+      <env name="SP_PYTHON_ENDPOINT" value="localhost:5000" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="org.apache.streampipes.processors.python.PythonProcessorInit" />
+    <module name="streampipes-processors-all-python" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.apache.streampipes.processors.python.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
