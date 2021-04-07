@@ -38,6 +38,7 @@ import org.apache.streampipes.processors.transformation.jvm.processor.booloperat
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timekeeping.BooleanTimekeepingController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timer.BooleanTimerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.csvmetadata.CsvMetadataEnrichmentController;
+import org.apache.streampipes.processors.transformation.jvm.processor.fieldrename.FiledRenameProcessor;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.buffer.StateBufferController;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.buffer.StateBufferLabelerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.number.NumberLabelerController;
@@ -75,6 +76,7 @@ public class TransformationJvmInit extends StandaloneModelSubmitter {
             .add(new NumberLabelerController())
             .add(new StringToStateController())
             .add(new StringCounterController())
+            .add(new FiledRenameProcessor())
             .add(new BooleanOperatorProcessor());
 
     DeclarersSingleton.getInstance().registerDataFormats(
