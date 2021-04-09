@@ -1,3 +1,4 @@
+#!/bin/sh
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -13,20 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE=arm64v8/openjdk:11-jre-slim
+#!/usr/bin/env bash
 
-FROM arm64v8/ubuntu:18.04 as build-dev
-RUN apt -y update; \
-    apt -y --no-install-recommends install qemu-user-static
+repo=apachestreampipes
+version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
-ARG BASE_IMAGE=arm64v8/openjdk:11-jre-slim
-FROM $BASE_IMAGE
+docker_build(){
+  docker build --no-cache --pull \
+  -t $repo/$1:$version \
+  -f $2/Dockerfile $2
+}
 
-MAINTAINER dev@streampipes.apache.org
-ENV CONSUL_LOCATION consul
-EXPOSE 8090
-
-COPY --from=build-dev /usr/bin/qemu-aarch64-static /usr/bin
-COPY target/streampipes-extensions-all-jvm.jar  /streampipes-extensions-all-jvm.jar
-
-ENTRYPOINT ["java", "-jar", "/streampipes-extensions-all-jvm.jar"]
+echo "Start Docker builds ..."
+docker_build extensions-all-jvm streampipes-extensions-all-jvm
+docker_build pipeline-elements-all-jvm streampipes-pipeline-elements-all-jvm

@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="node-controller-fog" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="edge-extensions">
-    <module name="streampipes-node-controller-container" />
+    <module name="streampipes-node-controller" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.streampipes.node.controller.container.NodeControllerInit" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
