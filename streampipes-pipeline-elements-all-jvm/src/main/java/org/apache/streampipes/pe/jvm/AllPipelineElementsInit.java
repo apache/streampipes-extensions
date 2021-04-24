@@ -38,6 +38,7 @@ import org.apache.streampipes.processors.filters.jvm.processor.merge.MergeByTime
 import org.apache.streampipes.processors.filters.jvm.processor.numericalfilter.NumericalFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.numericaltextfilter.NumericalTextFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.projection.ProjectionController;
+import org.apache.streampipes.processors.filters.jvm.processor.schema.MergeBySchemaProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.textfilter.TextFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.threshold.ThresholdDetectionController;
 import org.apache.streampipes.processors.geo.jvm.jts.processor.latLngToGeo.LatLngToGeoController;
@@ -74,6 +75,7 @@ import org.apache.streampipes.processors.transformation.jvm.processor.booloperat
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timekeeping.BooleanTimekeepingController;
 import org.apache.streampipes.processors.transformation.jvm.processor.booloperator.timer.BooleanTimerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.csvmetadata.CsvMetadataEnrichmentController;
+import org.apache.streampipes.processors.transformation.jvm.processor.fieldrename.FiledRenameProcessor;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.buffer.StateBufferController;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.buffer.StateBufferLabelerController;
 import org.apache.streampipes.processors.transformation.jvm.processor.state.labeler.number.NumberLabelerController;
@@ -125,6 +127,7 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new ProjectionController())
             .add(new MergeByEnrichController())
             .add(new MergeByTimeController())
+            .add(new MergeBySchemaProcessor())
             .add(new RateLimitController())
             .add(new ComposeController())
             .add(new NumericalTextFilterController())
@@ -206,6 +209,8 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new TelegramController())
             .add(new OneSignalController())
             .add(new SlackNotificationController())
+            .add(new SlackNotificationController())
+            .add(new FiledRenameProcessor())
             // TODO: delete this one after testing
             // streampipes-processors-filters-jvm
             .add(new DummyController());
