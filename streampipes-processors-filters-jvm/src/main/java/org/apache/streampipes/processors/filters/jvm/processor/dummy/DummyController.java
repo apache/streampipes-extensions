@@ -21,6 +21,7 @@ package org.apache.streampipes.processors.filters.jvm.processor.dummy;
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
 import org.apache.streampipes.model.DataProcessorType;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
+import org.apache.streampipes.model.resource.NodeResourceRequirement;
 import org.apache.streampipes.model.runtime.Event;
 import org.apache.streampipes.sdk.builder.ProcessingElementBuilder;
 import org.apache.streampipes.sdk.builder.ResourceRequirementsBuilder;
@@ -44,9 +45,12 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
             .withAssets(Assets.DOCUMENTATION)
             .withLocales(Locales.EN)
             .requiredStream(StreamRequirementsBuilder.any())
-            .requiredResource(ResourceRequirementsBuilder
-                    .create()
-                    .requiredProperty(NodeResourceRequirements.gpu())
+            //.requiredNodeResources(ResourceRequirementsBuilder.any())
+            .requiredNodeResources(ResourceRequirementsBuilder.create()
+                    .requiredGpu(true)
+                    .requiredCores(1)
+                    .requiredMemory("128MB")
+                    .requiredStorage("50MB")
                     .build())
             .requiredFloatParameter(Labels.withId("static-float"))
             .requiredReconfigurableFloatParameter(Labels.withId("i-am-reconfigurable"))
