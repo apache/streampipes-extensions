@@ -47,7 +47,7 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
             .requiredStream(StreamRequirementsBuilder.any())
             //.requiredNodeResources(ResourceRequirementsBuilder.any())
             .requiredNodeResources(ResourceRequirementsBuilder.create()
-                    .requiredGpu(true)
+                    .requiredGpu(false)
                     .requiredCores(1)
                     .requiredMemory("128MB")
                     .requiredStorage("50MB")

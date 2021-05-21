@@ -19,12 +19,35 @@
 repo=apachestreampipes
 version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 
-docker_build(){
+docker_build_amd(){
+  echo "Docker build for amd ..."
   docker build --no-cache --pull \
   -t $repo/$1:$version \
   -f $2/Dockerfile $2
 }
 
+docker_build_arm(){
+  echo "Docker build for arm ..."
+  docker buildx build \
+  --platform linux/arm/v7 \
+  -t $repo/$1:$version-aarch64 \
+  -f $2/aarch64.Dockerfile $2 --load
+}
+
+docker_build_aarch64(){
+  echo "Docker build for aarch64 ..."
+  docker buildx build \
+  --platform linux/arm64 \
+  -t $repo/$1:$version-aarch64 \
+  -f $2/aarch64.Dockerfile $2 --load
+}
+
+docker_build_multiarch(){
+  docker_build_amd $1 $2
+  docker_build_arm $1 $2
+  docker_build_aarch64 $1 $2
+}
+
 echo "Start Docker builds ..."
-docker_build extensions-all-jvm streampipes-extensions-all-jvm
-docker_build pipeline-elements-all-jvm streampipes-pipeline-elements-all-jvm
+docker_build_multiarch extensions-all-jvm streampipes-extensions-all-jvm
+docker_build_multiarch pipeline-elements-all-jvm streampipes-pipeline-elements-all-jvm
