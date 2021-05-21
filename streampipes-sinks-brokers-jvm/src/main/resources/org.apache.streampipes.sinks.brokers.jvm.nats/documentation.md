@@ -16,7 +16,7 @@
   ~
   -->
 
-## Trend
+## Nats Publisher
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,34 +26,47 @@
 
 ## Description
 
-Detects the increase of a numerical field over a customizable time window. Example: A temperature value increases by 10 percent within 5 minutes.
+Publishes events to NATS broker.
 
 ***
 
 ## Required input
 
-There should be a number field in the event to observe the trend.
+This sink does not have any requirements and works with any incoming event type.
 
 ***
 
 ## Configuration
 
-### Value to Observe
+### NATS Subject
 
-Specifies the value field that should be monitored.
+The subject (topic) where events should be sent to.
 
-### Increase/Decrease
+### NATS Broker URL
 
-Specifies the type of operation the processor should perform.
+The URL to connect to the NATS broker. It can be provided multiple urls separated by commas(,).
+ (e.g., nats://localhost:4222,nats://localhost:4223)
+ 
+### Username
 
-### Percentage of Increase/Decrease
+The username to authenticate the client with NATS broker.
 
-Specifies the increase in percent (e.g., 100 indicates an increase by 100 percent within the specified time window).
+It is an optional configuration.  
 
-### Time Window Length (Seconds)
+### NATS Broker URL
 
-Specifies the size of the time window in seconds.
+The password to authenticate the client with NATS broker. 
+
+It is an optional configuration.
+
+### NATS Connection Properties
+
+All other possible connection configurations that the nats client can be created with.
+It can be provided as key value pairs separated by colons(:) and commas(,).
+ (e.g., io.nats.client.reconnect.max:1, io.nats.client.timeout:1000)
+
+It is an optional configuration.
 
 ## Output
 
-Outputs the events if there is a trend observed according to the configuration defined.
+(not applicable for data sinks)

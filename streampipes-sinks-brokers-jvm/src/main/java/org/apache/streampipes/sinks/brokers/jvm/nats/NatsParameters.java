@@ -16,25 +16,46 @@
  *
  */
 
-package org.apache.streampipes.sinks.internal.jvm.dashboard;
+package org.apache.streampipes.sinks.brokers.jvm.nats;
 
 import org.apache.streampipes.model.graph.DataSinkInvocation;
-import org.apache.streampipes.model.schema.EventSchema;
 import org.apache.streampipes.wrapper.params.binding.EventSinkBindingParams;
 
-public class DashboardParameters extends EventSinkBindingParams {
-    private String elementId;
-    private EventSchema schema;
-    private String visualizationName;
+public class NatsParameters extends EventSinkBindingParams {
 
-    public DashboardParameters(DataSinkInvocation invocationGraph) {
-        super(invocationGraph);
+    private String natsUrls;
+    private String subject;
+    private String username;
+    private String password;
+    private String properties;
 
-        this.elementId = invocationGraph.getElementId();
-        this.elementId = this.elementId.substring(this.elementId.lastIndexOf("/") + 1);
+    public NatsParameters(DataSinkInvocation graph, String natsUrls, String subject, String username, String password,
+                          String properties) {
+        super(graph);
+        this.natsUrls = natsUrls;
+        this.subject = subject;
+        this.username = username;
+        this.password = password;
+        this.properties = properties;
     }
 
-    public String getElementId() {
-        return elementId;
+    public String getNatsUrls() {
+        return natsUrls;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getProperties() {
+        return properties;
     }
 }
