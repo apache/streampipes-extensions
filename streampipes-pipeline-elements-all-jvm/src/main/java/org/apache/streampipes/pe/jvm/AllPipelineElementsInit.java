@@ -29,6 +29,7 @@ import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.pe.jvm.config.AllPipelineElementsConfig;
 import org.apache.streampipes.processors.changedetection.jvm.cusum.CusumController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
+import org.apache.streampipes.processors.enricher.jvm.processor.latencymeasure.LatencyMeasureController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
 import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
@@ -121,6 +122,8 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             // streampipes-processors-enricher-jvm
             .add(new SizeMeasureController())
             .add(new JSEvalController())
+            //TODO: Remove after testing
+            .add(new LatencyMeasureController())
             // streampipes-processors-filters-jvm
             .add(new NumericalFilterController())
             .add(new ThresholdDetectionController())

@@ -14,13 +14,18 @@
 # limitations under the License.
 
 ARG BASE_IMAGE=arm64v8/openjdk:11-jre-slim
+
+FROM arm64v8/ubuntu:18.04 as build-dev
+RUN apt -y update; \
+    apt -y --no-install-recommends install qemu-user-static
+
 FROM $BASE_IMAGE
 
 ENV CONSUL_LOCATION consul
 
 EXPOSE 8090
 
-COPY qemu-aarch64-static /usr/bin
+COPY --from=build-dev /usr/bin/qemu-aarch64-static /usr/bin
 COPY target/streampipes-processors-all-jvm.jar  /streampipes-processing-element-container.jar
 
 ENTRYPOINT ["java", "-jar", "/streampipes-processing-element-container.jar"]

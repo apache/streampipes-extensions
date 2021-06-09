@@ -19,6 +19,7 @@
 package org.apache.streampipes.processors.filters.jvm.processor.dummy;
 
 import org.apache.streampipes.commons.exceptions.SpRuntimeException;
+import org.apache.streampipes.logging.evaluation.EvaluationLogger;
 import org.apache.streampipes.model.DataProcessorType;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.resource.NodeResourceRequirement;
@@ -81,6 +82,8 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
 
   @Override
   public void onReconfigurationEvent(Event event) throws SpRuntimeException {
+    Object[] obs = {System.currentTimeMillis(), String.format("Dummy processor reconfigured with value %s", event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble())};
+    EvaluationLogger.getInstance().addLine(obs);
     reconfigurableValue = event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble();
   }
 }

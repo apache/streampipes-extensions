@@ -50,6 +50,7 @@ import org.apache.streampipes.connect.protocol.stream.pulsar.PulsarProtocol;
 import org.apache.streampipes.container.extensions.ExtensionsModelSubmitter;
 import org.apache.streampipes.container.init.DeclarersSingleton;
 import org.apache.streampipes.extensions.all.jvm.config.AllExtensionsConfig;
+import org.apache.streampipes.processors.enricher.jvm.processor.latencymeasure.LatencyMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
@@ -137,6 +138,8 @@ public class AllExtensionsInit extends ExtensionsModelSubmitter {
                 // streampipes-processors-enricher-jvm
                 .add(new SizeMeasureController())
                 .add(new JSEvalController())
+                //TODO: Remove after testing
+                .add(new LatencyMeasureController())
                 // streampipes-processors-filters-jvm
                 .add(new NumericalFilterController())
                 .add(new ThresholdDetectionController())
