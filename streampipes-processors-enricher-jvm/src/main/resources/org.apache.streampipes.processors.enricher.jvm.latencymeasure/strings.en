@@ -1,0 +1,2 @@
+org.apache.streampipes.processors.enricher.jvm.latencymeasure.title=Latency Measure
+org.apache.streampipes.processors.enricher.jvm.latencymeasure.description=Measures the Latency of an Event.
