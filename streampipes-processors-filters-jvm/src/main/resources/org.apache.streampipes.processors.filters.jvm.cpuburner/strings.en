@@ -1,0 +1,11 @@
+org.apache.streampipes.processors.filters.jvm.cpuburner.title=CPU Burner
+org.apache.streampipes.processors.filters.jvm.cpuburner.description=Simulates load on CPU
+
+load.title=load
+load.description=relative amount of CPU that should be burned
+
+ramp-up-duration.title=ramp up duration (ms)
+ramp-up-duration.description=Time over which CPU load should be ramped up
+
+ramp-up-delay.title=ramp up delay (ms)
+ramp-up-delay.description=time between ramp up steps

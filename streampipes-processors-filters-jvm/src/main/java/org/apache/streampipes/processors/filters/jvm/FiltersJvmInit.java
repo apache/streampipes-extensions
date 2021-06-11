@@ -29,6 +29,7 @@ import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
 import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.processors.filters.jvm.config.FiltersJvmConfig;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
+import org.apache.streampipes.processors.filters.jvm.processor.cpuburner.CPUBurnerController;
 import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.filters.jvm.processor.enrich.MergeByEnrichController;
 import org.apache.streampipes.processors.filters.jvm.processor.limit.RateLimitController;
@@ -55,6 +56,7 @@ public class FiltersJvmInit extends StandaloneModelSubmitter {
             .add(new NumericalTextFilterController())
             .add(new RateLimitController())
             //TODO: delete after testing
+            .add(new CPUBurnerController())
             .add(new DummyController());
 
     DeclarersSingleton.getInstance().registerDataFormats(

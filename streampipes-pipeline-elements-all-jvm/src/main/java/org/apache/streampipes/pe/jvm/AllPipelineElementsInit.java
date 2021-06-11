@@ -32,6 +32,7 @@ import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalCon
 import org.apache.streampipes.processors.enricher.jvm.processor.latencymeasure.LatencyMeasureController;
 import org.apache.streampipes.processors.enricher.jvm.processor.sizemeasure.SizeMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
+import org.apache.streampipes.processors.filters.jvm.processor.cpuburner.CPUBurnerController;
 import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.filters.jvm.processor.enrich.MergeByEnrichController;
 import org.apache.streampipes.processors.filters.jvm.processor.limit.RateLimitController;
@@ -124,6 +125,7 @@ public class AllPipelineElementsInit extends StandaloneModelSubmitter {
             .add(new JSEvalController())
             //TODO: Remove after testing
             .add(new LatencyMeasureController())
+            .add(new CPUBurnerController())
             // streampipes-processors-filters-jvm
             .add(new NumericalFilterController())
             .add(new ThresholdDetectionController())
