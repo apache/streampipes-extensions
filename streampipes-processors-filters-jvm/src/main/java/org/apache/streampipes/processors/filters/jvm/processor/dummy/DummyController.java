@@ -85,5 +85,6 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
     Object[] obs = {System.currentTimeMillis(), String.format("Dummy processor reconfigured with value %s", event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble())};
     EvaluationLogger.getInstance().addLine(obs);
     reconfigurableValue = event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble();
+    EvaluationLogger.getInstance().writeOut();
   }
 }

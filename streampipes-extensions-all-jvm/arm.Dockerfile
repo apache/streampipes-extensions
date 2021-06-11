@@ -13,15 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG BASE_IMAGE=arm32v7/openjdk:11-jre-slim
-FROM $BASE_IMAGE
 
+ARG BASE_IMAGE=arm32v7/openjdk:11-jre-slim
+
+FROM arm32v7/ubuntu:18.04 as build-dev
+RUN apt -y update; \
+    apt -y --no-install-recommends install qemu-user-static
+
+FROM $BASE_IMAGE
 MAINTAINER dev@streampipes.apache.org
 
 ENV CONSUL_LOCATION consul
 EXPOSE 8090
 
-COPY qemu-arm-static /usr/bin
+COPY --from=build-dev /usr/bin/qemu-arm-static /usr/bin
 COPY target/streampipes-extensions-all-jvm.jar  /streampipes-extensions-all-jvm.jar
 
 ENTRYPOINT ["java", "-jar", "/streampipes-extensions-all-jvm.jar"]

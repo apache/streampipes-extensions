@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="node-controller-cloud-01" type="Application" factoryName="Application" folderName="node-controller">
+    <envs>
+      <env name="SP_NODE_CONTROLLER_ID" value="cloud-01.node-controller" />
+      <env name="SP_NODE_BROKER_CONTAINER_PORT" value="1888" />
+      <env name="SP_NODE_TAGS" value="aws;frankfurt" />
+      <env name="SP_DEBUG" value="true" />
+      <env name="SP_URL" value="http://localhost:8030" />
+      <env name="SP_NODE_CONTROLLER_URL" value="http://cloud01.example.de:7080" />
+      <env name="SP_VERSION" value="0.68.0-SNAPSHOT" />
+      <env name="SP_HAS_GPU" value="true" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="org.apache.streampipes.node.controller.NodeControllerInit" />
+    <module name="streampipes-node-controller" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
