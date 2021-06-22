@@ -38,6 +38,7 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesReconfigurableProces
 public class DummyController extends StreamPipesReconfigurableProcessor {
 
   private static double reconfigurableValue;
+  private int nrRuns = 1;
 
   @Override
   public DataProcessorDescription declareModel() {
@@ -82,9 +83,8 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
 
   @Override
   public void onReconfigurationEvent(Event event) throws SpRuntimeException {
-    Object[] obs = {System.currentTimeMillis(), String.format("Dummy processor reconfigured with value %s", event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble())};
-    EvaluationLogger.getInstance().addLine(obs);
+    Object[] obs = {System.currentTimeMillis(), "processor reconfigured", nrRuns++, event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble()};
+    EvaluationLogger.getInstance().logMQTT("Reconfiguration", obs);
     reconfigurableValue = event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble();
-    EvaluationLogger.getInstance().writeOut();
   }
 }
