@@ -74,6 +74,8 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
     // transform event
     event.addField("appended-reconfigurable", reconfigurableValue);
     collector.collect(event);
+    Object[] obs = {System.currentTimeMillis(), "raw event", "", reconfigurableValue};
+    EvaluationLogger.getInstance().logMQTT("Reconfiguration", obs);
   }
 
   @Override
@@ -84,7 +86,7 @@ public class DummyController extends StreamPipesReconfigurableProcessor {
   @Override
   public void onReconfigurationEvent(Event event) throws SpRuntimeException {
     Object[] obs = {System.currentTimeMillis(), "processor reconfigured", nrRuns++, event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble()};
-    EvaluationLogger.getInstance().logMQTT("Reconfiguration", obs);
     reconfigurableValue = event.getFieldByRuntimeName("i-am-reconfigurable").getAsPrimitive().getAsDouble();
+    EvaluationLogger.getInstance().logMQTT("Reconfiguration", obs);
   }
 }

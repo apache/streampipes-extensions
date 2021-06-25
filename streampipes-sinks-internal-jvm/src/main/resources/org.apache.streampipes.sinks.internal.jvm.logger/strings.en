@@ -1,0 +1,9 @@
+org.apache.streampipes.sinks.internal.jvm.logger.title=Latency MQTT Logger
+org.apache.streampipes.sinks.internal.jvm.logger.description=Calculates latency and sends events to MQTT Logger.
+
+
+timestamp_mapping.title=Timestamp Field
+timestamp_mapping.description=The value which contains a timestamp
+
+logger-topic-name.title=Topic name
+logger-topic-name.description=The name of the topic events should be send to.

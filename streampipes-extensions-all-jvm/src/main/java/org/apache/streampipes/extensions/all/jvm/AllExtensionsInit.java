@@ -50,7 +50,6 @@ import org.apache.streampipes.connect.protocol.stream.pulsar.PulsarProtocol;
 import org.apache.streampipes.container.extensions.ExtensionsModelSubmitter;
 import org.apache.streampipes.container.init.DeclarersSingleton;
 import org.apache.streampipes.extensions.all.jvm.config.AllExtensionsConfig;
-import org.apache.streampipes.processors.enricher.jvm.processor.latencymeasure.LatencyMeasureController;
 import org.apache.streampipes.processors.filters.jvm.processor.cpuburner.CPUBurnerController;
 import org.apache.streampipes.processors.filters.jvm.processor.dummy.DummyController;
 import org.apache.streampipes.processors.enricher.jvm.processor.jseval.JSEvalController;
@@ -125,6 +124,7 @@ import org.apache.streampipes.sinks.databases.jvm.postgresql.PostgreSqlControlle
 import org.apache.streampipes.sinks.databases.jvm.redis.RedisController;
 import org.apache.streampipes.sinks.internal.jvm.dashboard.DashboardController;
 import org.apache.streampipes.sinks.internal.jvm.datalake.DataLakeController;
+import org.apache.streampipes.sinks.internal.jvm.logger.LatencyMqttSinkController;
 import org.apache.streampipes.sinks.internal.jvm.notification.NotificationController;
 import org.apache.streampipes.sinks.notifications.jvm.email.EmailController;
 import org.apache.streampipes.sinks.notifications.jvm.onesignal.OneSignalController;
@@ -140,7 +140,6 @@ public class AllExtensionsInit extends ExtensionsModelSubmitter {
                 .add(new SizeMeasureController())
                 .add(new JSEvalController())
                 //TODO: Remove after testing
-                .add(new LatencyMeasureController())
                 .add(new CPUBurnerController())
                 // streampipes-processors-filters-jvm
                 .add(new NumericalFilterController())
@@ -223,6 +222,8 @@ public class AllExtensionsInit extends ExtensionsModelSubmitter {
                 .add(new NotificationController())
                 .add(new DataLakeController())
                 .add(new DashboardController())
+                //TODO: remove after testing
+                .add(new LatencyMqttSinkController())
                 // streampipes-sinks-notifications-jvm
                 .add(new EmailController())
                 .add(new TelegramController())

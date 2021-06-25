@@ -16,7 +16,7 @@
   ~
   -->
 
-## Size Measure
+## MQTT logger
 
 <p align="center"> 
     <img src="icon.png" width="150px;" class="pe-image-documentation"/>
@@ -26,18 +26,16 @@
 
 ## Description
 
-Measures the latency of an incoming event and appends this number to the event by serializing it.
-
-***
-
-## Required input
-The latency measure processor requires a timestamp.
+Analyzes the latency of an event and sends it to MQTT logger.
 
 ***
 
 ## Configuration
 
--
+### Topic name
+
+The name of the topic the latency should be written to.
 
 ## Output
-The latency measure processor appends the latency of the event as a double. The rest of the event stays the same.
+
+(not applicable for data sinks)
