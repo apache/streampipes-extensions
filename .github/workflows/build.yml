@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Set Branch env variable
         run: |
-          echo "::set-env name=GITHUB_BRANCH::${GITHUB_REF#refs/*/}"
+          echo "GITHUB_BRANCH=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo ${{ env.GITHUB_BRANCH }}
       - name: Checkout incubator-streampipes project
         uses: actions/checkout@v2
@@ -45,15 +45,15 @@ jobs:
         uses: actions/checkout@v1
       - name: Build Extensions with Maven
         working-directory: ./
-        run: mvn clean package javadoc:aggregate -U
+        run: mvn clean package javadoc:aggregate
       - name: Set env variables for Docker builds
         run: |
-          echo "::set-env name=DOCKER_CLI_EXPERIMENTAL::enabled"
-          echo "::set-env name=MVN_VERSION::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
-          echo "::set-env name=DOCKERHUB_APACHE_REPO::apachestreampipes"
-          echo "::set-env name=BASE_IMG_JRE_DEFAULT::adoptopenjdk/openjdk8-openj9:alpine-slim"
-          echo "::set-env name=BASE_IMG_JRE_ARM32V7::arm32v7/openjdk:11-jre-slim"
-          echo "::set-env name=BASE_IMG_JRE_ARM64V8::arm64v8/openjdk:11-jre-slim"
+          echo "DOCKER_CLI_EXPERIMENTAL=enabled" >> $GITHUB_ENV
+          echo "MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "DOCKERHUB_APACHE_REPO=apachestreampipes" >> $GITHUB_ENV
+          echo "BASE_IMG_JRE_DEFAULT=adoptopenjdk/openjdk8-openj9:alpine" >> $GITHUB_ENV
+          echo "BASE_IMG_JRE_ARM32V7=arm32v7/openjdk:11-jre-slim" >> $GITHUB_ENV
+          echo "BASE_IMG_JRE_ARM64V8=arm64v8/openjdk:11-jre-slim" >> $GITHUB_ENV
       - name: Install qemu-user-static for multi-arch builds
         run: |
           sudo apt-get update
@@ -73,9 +73,49 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/connect-worker:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker push $IMG_NAME_DEFAULT
+          docker push $IMG_NAME_AMD64
+          docker push $IMG_NAME_ARM32V7
+          docker push $IMG_NAME_ARM64V8
+          docker manifest create $IMG_NAME_DEFAULT $IMG_NAME_AMD64 $IMG_NAME_ARM32V7 $IMG_NAME_ARM64V8
+          docker manifest annotate $IMG_NAME_DEFAULT $IMG_NAME_ARM32V7 --os linux --arch arm
+          docker manifest annotate $IMG_NAME_DEFAULT $IMG_NAME_ARM64V8 --os linux --arch arm64
+          docker manifest push $IMG_NAME_DEFAULT
+      - name: Build and Push Docker Image extensions-all-jvm
+        working-directory: ./streampipes-extensions-all-jvm
+        env:
+          IMG_NAME_DEFAULT: ${{ env.DOCKERHUB_APACHE_REPO }}/extensions-all-jvm:${{ env.MVN_VERSION }}
+          IMG_NAME_AMD64: ${{ env.DOCKERHUB_APACHE_REPO }}/extensions-all-jvm:amd64-${{ env.MVN_VERSION }}
+          IMG_NAME_ARM32V7: ${{ env.DOCKERHUB_APACHE_REPO }}/extensions-all-jvm:arm32v7-${{ env.MVN_VERSION }}
+          IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/extensions-all-jvm:arm64v8-${{ env.MVN_VERSION }}
+        run: |
+          cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker push $IMG_NAME_DEFAULT
+          docker push $IMG_NAME_AMD64
+          docker push $IMG_NAME_ARM32V7
+          docker push $IMG_NAME_ARM64V8
+          docker manifest create $IMG_NAME_DEFAULT $IMG_NAME_AMD64 $IMG_NAME_ARM32V7 $IMG_NAME_ARM64V8
+          docker manifest annotate $IMG_NAME_DEFAULT $IMG_NAME_ARM32V7 --os linux --arch arm
+          docker manifest annotate $IMG_NAME_DEFAULT $IMG_NAME_ARM64V8 --os linux --arch arm64
+          docker manifest push $IMG_NAME_DEFAULT
+      - name: Build and Push Docker Image pipeline-elements-all-flink
+        working-directory: ./streampipes-pipeline-elements-all-flink
+        env:
+          IMG_NAME_DEFAULT: ${{ env.DOCKERHUB_APACHE_REPO }}/pipeline-elements-all-flink:${{ env.MVN_VERSION }}
+          IMG_NAME_AMD64: ${{ env.DOCKERHUB_APACHE_REPO }}/pipeline-elements-all-flink:amd64-${{ env.MVN_VERSION }}
+          IMG_NAME_ARM32V7: ${{ env.DOCKERHUB_APACHE_REPO }}/pipeline-elements-all-flink:arm32v7-${{ env.MVN_VERSION }}
+          IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/pipeline-elements-all-flink:arm64v8-${{ env.MVN_VERSION }}
+        run: |
+          cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -113,9 +153,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/pipeline-elements-all-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -133,9 +173,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-aggregation-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -153,9 +193,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-enricher-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -173,9 +213,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-enricher-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -193,9 +233,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-filters-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -213,9 +253,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-geo-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -233,9 +273,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-image-processing-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -253,9 +293,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-pattern-detection-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -273,9 +313,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-filters-siddhi:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -293,9 +333,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-statistics-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -313,9 +353,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-geo-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -333,9 +373,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-transformation-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -353,9 +393,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-transformation-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -373,9 +413,9 @@ jobs:
 #        IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-text-mining-flink:arm64v8-${{ env.MVN_VERSION }}
 #      run: |
 #        cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-#        docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-#        docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-#        docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+#        docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+#        docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+#        docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
 #        docker push $IMG_NAME_DEFAULT
 #        docker push $IMG_NAME_AMD64
 #        docker push $IMG_NAME_ARM32V7
@@ -393,9 +433,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/processors-text-mining-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -413,9 +453,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sinks-brokers-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -433,9 +473,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sinks-databases-flink:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -453,9 +493,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sinks-databases-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -473,9 +513,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sinks-notifications-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -493,9 +533,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sinks-internal-jvm:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -513,9 +553,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sources-vehicle-simulator:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7
@@ -533,9 +573,9 @@ jobs:
           IMG_NAME_ARM64V8: ${{ env.DOCKERHUB_APACHE_REPO }}/sources-watertank-simulator:arm64v8-${{ env.MVN_VERSION }}
         run: |
           cp /usr/bin/{qemu-arm-static,qemu-aarch64-static} .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
-          docker build --pull --build-arg BASE_IMG=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_DEFAULT -t $IMG_NAME_DEFAULT -t $IMG_NAME_AMD64 -f Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM32V7 -t $IMG_NAME_ARM32V7 -f arm.Dockerfile .
+          docker build --pull --build-arg BASE_IMAGE=$BASE_IMG_JRE_ARM64V8 -t $IMG_NAME_ARM64V8 -f aarch64.Dockerfile .
           docker push $IMG_NAME_DEFAULT
           docker push $IMG_NAME_AMD64
           docker push $IMG_NAME_ARM32V7

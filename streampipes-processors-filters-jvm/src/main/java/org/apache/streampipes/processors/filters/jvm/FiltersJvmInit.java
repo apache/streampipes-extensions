@@ -26,6 +26,7 @@ import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
+import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.processors.filters.jvm.config.FiltersJvmConfig;
 import org.apache.streampipes.processors.filters.jvm.processor.compose.ComposeController;
 import org.apache.streampipes.processors.filters.jvm.processor.enrich.MergeByEnrichController;
@@ -34,30 +35,34 @@ import org.apache.streampipes.processors.filters.jvm.processor.merge.MergeByTime
 import org.apache.streampipes.processors.filters.jvm.processor.numericalfilter.NumericalFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.numericaltextfilter.NumericalTextFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.projection.ProjectionController;
+import org.apache.streampipes.processors.filters.jvm.processor.schema.MergeBySchemaProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.textfilter.TextFilterController;
 import org.apache.streampipes.processors.filters.jvm.processor.threshold.ThresholdDetectionController;
 
 public class FiltersJvmInit extends StandaloneModelSubmitter {
 
   public static void main(String[] args) {
-    DeclarersSingleton
-            .getInstance()
+    DeclarersSingleton.getInstance()
             .add(new NumericalFilterController())
             .add(new ThresholdDetectionController())
             .add(new TextFilterController())
             .add(new ProjectionController())
             .add(new MergeByEnrichController())
             .add(new MergeByTimeController())
+            .add(new MergeBySchemaProcessor())
             .add(new ComposeController())
             .add(new NumericalTextFilterController())
             .add(new RateLimitController());
 
-    DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),
+    DeclarersSingleton.getInstance().registerDataFormats(
+            new JsonDataFormatFactory(),
             new CborDataFormatFactory(),
             new SmileDataFormatFactory(),
             new FstDataFormatFactory());
 
-    DeclarersSingleton.getInstance().registerProtocols(new SpKafkaProtocolFactory(),
+    DeclarersSingleton.getInstance().registerProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpMqttProtocolFactory(),
             new SpJmsProtocolFactory());
 
     new FiltersJvmInit().init(FiltersJvmConfig.INSTANCE);

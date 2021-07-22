@@ -30,6 +30,7 @@ import org.apache.plc4x.java.api.exceptions.PlcConnectionException;
 import org.apache.plc4x.java.api.messages.PlcReadRequest;
 import org.apache.plc4x.java.api.messages.PlcReadResponse;
 import org.apache.plc4x.java.api.types.PlcResponseCode;
+import org.apache.plc4x.java.utils.connectionpool.PooledPlcDriverManager;
 import org.apache.streampipes.connect.adapter.Adapter;
 import org.apache.streampipes.connect.adapter.exception.AdapterException;
 import org.apache.streampipes.connect.adapter.util.PollingSettings;
@@ -55,10 +56,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -97,7 +100,8 @@ public class Plc4xS7Adapter extends PullAdapter {
     /**
      * Connection to the PLC
      */
-    private PlcConnection plcConnection;
+//    private PlcConnection plcConnection;
+    private PlcDriverManager driverManager;
 
     /**
      * Empty constructor and a constructor with SpecificAdapterStreamDescription are mandatory
@@ -108,8 +112,6 @@ public class Plc4xS7Adapter extends PullAdapter {
     public Plc4xS7Adapter(SpecificAdapterStreamDescription adapterDescription) {
         super(adapterDescription);
     }
-
-
 
     /**
      * Describe the adapter adapter and define what user inputs are required. Currently users can just select one node, this will be extended in the future
@@ -130,7 +132,7 @@ public class Plc4xS7Adapter extends PullAdapter {
                                         StaticProperties.stringFreeTextProperty(Labels.withId(PLC_NODE_RUNTIME_NAME)),
                                         StaticProperties.stringFreeTextProperty(Labels.withId(PLC_NODE_NAME)),
                                         StaticProperties.singleValueSelection(Labels.withId(PLC_NODE_TYPE),
-                                                Options.from("Bool",  "Byte", "Int", "Word", "Real")))),
+                                                Options.from("Bool",  "Byte", "Int", "Word", "Real", "String")))),
                         Alternatives.from(Labels.withId(CSV_IMPORT),
                                 StaticProperties.fileProperty(Labels.withId(PLC_NODES_CSV_FILE), Filetypes.CSV)),
                         Alternatives.from(Labels.withId(EXCEL_IMPORT),
@@ -190,15 +192,16 @@ public class Plc4xS7Adapter extends PullAdapter {
         // Extract user input
         getConfigurations(adapterDescription);
 
-        try {
-            this.plcConnection = new PlcDriverManager().getConnection("s7://" + this.ip);
+        this.driverManager = new PooledPlcDriverManager();
+        try (PlcConnection plcConnection = this.driverManager.getConnection("s7://" + this.ip)) {
 
-            if (!this.plcConnection.getMetadata().canRead()) {
-                throw new AdapterException("The S7 on IP: " + this.ip + " does not support reading data");
+            if (!plcConnection.getMetadata().canRead()) {
+                this.LOG.error("The S7 on IP: " + this.ip + " does not support reading data");
             }
-
         } catch (PlcConnectionException e) {
-            throw new AdapterException("Could not establish connection to S7 with ip " + this.ip, e);
+            this.LOG.error("Could not establish connection to S7 with ip " + this.ip, e);
+        } catch (Exception e) {
+            this.LOG.error("Could not close connection to S7 with ip " + this.ip, e);
         }
     }
 
@@ -210,34 +213,43 @@ public class Plc4xS7Adapter extends PullAdapter {
     protected void pullData() {
 
         // Create PLC read request
-        PlcReadRequest.Builder builder = plcConnection.readRequestBuilder();
-        for (Map<String, String> node : this.nodes) {
-            builder.addItem(node.get(PLC_NODE_NAME), node.get(PLC_NODE_NAME) + ":" + node.get(PLC_NODE_TYPE).toUpperCase());
-        }
-        PlcReadRequest readRequest = builder.build();
-
-        // Execute the request
-        PlcReadResponse response = null;
-        try {
-            response = readRequest.execute().get();
-
-            // Create an event containing the value of the PLC
-            Map<String, Object> event = new HashMap<>();
+        try (PlcConnection plcConnection = this.driverManager.getConnection("s7://" + this.ip)) {
+            PlcReadRequest.Builder builder = plcConnection.readRequestBuilder();
             for (Map<String, String> node : this.nodes) {
-                if(response.getResponseCode(node.get(PLC_NODE_NAME)) == PlcResponseCode.OK) {
-                    event.put(node.get(PLC_NODE_RUNTIME_NAME), response.getObject(node.get(PLC_NODE_NAME)));
-                }
-
-                else {
-                    logger.error("Error[" + node.get(PLC_NODE_NAME) + "]: " +
-                            response.getResponseCode(node.get(PLC_NODE_NAME)).name());
-                }
+                builder.addItem(node.get(PLC_NODE_NAME), node.get(PLC_NODE_NAME) + ":" + node.get(PLC_NODE_TYPE).toUpperCase());
             }
+            PlcReadRequest readRequest = builder.build();
 
-            // publish the final event
-            adapterPipeline.process(event);
+            // Execute the request
+            CompletableFuture<? extends PlcReadResponse> asyncResponse = readRequest.execute();
+
+            asyncResponse.whenComplete((response, throwable) -> {
+                // Create an event containing the value of the PLC
+                if (throwable != null) {
+                    throwable.printStackTrace();
+                    this.LOG.error(throwable.getMessage());
+                } else {
+                    Map<String, Object> event = new HashMap<>();
+                    for (Map<String, String> node : this.nodes) {
+                        if (response.getResponseCode(node.get(PLC_NODE_NAME)) == PlcResponseCode.OK) {
+                            event.put(node.get(PLC_NODE_RUNTIME_NAME), response.getObject(node.get(PLC_NODE_NAME)));
+                        } else {
+                            this.LOG.error("Error[" + node.get(PLC_NODE_NAME) + "]: " +
+                                    response.getResponseCode(node.get(PLC_NODE_NAME)).name());
+                        }
+                    }
+
+                    // publish the final event
+                    adapterPipeline.process(event);
+                }
+            });
+
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(e.getMessage());
+            this.LOG.error(e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            this.LOG.error("Could not establish connection to S7 with ip " + this.ip, e);
+            e.printStackTrace();
         }
     }
 
@@ -381,6 +393,8 @@ public class Plc4xS7Adapter extends PullAdapter {
                 return Datatypes.String;
             case "REAL":
                 return Datatypes.Float;
+            case "STRING":
+                return Datatypes.String;
             default:
                 throw new AdapterException("Datatype " + plcType + " is not supported");
         }

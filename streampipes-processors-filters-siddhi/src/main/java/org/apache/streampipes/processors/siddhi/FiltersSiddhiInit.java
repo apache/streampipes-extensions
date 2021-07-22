@@ -26,32 +26,40 @@ import org.apache.streampipes.dataformat.json.JsonDataFormatFactory;
 import org.apache.streampipes.dataformat.smile.SmileDataFormatFactory;
 import org.apache.streampipes.messaging.jms.SpJmsProtocolFactory;
 import org.apache.streampipes.messaging.kafka.SpKafkaProtocolFactory;
+import org.apache.streampipes.messaging.mqtt.SpMqttProtocolFactory;
 import org.apache.streampipes.processors.siddhi.config.FilterSiddhiConfig;
+import org.apache.streampipes.processors.siddhi.count.CountAggregation;
 import org.apache.streampipes.processors.siddhi.filter.NumericalFilterController;
-import org.apache.streampipes.processors.siddhi.frequency.FrequencyController;
-import org.apache.streampipes.processors.siddhi.frequencychange.FrequencyChangeController;
-import org.apache.streampipes.processors.siddhi.stop.StreamStopController;
+import org.apache.streampipes.processors.siddhi.listcollector.ListCollector;
+import org.apache.streampipes.processors.siddhi.listfilter.ListFilter;
+import org.apache.streampipes.processors.siddhi.topk.TopK;
 import org.apache.streampipes.processors.siddhi.trend.TrendController;
 
 public class FiltersSiddhiInit extends StandaloneModelSubmitter {
 
   public static void main(String[] args) {
-    DeclarersSingleton
-            .getInstance()
+    DeclarersSingleton.getInstance()
             .add(new TrendController())
-            .add(new NumericalFilterController());
-            // TODO: currently not working
+            .add(new NumericalFilterController())
+            .add(new ListFilter())
+            .add(new ListCollector())
+            .add(new CountAggregation())
+            .add(new TopK());
+    // TODO: currently not working
 //            .add(new StreamStopController())
 //            .add(new FrequencyController())
 //            .add(new FrequencyChangeController())
 
 
-    DeclarersSingleton.getInstance().registerDataFormats(new JsonDataFormatFactory(),
+    DeclarersSingleton.getInstance().registerDataFormats(
+            new JsonDataFormatFactory(),
             new CborDataFormatFactory(),
             new SmileDataFormatFactory(),
             new FstDataFormatFactory());
 
-    DeclarersSingleton.getInstance().registerProtocols(new SpKafkaProtocolFactory(),
+    DeclarersSingleton.getInstance().registerProtocols(
+            new SpKafkaProtocolFactory(),
+            new SpMqttProtocolFactory(),
             new SpJmsProtocolFactory());
 
     new FiltersSiddhiInit().init(FilterSiddhiConfig.INSTANCE);

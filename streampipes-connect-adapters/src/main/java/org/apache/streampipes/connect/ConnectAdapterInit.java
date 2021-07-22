@@ -24,6 +24,7 @@ import org.apache.streampipes.connect.adapters.iss.IssAdapter;
 import org.apache.streampipes.connect.adapters.flic.FlicMQTTAdapter;
 import org.apache.streampipes.connect.adapters.netio.NetioMQTTAdapter;
 import org.apache.streampipes.connect.adapters.netio.NetioRestAdapter;
+import org.apache.streampipes.connect.adapters.opcua.OpcUaAdapter;
 import org.apache.streampipes.connect.adapters.plc4x.modbus.Plc4xModbusAdapter;
 import org.apache.streampipes.connect.adapters.simulator.machine.MachineDataStreamAdapter;
 import org.apache.streampipes.connect.adapters.ti.TISensorTag;
@@ -36,7 +37,6 @@ import org.apache.streampipes.connect.adapters.influxdb.InfluxDbSetAdapter;
 import org.apache.streampipes.connect.adapters.influxdb.InfluxDbStreamAdapter;
 import org.apache.streampipes.connect.adapters.mysql.MySqlSetAdapter;
 import org.apache.streampipes.connect.adapters.mysql.MySqlStreamAdapter;
-import org.apache.streampipes.connect.adapters.opcua.OpcUaAdapter;
 import org.apache.streampipes.connect.adapters.plc4x.s7.Plc4xS7Adapter;
 import org.apache.streampipes.connect.adapters.ros.RosBridgeAdapter;
 import org.apache.streampipes.connect.adapters.simulator.random.RandomDataSetAdapter;
@@ -48,11 +48,7 @@ import org.apache.streampipes.connect.config.ConnectWorkerConfig;
 import org.apache.streampipes.connect.container.worker.init.AdapterWorkerContainer;
 import org.apache.streampipes.connect.init.AdapterDeclarerSingleton;
 import org.apache.streampipes.connect.protocol.set.FileProtocol;
-import org.apache.streampipes.connect.protocol.stream.FileStreamProtocol;
-import org.apache.streampipes.connect.protocol.stream.HDFSProtocol;
-import org.apache.streampipes.connect.protocol.stream.HttpStreamProtocol;
-import org.apache.streampipes.connect.protocol.stream.KafkaProtocol;
-import org.apache.streampipes.connect.protocol.stream.MqttProtocol;
+import org.apache.streampipes.connect.protocol.stream.*;
 import org.apache.streampipes.connect.protocol.stream.pulsar.PulsarProtocol;
 
 public class ConnectAdapterInit extends AdapterWorkerContainer {
@@ -70,6 +66,7 @@ public class ConnectAdapterInit extends AdapterWorkerContainer {
             .add(new MqttProtocol())
             .add(new HttpStreamProtocol())
             .add(new PulsarProtocol())
+            .add(new HttpServerProtocol())
 //
 //          // Specific Adapters
             .add(new GdeltAdapter())
@@ -99,10 +96,10 @@ public class ConnectAdapterInit extends AdapterWorkerContainer {
             .add(new FlicMQTTAdapter());
 
     String workerUrl = ConnectWorkerConfig.INSTANCE.getConnectContainerWorkerUrl();
-    String masterUrl = ConnectWorkerConfig.INSTANCE.getConnectContainerMasterUrl();
+    String backendUrl = ConnectWorkerConfig.INSTANCE.getBackendUrl();
     Integer workerPort = ConnectWorkerConfig.INSTANCE.getConnectContainerWorkerPort();
 
-    new ConnectAdapterInit().init(workerUrl, masterUrl, workerPort);
+    new ConnectAdapterInit().init(workerUrl, backendUrl, workerPort);
 
   }
 }

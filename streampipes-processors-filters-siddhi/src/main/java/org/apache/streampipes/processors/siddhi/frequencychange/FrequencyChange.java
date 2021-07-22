@@ -17,20 +17,38 @@
  */
 package org.apache.streampipes.processors.siddhi.frequencychange;
 
+import org.apache.streampipes.wrapper.siddhi.SiddhiAppConfig;
+import org.apache.streampipes.wrapper.siddhi.SiddhiAppConfigBuilder;
+import org.apache.streampipes.wrapper.siddhi.SiddhiQueryBuilder;
 import org.apache.streampipes.wrapper.siddhi.engine.SiddhiEventEngine;
-
-import java.util.List;
+import org.apache.streampipes.wrapper.siddhi.model.SiddhiProcessorParams;
+import org.apache.streampipes.wrapper.siddhi.query.InsertIntoClause;
+import org.apache.streampipes.wrapper.siddhi.query.SelectClause;
 
 public class FrequencyChange extends SiddhiEventEngine<FrequencyChangeParameters> {
 
-  @Override
-  protected String fromStatement(List<String> inputStreamNames, FrequencyChangeParameters params) {
-            return "from every not " + inputStreamNames.get(0) + " for " + params.getDuration() + " sec";
+  private String fromStatement(SiddhiProcessorParams<FrequencyChangeParameters> siddhiParams) {
+    return "from every not "
+            + siddhiParams.getInputStreamNames().get(0)
+            + " for "
+            + siddhiParams.getParams().getDuration()
+            + " sec";
+  }
+
+  private String selectStatement(SiddhiProcessorParams<FrequencyChangeParameters> siddhiParams) {
+    return SelectClause.createWildcard().toSiddhiEpl();
   }
 
   @Override
-  protected String selectStatement(FrequencyChangeParameters params) {
-    return "select *";
-  }
+  public SiddhiAppConfig makeStatements(SiddhiProcessorParams<FrequencyChangeParameters> siddhiParams,
+                                        String finalInsertIntoStreamName) {
 
+    InsertIntoClause insertIntoClause = InsertIntoClause.create(finalInsertIntoStreamName);
+    return SiddhiAppConfigBuilder
+            .create()
+            .addQuery(SiddhiQueryBuilder.create(fromStatement(siddhiParams), insertIntoClause)
+                    .withSelectClause(selectStatement(siddhiParams))
+                    .build())
+            .build();
+  }
 }

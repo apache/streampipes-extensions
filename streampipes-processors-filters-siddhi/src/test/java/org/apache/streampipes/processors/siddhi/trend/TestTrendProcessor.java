@@ -17,13 +17,6 @@
  */
 package org.apache.streampipes.processors.siddhi.trend;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.streampipes.model.graph.DataProcessorDescription;
 import org.apache.streampipes.model.graph.DataProcessorInvocation;
 import org.apache.streampipes.model.runtime.Event;
@@ -34,13 +27,16 @@ import org.apache.streampipes.sdk.helpers.Tuple2;
 import org.apache.streampipes.test.generator.EventStreamGenerator;
 import org.apache.streampipes.test.generator.InvocationGraphGenerator;
 import org.apache.streampipes.test.generator.grounding.EventGroundingGenerator;
+import org.apache.streampipes.wrapper.siddhi.engine.callback.SiddhiDebugCallback;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class TestTrendProcessor {
@@ -112,9 +108,21 @@ public class TestTrendProcessor {
 
     graph.getOutputStream().getEventGrounding().getTransportProtocol().getTopicDefinition().setActualTopicName("output-topic");
     TrendParameters params = new TrendParameters(graph, trendOperator, increase, timeWindow, "s0" +
-            "::randomValue");
+            "::randomValue", Arrays.asList("s0::randomValue"));
 
-    Trend trend = new Trend(event -> actualMatchCount[0]++);
+    SiddhiDebugCallback callback = new SiddhiDebugCallback() {
+      @Override
+      public void onEvent(io.siddhi.core.event.Event event) {
+        actualMatchCount[0]++;
+      }
+
+      @Override
+      public void onEvent(List<io.siddhi.core.event.Event> events) {
+
+      }
+    };
+
+    Trend trend = new Trend(callback);
     trend.onInvocation(params, null, null);
 
     sendEvents(trend);

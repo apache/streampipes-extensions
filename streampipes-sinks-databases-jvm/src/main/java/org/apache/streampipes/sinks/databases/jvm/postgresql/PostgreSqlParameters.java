@@ -19,48 +19,24 @@
 package org.apache.streampipes.sinks.databases.jvm.postgresql;
 
 import org.apache.streampipes.model.graph.DataSinkInvocation;
-import org.apache.streampipes.wrapper.params.binding.EventSinkBindingParams;
+import org.apache.streampipes.sinks.databases.jvm.jdbcclient.model.JdbcConnectionParameters;
 
-public class PostgreSqlParameters extends EventSinkBindingParams {
+public class PostgreSqlParameters extends JdbcConnectionParameters {
 
-  private String PostgreSqlHost;
-  private Integer PostgreSqlPort;
-  private String databaseName;
-  private String tableName;
-  private String user;
-  private String password;
 
-  public PostgreSqlParameters(DataSinkInvocation graph, String PostgreSqlHost, Integer PostgreSqlPort, String databaseName, String tableName, String user, String password) {
-    super(graph);
-    this.PostgreSqlHost = PostgreSqlHost;
-    this.PostgreSqlPort = PostgreSqlPort;
-    this.databaseName = databaseName;
-    this.tableName = tableName;
-    this.user = user;
-    this.password = password;
-  }
+  private boolean sslEnabled;
 
-  public String getPostgreSqlHost() {
-    return PostgreSqlHost;
-  }
-
-  public Integer getPostgreSqlPort() {
-    return PostgreSqlPort;
-  }
-
-  public String getDatabaseName() {
-    return databaseName;
-  }
-
-  public String getTableName() {
-    return tableName;
-  }
-
-  public String getUsername() {
-    return user;
-  }
-
-  public String getPassword() {
-    return password;
+  public PostgreSqlParameters(DataSinkInvocation graph, String PostgreSqlHost, Integer PostgreSqlPort, String databaseName, String tableName, String user, String password, Boolean sslEnabled) {
+    super(
+            graph,
+            PostgreSqlHost,
+            PostgreSqlPort,
+            databaseName,
+            user,
+            password,
+            tableName,
+            sslEnabled,
+            "org.postgresql.ssl.NonValidatingFactory",
+            true);
   }
 }
