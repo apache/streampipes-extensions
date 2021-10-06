@@ -68,7 +68,7 @@ public class LatencyMqttSinkController extends StreamPipesDataSink {
     public void onEvent(Event event) throws SpRuntimeException {
         long timestamp = event.getFieldBySelector(timestampField).getAsPrimitive().getAsLong();
         long latency = System.currentTimeMillis() - timestamp;
-        Object[] obs = {System.currentTimeMillis(), "event received", "", latency};
+        Object[] obs = {"event received", "", latency};
         logger.logMQTT(topic, obs);
     }
 
