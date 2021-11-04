@@ -1,0 +1,20 @@
+org.apache.streampipes.processors.filters.jvm.processor.time.title=Events Per Time
+org.apache.streampipes.processors.filters.jvm.processor.time.description=
+
+timestamp-mapping.title=Timestamp
+timestamp-mapping.description=
+
+number-of-events.title=Number of events
+number-of-events.description=The amount of events that must occur before the rule fires
+
+time-window.title=Time Window Length
+time-window.description=The length of the time window in which the events are counted
+
+time-option.title=Time Option
+time-option.description=The unit of the time configurations
+
+freeze-time.title=Wait Time
+freeze-time.description=The time that is waited before the rule fires again.
+
+fire-option.title=Fire option
+fire-option.description=How often should the results be forwarded.

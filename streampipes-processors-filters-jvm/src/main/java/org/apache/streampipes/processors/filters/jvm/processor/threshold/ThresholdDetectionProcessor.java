@@ -62,7 +62,7 @@ public class ThresholdDetectionProcessor extends StreamPipesDataProcessor {
                             EpProperties.booleanEp(Labels.empty(), RESULT_FIELD, SO.Boolean)))
             .requiredSingleValueSelection(Labels.withId(OPERATION), Options.from("<", "<=", ">",
                     ">=", "==", "!="))
-            .requiredFloatParameter(Labels.withId(VALUE), NUMBER_MAPPING)
+            .requiredFloatParameter(Labels.withId(VALUE))
             .build();
 
   }

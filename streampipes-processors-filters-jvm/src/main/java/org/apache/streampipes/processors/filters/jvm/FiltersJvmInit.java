@@ -39,6 +39,7 @@ import org.apache.streampipes.processors.filters.jvm.processor.projection.Projec
 import org.apache.streampipes.processors.filters.jvm.processor.schema.MergeBySchemaProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.textfilter.TextFilterProcessor;
 import org.apache.streampipes.processors.filters.jvm.processor.threshold.ThresholdDetectionProcessor;
+import org.apache.streampipes.processors.filters.jvm.processor.time.EventsPerTimeProcessor;
 
 public class FiltersJvmInit extends StandaloneModelSubmitter {
 
@@ -54,6 +55,7 @@ public class FiltersJvmInit extends StandaloneModelSubmitter {
             8090)
             .registerPipelineElements(
                     new BooleanFilterProcessor(),
+                    new EventsPerTimeProcessor(),
                     new TextFilterProcessor(),
                     new NumericalFilterProcessor(),
                     new ThresholdDetectionProcessor(),
