@@ -34,6 +34,7 @@ import org.apache.streampipes.wrapper.standalone.StreamPipesDataProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
 
@@ -57,6 +58,8 @@ public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
   private int freezeTime;
   private String fireOption;
 
+  private Long lastFire;
+
   List<Long> timestamps;
 
   public EventsPerTimeProcessor() {
@@ -69,7 +72,7 @@ public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
                                 String timeOption,
                                 int freezeTime,
                                 String fireOption) {
-    this.timestampKey = timestampKey;
+    this.timestamps = timestamps;
     this.numberOfEvents = numberOfEvents;
     this.timeWindow = timeWindow;
     this.timeOption = timeOption;
@@ -119,8 +122,11 @@ public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
   public void onEvent(Event event, SpOutputCollector spOutputCollector) throws SpRuntimeException {
     long timestamp = event.getFieldBySelector(this.timestampKey).getAsPrimitive().getAsLong();
 
+    this.timestamps.add(timestamp);
 
-    spOutputCollector.collect(event);
+    if (this.applyRule()) {
+      spOutputCollector.collect(event);
+    }
   }
 
   @Override
@@ -129,9 +135,25 @@ public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
   }
 
   public boolean applyRule() {
-    boolean result = false;
+    boolean result;
 
-    // remove old events
+    // remove old events (TODO change unit)
+    long leftWindowTimestamp = this.timestamps.get(this.timestamps.size() - 1) - this.timeWindow * getMilliseconds();
+    timestamps = timestamps
+            .stream()
+            .filter(t -> t > leftWindowTimestamp)
+            .collect(Collectors.toList());
+
+    // validate if enough events  are in time window
+    result = timestamps.size() > this.numberOfEvents;
+
+//    if  (result  && )
+
+    // check if it should  only fire once
+    if (ONCE.equals(fireOption)) {
+
+    }
+
 
 
     return result;
@@ -139,5 +161,18 @@ public class EventsPerTimeProcessor extends StreamPipesDataProcessor {
 
   public List<Long> getTimestamps() {
     return timestamps;
+  }
+
+  private int getMilliseconds() {
+    switch (this.timeOption) {
+      case SECOND:
+        return 1000;
+      case MINUTE:
+        return 60000;
+      case HOUR:
+        return 86400;
+      default:
+        return 1000;
+    }
   }
 }

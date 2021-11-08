@@ -25,11 +25,10 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class EventsPerTimeProcessorTest {
+    private List<Long> timestamps = Arrays.asList(1000L, 2000L, 3000L, 4000L);
 
     @Test
-    public void testFieldAddition() {
-        List<Long> timestamps = Arrays.asList(1000L, 2000L, 3000L, 4000L);
-
+    public void testFieldAddition1() {
         EventsPerTimeProcessor eventsPerTimeProcessor = new EventsPerTimeProcessor(
                 timestamps,
                 3,
@@ -40,5 +39,33 @@ public class EventsPerTimeProcessorTest {
 
         assertEquals(true, eventsPerTimeProcessor.applyRule());
         assertEquals(4, eventsPerTimeProcessor.getTimestamps().size());
+    }
+
+    @Test
+    public void testFieldAddition2() {
+        EventsPerTimeProcessor eventsPerTimeProcessor = new EventsPerTimeProcessor(
+                timestamps,
+                5,
+                5,
+                EventsPerTimeProcessor.SECOND,
+                2,
+                EventsPerTimeProcessor.EACH);
+
+        assertEquals(false, eventsPerTimeProcessor.applyRule());
+        assertEquals(4, eventsPerTimeProcessor.getTimestamps().size());
+    }
+
+    @Test
+    public void testFieldAddition3() {
+        EventsPerTimeProcessor eventsPerTimeProcessor = new EventsPerTimeProcessor(
+                timestamps,
+                2,
+                2,
+                EventsPerTimeProcessor.SECOND,
+                2,
+                EventsPerTimeProcessor.EACH);
+
+        assertEquals(false, eventsPerTimeProcessor.applyRule());
+        assertEquals(2, eventsPerTimeProcessor.getTimestamps().size());
     }
 }
