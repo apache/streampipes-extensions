@@ -15,7 +15,10 @@
   ~ limitations under the License.
   ~
   -->
-[![Github Actions](https://img.shields.io/github/workflow/status/apache/incubator-streampipes-extensions/Build%20and%20Deploy%20Extensions)](https://github.com/apache/incubator-streampipes-extensions/actions/)
+# Deprecated
+**The content of this repository was merged into the main repository  [StreamPipes Extensions](https://github.com/apache/incubator-streampipes/tree/dev/streampipes-extensions)**
+
+
 # Apache StreamPipes
 
 Apache StreamPipes (incubating) enables flexible modeling of stream processing pipelines by providing a graphical 
